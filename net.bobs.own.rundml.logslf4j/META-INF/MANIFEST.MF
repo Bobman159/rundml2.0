@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Logger
+Bundle-SymbolicName: net.bobs.own.rundml.logslf4j
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: net.bobs.own.rundml.logger
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .,
+ lib/slf4j-api-1.7.12.jar,
+ lib/slf4j-simple-1.7.12.jar
+Export-Package: org.slf4j,
+ org.slf4j.helpers,
+ org.slf4j.impl,
+ org.slf4j.spi
