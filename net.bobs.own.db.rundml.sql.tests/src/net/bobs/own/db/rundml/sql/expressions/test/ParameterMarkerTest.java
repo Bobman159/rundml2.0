@@ -49,7 +49,7 @@ class ParameterMarkerTest {
 		String sqlGen2 = marker2.serialize();
 		Assert.assertEquals(" ? ",sqlGen2);
 		Assert.assertEquals(Types.VARCHAR, marker2.getParmType());
-		Assert.assertEquals("abc", marker2.getValue()); -
+		Assert.assertEquals("abc", marker2.getValue());
 		
 	}
 	
