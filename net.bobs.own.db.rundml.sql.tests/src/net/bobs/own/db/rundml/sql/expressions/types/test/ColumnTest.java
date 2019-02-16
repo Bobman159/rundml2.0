@@ -1,6 +1,4 @@
-package net.bobs.own.db.rundml.sql.expressions.test;
-
-import static org.junit.jupiter.api.Assertions.fail;
+package net.bobs.own.db.rundml.sql.expressions.types.test;
 
 import java.sql.Types;
 

@@ -1,6 +1,8 @@
 package net.bobs.own.db.rundml.sql.expression.types;
 
-public class ParmMarker implements IExpression, IMathOperations, IStringOperations {
+import net.bobs.own.db.rundml.sql.predicates.IPredicate;
+
+public class ParmMarker implements IExpression, IMathOperations, IStringOperations, IPredicate {
 
 	private Object value;
 	private int jdbcType;
@@ -45,7 +47,7 @@ public class ParmMarker implements IExpression, IMathOperations, IStringOperatio
 	@Override
 	public String serialize() {
 		String expr = "";
-		expr = " ? ";
+		expr = "?";
 		return expr;
 	}
 

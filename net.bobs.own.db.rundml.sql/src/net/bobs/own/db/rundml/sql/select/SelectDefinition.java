@@ -2,7 +2,7 @@ package net.bobs.own.db.rundml.sql.select;
 
 import java.util.Properties;
 
-import net.bobs.own.db.rundml.sql.expressions.ExpressionList;
+import net.bobs.own.db.rundml.sql.builders.exprs.ExpressionList;
 
 
 /**

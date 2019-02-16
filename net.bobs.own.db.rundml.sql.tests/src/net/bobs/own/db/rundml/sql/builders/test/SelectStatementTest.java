@@ -1,7 +1,5 @@
 package net.bobs.own.db.rundml.sql.builders.test;
 
-import static org.junit.Assert.fail;
-
 import java.sql.Connection;
 
 import org.junit.jupiter.api.AfterAll;
@@ -11,9 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import net.bobs.own.db.rundml.sql.builders.exprs.Expression;
+import net.bobs.own.db.rundml.sql.builders.predicates.Predicate;
 import net.bobs.own.db.rundml.sql.builders.stmts.SelectStatement;
 
-class SelectBuildTest {
+class SelectStatementTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -33,15 +32,20 @@ class SelectBuildTest {
 
 	@Test
 	void selectNumberTest() {
-
-		Connection conn = null;
-		SelectStatement.select(conn)
-//						.selectExpr(SQLEx.number(10))
-//						.selectExpr(SQLEx.numberExpr(10).add(Literal.numberExpr(20)))
-						.from("ezmenu","ingredients")
-						.fetch();
 		
-		fail("Not yet implemented");
+		Connection conn = null;
+		
+		Predicate pred = Predicate.where("abc").isEqual("abc")
+								  .and(10).isEqual(10)
+								  .build();
+												 
+		SelectStatement.select(conn)
+						.selectExpr(Expression.number(10))
+						.selectExpr(Expression.number(10).add(Expression.number(20)))
+						.from("ezmenu","ingredients")	
+						.where(pred)
+						.fetch();
+
 	}
 
 }

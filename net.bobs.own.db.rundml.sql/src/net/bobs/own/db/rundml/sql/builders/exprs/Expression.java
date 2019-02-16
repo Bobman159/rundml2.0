@@ -69,6 +69,5 @@ public class Expression {
 	public static CaseWhenExpression caseWhen() {
 		return new CaseWhenExpression();
 	}
-
 			
 }

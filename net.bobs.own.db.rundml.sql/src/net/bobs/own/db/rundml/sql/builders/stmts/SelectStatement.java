@@ -8,6 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.bobs.own.db.rundml.jdbc.pool.DefaultConnectionProvider;
+import net.bobs.own.db.rundml.sql.builders.exprs.ExpressionList;
+import net.bobs.own.db.rundml.sql.builders.predicates.Predicate;
+import net.bobs.own.db.rundml.sql.builders.predicates.PredicatesList;
 import net.bobs.own.db.rundml.sql.expression.types.IExpression;
 
 
@@ -30,13 +33,17 @@ import net.bobs.own.db.rundml.sql.expression.types.IExpression;
  * 
  * http://rdafbn.blogspot.com/2012/07/step-builder-pattern_28.html.
  */
-public class SelectStatement implements ISQLStatement {
+public class SelectStatement implements ISQLStatement
+//										IPredicateOperations 
+{
 	
 	private Logger logger = LogManager.getLogger(SelectStatement.class);
 	private Connection conn;
-	private List<IExpression> selectExprs;
+//	private List<IExpression> selectExprs;
+	private ExpressionList selectExprs;
 	private String schema;
 	private String tbName;
+	private PredicatesList predicates;
 	
 	/**
 	 * First Builder Step the Select.
@@ -54,8 +61,10 @@ public class SelectStatement implements ISQLStatement {
      *
      */
     public interface FromStep {
-    	List<String> fetch();
-  
+//    	IPredicate where(IExpression lhs, Op op,IExpression rhs);
+    	FetchStep where(Predicate pred);
+//    	public <T> PredicateStep where(T lhsExpr);
+    	List<String> fetch();  
     }
     
     /**
@@ -63,7 +72,14 @@ public class SelectStatement implements ISQLStatement {
      * Next Step available: FetchStep.
      *
      */
-    public interface PredicateStep {
+    @SuppressWarnings("hiding")
+//	public interface PredicateStep extends IFetchAndOrStep  {
+	public interface FetchStep {
+//    	PredicateStep and(Number lhs, Op op);
+//    	PredicateStep and(IExpression lhs, Op op,IExpression rhs);
+//    	PredicateStep or(IExpression lhs, Op op,IExpression rhs);
+//    	public <T> PredicateStep and(T lhsExpr);
+//    	public <T> PredicateStep or(T lhsExpr);
     	List<String> fetch();
     }
     
@@ -71,25 +87,32 @@ public class SelectStatement implements ISQLStatement {
      * Last builder step in the Select.
      *
      */
-    public interface FetchStep {
-    	
-    	List<String> fetch();
-    	
-    }
+//    public interface FetchStep {
+//    	
+//    	List<String> fetch();
+//    	
+//    }
     
     /**
      * Implement the step builder pattern interfaces to build an 
      * SQL Select statement.
      *
      */
-    public static class SelectSteps implements SelectExprStep,FromStep,
-     											PredicateStep,FetchStep {
+    public static class SelectSteps implements SelectExprStep,
+    										   FromStep
+//    										   PredicateStep
+//    										   IFetchWhereStep
+//     										   IFetchAndOrStep    										   
+//     										   FetchStep 
+{
     	 
     	 private static DefaultConnectionProvider provider;
     	 private static Connection conn;
-    	 private static List<IExpression> selectExprs = new ArrayList<>();
+    	 private static ExpressionList selectExprs;
+//    	 private static List<IExpression> selectExprs = new ArrayList<>();
     	 private static String schema;
     	 private static String tableName;
+    	 private static PredicatesList  predicates = new PredicatesList();
     	
     	/**
     	 * Execute the Select statement on the defined connection and 
@@ -97,11 +120,12 @@ public class SelectStatement implements ISQLStatement {
     	 * 
     	 * @return - list of the Select results
     	 */
-		@Override
-		public List<String> fetch() {
-			
-			return new SelectStatement(conn,selectExprs,schema,tableName).fetch();
-		}
+//		@Override
+//		public List<String> fetch() {
+//			
+//			return new SelectStatement(conn,selectExprs,schema,tableName).fetch();
+//			
+//		}
 
 		/**
 		 * Add the specified expression to the list of expressions to be 
@@ -112,7 +136,7 @@ public class SelectStatement implements ISQLStatement {
 		@Override
 		public SelectExprStep selectExpr(IExpression expr) {
 
-			selectExprs.add(expr);
+			selectExprs.addExpression(expr);
 			return this;
 			
 		}
@@ -129,7 +153,82 @@ public class SelectStatement implements ISQLStatement {
 			SelectSteps.tableName = tbName;
 			return this;
 		}
-    	
+
+
+		@Override
+		public FetchStep where(Predicate pred) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+
+		@Override
+		public List<String> fetch() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+//		@Override
+//		public List<String> fetch() {
+//			return new ArrayList<>();
+//		}
+
+		/**
+		 * Specify a AND condition predicate
+		 * @param lhs expression to left of comparison operand
+		 * @param op comparison operand 
+		 * @param rhs expression to the right of comparison operand
+		 */
+//		@Override
+//		public PredicateStep and(IExpression lhs, Op op, IExpression rhs) {
+//			PredicateCondition predCond = PredicateHelper.andPredicateCondition(lhs, op, rhs);
+//			predicates.addPredicate(predCond);
+//			return this;
+//		}
+
+		/**
+		 * Specify a OR condition predicate
+		 * @param lhs expression to left of comparison operand
+		 * @param op comparison operand 
+		 * @param rhs expression to the right of comparison operand
+		 */
+//		@Override
+//		public PredicateStep or(IExpression lhs, Op op, IExpression rhs) {
+//			PredicateCondition predCond = PredicateHelper.orPredicateCondition(lhs, op, rhs);
+//			predicates.addPredicate(predCond);
+//			return this;
+//		}
+
+		/**
+		 * Specify a WHERE condition predicate
+		 * @param lhs expression to left of comparison operand
+		 * @param op comparison operand 
+		 * @param rhs expression to the right of comparison operand
+		 */
+//		@Override
+////		public PredicateStep where(IExpression lhs, Op op, IExpression rhs) {
+//    	public <T> PredicateStep where(T lhsExpr) {
+//			
+////			PredicateCondition predCond = PredicateHelper.wherePredicateCondition(lhs, op, rhs);
+////			predicates.addPredicate(predCond);
+//			return this;
+//		}
+		
+//		@Override 
+//		public <T> IPredicateAndOr and(T lhsExpr) {
+//			return (IPredicateAndOr) this;
+//		}
+//		
+//		@Override
+//		public <T> PredicateStep or(T lhsExpr) {
+//			return this;
+//		}
+//		
+//		@Override
+//		public List<String> fetch() {
+//			return new ArrayList<>();
+//		}
+     	
     }
      
     /**
@@ -163,11 +262,12 @@ public class SelectStatement implements ISQLStatement {
      * @param schema - the table schema name
      * @param tbName - the table name
      */
-	private SelectStatement(Connection conn, List<IExpression> selectExprs, String schema, 
-						   String tbName) {
+	private SelectStatement(Connection conn, ExpressionList selectExprs,
+							String schema, String tbName) {
 		
 		this.conn = conn;
 		this.selectExprs = selectExprs;
+		this.selectExprs = new ExpressionList();
 		this.schema = schema;
 		this.tbName = tbName;
 		
@@ -183,16 +283,17 @@ public class SelectStatement implements ISQLStatement {
 		
 		builder.append("select ");
 		
-		int exprCount = selectExprs.size() - 1;
-		IExpression sqlEx;
-		for (int ix = 0; ix < exprCount; ix++) {
-			sqlEx = selectExprs.get(ix);
-			builder.append(sqlEx.serialize()).append(", ");
-			logger.debug(sqlEx.serialize());
-		}
+//		int exprCount = selectExprs.size() - 1;
+//		IExpression sqlEx;
+//		for (int ix = 0; ix < exprCount; ix++) {
+//			sqlEx = selectExprs.get(ix);
+//			builder.append(sqlEx.serialize()).append(", ");
+//			logger.debug(sqlEx.serialize());
+//		}
+		selectExprs.forEach(expr -> builder.append(expr.serialize()));
 		
-		sqlEx = selectExprs.get((selectExprs.size() - 1));
-		builder.append(sqlEx.serialize());
+//		sqlEx = selectExprs.get((selectExprs.size() - 1));
+//		builder.append(sqlEx.serialize());
 		
 		builder.append(" from ").append(schema).append(".").append(tbName);
 		

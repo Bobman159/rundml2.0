@@ -1,4 +1,4 @@
-package net.bobs.own.db.rundml.sql.expressions;
+package net.bobs.own.db.rundml.sql.builders.exprs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,9 @@ public class ExpressionList {
 	
 	private List<IExpression> expressions;
 	
-	
+	/**
+	 * Define the list for <code>IExpression</code> types.
+	 */
 	public ExpressionList() {
 		expressions = new ArrayList<>();
 	}

@@ -1,4 +1,4 @@
-package net.bobs.own.db.rundml.sql.expressions.test;
+package net.bobs.own.db.rundml.sql.expressions.types.test;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;

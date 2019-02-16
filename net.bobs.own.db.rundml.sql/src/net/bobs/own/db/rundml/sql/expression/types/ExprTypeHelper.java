@@ -1,5 +1,6 @@
 package net.bobs.own.db.rundml.sql.expression.types;
 
+import net.bobs.own.db.rundml.sql.builders.exprs.Expression;
 import net.bobs.own.db.rundml.sql.condition.Op;
 
 /**
@@ -7,7 +8,7 @@ import net.bobs.own.db.rundml.sql.condition.Op;
  * defining SQL operations.
  *
  */
-class ExprTypeHelper {
+public class ExprTypeHelper {
 
 	private ExprTypeHelper() {
 		throw new IllegalStateException("ExprTypeHelper is a utility class");
@@ -61,6 +62,36 @@ class ExprTypeHelper {
 	 */
 	public static StringOperation stringOperation(IExpression lhs, IExpression rhs, Op op) {
 		return new StringOperation(lhs,rhs,op);
+	}
+	
+	/**
+	 * Define the corresponding IExpression (Number or String) 
+	 * from a Java Number or String object
+	 * 
+	 * @param expr - java object 
+	 * @return - an corresponding <code>IExpression</code> from the input
+	 */
+	/*
+	 * 
+	 */
+	public static IExpression convertExpression(Object expr) {
+		
+		IExpression iExpr = null;
+		
+		if (expr instanceof IExpression) {
+			return (IExpression) expr;
+		}
+		
+		if (expr instanceof Number) {
+			Number exprNumb = (Number) expr;
+			iExpr = Expression.number(exprNumb);
+		} else if (expr instanceof String) {
+			String exprString = (String) expr;
+			iExpr = Expression.string(exprString);
+		}
+		
+		return iExpr;
+		
 	}
 
 }

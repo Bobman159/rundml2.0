@@ -11,8 +11,11 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: net.bobs.own.db.rundml.sql
 Bundle-ActivationPolicy: lazy
 Export-Package: net.bobs.own.db.rundml.sql.builders.exprs,
+ net.bobs.own.db.rundml.sql.builders.predicates,
  net.bobs.own.db.rundml.sql.builders.stmts,
+ net.bobs.own.db.rundml.sql.condition,
  net.bobs.own.db.rundml.sql.expression.types,
  net.bobs.own.db.rundml.sql.expressions,
+ net.bobs.own.db.rundml.sql.predicates,
  net.bobs.own.db.rundml.sql.select
 Import-Package: net.bobs.own.db.rundml.jdbc.pool
