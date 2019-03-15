@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Mysql
-Bundle-SymbolicName: net.bobs.own.db.rundml.mysql
-Bundle-Version: 1.0.0.qualifier
-Automatic-Module-Name: net.bobs.own.db.rundml.mysql
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-ClassPath: .,
- lib/mysql-connector-java-5.1.44-bin.jar

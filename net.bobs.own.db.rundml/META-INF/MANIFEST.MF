@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Rundml
-Bundle-SymbolicName: net.bobs.own.db.rundml
+Bundle-SymbolicName: com.bobman159.rundml
 Bundle-Version: 1.0.1
-Bundle-Activator: net.bobs.own.db.rundml.Activator
+Bundle-Activator: com.bobman159.rundml.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.junit.jupiter.api;bundle-version="5.0.0",
  org.junit.jupiter.engine;bundle-version="5.0.0",
@@ -18,12 +18,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.junit.vintage.engine;bundle-version="4.12.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: net.bobs.own.db.rundml.exception,
- net.bobs.own.db.rundml.factory,
- net.bobs.own.db.rundml.mapper,
+Export-Package: com.bobman159.rundml.exception,
+ com.bobman159.rundml.factory,
+ com.bobman159.rundml.mapper,
  net.bobs.own.ezmenu.rundml.listener
-Import-Package: net.bobs.own.db.rundml.sql.builders,
- org.eclipse.jface.dialogs,
+Import-Package: org.eclipse.jface.dialogs,
+ org.eclipse.jface.window,
  org.eclipse.swt.widgets,
  org.junit;version="4.12.0",
  org.junit.runner;version="4.12.0",
