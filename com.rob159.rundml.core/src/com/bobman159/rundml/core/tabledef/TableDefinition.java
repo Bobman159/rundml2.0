@@ -70,8 +70,23 @@ public class TableDefinition {
 	 * At this time I don't feel this violates encapsulation since there are
 	 * no set methods in the Column class.
 	 */
-	public Column getColumnName(String columnName) {
-		return columnMap.get(columnName);
+	public Column column(String columnName) {
+		
+		Column col = null;
+
+		col = columnMap.get(columnName);
+		if (col == null) {
+			String msg = String.format("Column name %s was not found for table %s", 
+						columnName,RunDMLUtils.qualifiedTbName(schema,tbName));
+			try {
+					throw new ColumnNotFoundException(msg);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+ 
+		} 
+
+		return col;
 	}
 	
 	

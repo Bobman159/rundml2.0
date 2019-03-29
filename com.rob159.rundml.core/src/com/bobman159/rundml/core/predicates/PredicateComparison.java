@@ -28,7 +28,7 @@ public class PredicateComparison implements IPredicate {
 
 	@Override
 	public String serialize() {
-		return compareOp.getOperator() + exprRhs.serialize();
+		return compareOp.getOperator() + " " + exprRhs.serialize() + " ";
 	}
 	
 	

@@ -46,7 +46,16 @@ public class Predicate implements IPredicate {
 	 * @return - predicate builder next step
 	 */
 	public static IPredicateComparisonStep where(Object expr) {
-		return new PredicateSteps(expr);
+		return new PredicateSteps(PredOperand.WHERE,expr);
+	}
+	
+	/**
+	 * Create an SQL HAVING clause predicate
+	 * @param expr - expression for the HAVING
+	 * @return - predicate builder next step
+	 */
+	public static IPredicateComparisonStep having(Object expr) {
+		return new PredicateSteps(PredOperand.HAVING,expr);
 	}
 	
 	/**
@@ -62,13 +71,13 @@ public class Predicate implements IPredicate {
 		private PredicatesList predList = null;
 		
 		/**
-		 * Define an SQL predicate builder and the initial WHERE clause 
+		 * Define an SQL predicate builder and the initial WHERE or HAVING clause
+		 * @param predOp - predicate operand WHERE or HAVING
 		 * @param whereExpr - expression for the SQL WHERE clause
 		 */
-		public PredicateSteps(Object whereExpr) {
+		public PredicateSteps(PredOperand predOp,Object predExpr) {
 			predList = new PredicatesList();
-			predList.addPredicate(new PredicateClause(PredOperand.WHERE,whereExpr));
-			
+			predList.addPredicate(new PredicateClause(predOp,predExpr));
 		}
 		
 		/**

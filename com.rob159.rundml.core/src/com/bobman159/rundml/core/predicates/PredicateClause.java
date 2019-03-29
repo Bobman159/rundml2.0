@@ -14,9 +14,10 @@ public class PredicateClause implements IPredicate {
 	 *
 	 */
 	public enum PredOperand {
-		WHERE(" WHERE "),
-		AND( " AND "),
-		OR(" OR ");
+		AND("AND"),
+		HAVING("HAVING"),
+		OR("OR"),
+		WHERE("WHERE");
 		
 		private String operand;
 		
@@ -54,7 +55,7 @@ public class PredicateClause implements IPredicate {
 	@Override
 	public String serialize() {
 		String pred = "";
-		return pred + predicate.getPredicate() + exprLhs.serialize();
+		return pred + predicate.getPredicate() + " " + exprLhs.serialize() + " ";
 	}
 
 }

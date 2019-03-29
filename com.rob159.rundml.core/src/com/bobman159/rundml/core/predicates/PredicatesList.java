@@ -38,7 +38,7 @@ public class PredicatesList implements IPredicate {
 			expr.append(pred.serialize());
 		}
 		
-		return expr.toString();
+		return expr.toString().trim();
 	}
 
 }

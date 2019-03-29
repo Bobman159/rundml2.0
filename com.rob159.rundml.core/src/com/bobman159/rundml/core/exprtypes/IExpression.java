@@ -2,6 +2,7 @@ package com.bobman159.rundml.core.exprtypes;
 
 /**
  * Base interface for SQL Expression types (number, string, column etc).
+ * This class should be implemented for any SQL expression types 
  * 
  */
 

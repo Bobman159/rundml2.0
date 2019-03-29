@@ -35,32 +35,32 @@ class PredicateWhereTest {
 	void testWherePredicates() {
 		
 		String predResult = Predicate.where(10).isEqual(10).build().serialize();
-		Assert.assertEquals(" WHERE 10 = 10",predResult);
+		Assert.assertEquals("WHERE 10 = 10",predResult);
 		
 		String predResult2 = Predicate.where(Expression.number(10))
 									  .isLessOrEqual(10)
 									  .build().serialize();
-		Assert.assertEquals(" WHERE 10 <= 10",predResult2);
+		Assert.assertEquals("WHERE 10 <= 10",predResult2);
 		
 		Column colTest = new Column("coltest",Types.INTEGER);
 		String predResult3 = Predicate.where(colTest).isLessOrEqual(10)
 									  .build().serialize();
-		Assert.assertEquals(" WHERE COLTEST <= 10",predResult3);
+		Assert.assertEquals("WHERE COLTEST <= 10",predResult3);
 		
 		String predResult4 = Predicate.where(Expression.parm(Types.BIGINT, 10))
 									  .isLessOrEqual(10)
 									  .build().serialize();
-		Assert.assertEquals(" WHERE ? <= 10",predResult4);
+		Assert.assertEquals("WHERE ? <= 10",predResult4);
 		
 		String predResult5 = Predicate.where(Expression.number(10).add(10))
 									  .isLessOrEqual(10)
 									  .build().serialize();
-		Assert.assertEquals(" WHERE 10 + 10 <= 10",predResult5);
+		Assert.assertEquals("WHERE 10 + 10 <= 10",predResult5);
 		
 		String predResult6 = Predicate.where(Expression.string("abc").concat("def"))
 				  					  .isLessOrEqual("abcdef")
 				  					  .build().serialize();
-		Assert.assertEquals(" WHERE \'abc\' || \'def\' <= 'abcdef'",predResult6);
+		Assert.assertEquals("WHERE \'abc\' || \'def\' <= 'abcdef'",predResult6);
 	
 	}
 	
@@ -69,20 +69,20 @@ class PredicateWhereTest {
 		
 		String predResult = Predicate.where(10).isEqual(10)
 									 .and(10).isEqual(10).build().serialize();
-		Assert.assertEquals(" WHERE 10 = 10 AND 10 = 10",predResult);
+		Assert.assertEquals("WHERE 10 = 10 AND 10 = 10",predResult);
 		
 		String predResult2 = Predicate.where(Expression.number(10))
 									  .isLessOrEqual(10)
 									  .and(Expression.number(10))
 									  .isLessOrEqual(10)
 									  .build().serialize();
-		Assert.assertEquals(" WHERE 10 <= 10 AND 10 <= 10",predResult2);
+		Assert.assertEquals("WHERE 10 <= 10 AND 10 <= 10",predResult2);
 		
 		Column colTest = new Column("coltest",Types.INTEGER);
 		String predResult3 = Predicate.where(colTest).isLessOrEqual(10)
 									  .and(colTest).isLessOrEqual(10)
 									  .build().serialize();
-		Assert.assertEquals(" WHERE COLTEST <= 10" +
+		Assert.assertEquals("WHERE COLTEST <= 10" +
 							" AND COLTEST <= 10",predResult3);
 		
 		String predResult4 = Predicate.where(Expression.parm(Types.BIGINT, 10))
@@ -90,14 +90,14 @@ class PredicateWhereTest {
 									  .and(Expression.parm(Types.BIGINT, 10))
 									  .isLessOrEqual(10)
 									  .build().serialize();
-		Assert.assertEquals(" WHERE ? <= 10 AND ? <= 10",predResult4);
+		Assert.assertEquals("WHERE ? <= 10 AND ? <= 10",predResult4);
 		
 		String predResult5 = Predicate.where(Expression.number(10).add(10))
 									  .isLessOrEqual(10)
 									  .and(Expression.number(10).add(10))
 									  .isLessOrEqual(10)
 									  .build().serialize();
-		Assert.assertEquals(" WHERE 10 + 10 <= 10" +
+		Assert.assertEquals("WHERE 10 + 10 <= 10" +
 							" AND 10 + 10 <= 10",predResult5);
 		
 		String predResult6 = Predicate.where(Expression.string("abc").concat("def"))
@@ -105,7 +105,7 @@ class PredicateWhereTest {
 				  					  .and(Expression.string("abc").concat("def"))
 				  					  .isLessOrEqual("abcdef")
 				  					  .build().serialize();
-		Assert.assertEquals(" WHERE 'abc' || 'def' <= 'abcdef'" +
+		Assert.assertEquals("WHERE 'abc' || 'def' <= 'abcdef'" +
 				  			" AND 'abc' || 'def' <= 'abcdef'",predResult6);
 	
 	}
@@ -115,20 +115,20 @@ class PredicateWhereTest {
 		
 		String predResult = Predicate.where(10).isEqual(10)
 				 .or(10).isEqual(10).build().serialize();
-		Assert.assertEquals(" WHERE 10 = 10 OR 10 = 10",predResult);
+		Assert.assertEquals("WHERE 10 = 10 OR 10 = 10",predResult);
 
 		String predResult2 = Predicate.where(Expression.number(10))
 				  					  .isLessOrEqual(10)
 				  					  .or(Expression.number(10))
 				  					  .isLessOrEqual(10)
 				  					  .build().serialize();
-		Assert.assertEquals(" WHERE 10 <= 10 OR 10 <= 10",predResult2);
+		Assert.assertEquals("WHERE 10 <= 10 OR 10 <= 10",predResult2);
 
 		Column colTest = new Column("coltest",Types.INTEGER);
 		String predResult3 = Predicate.where(colTest).isLessOrEqual(10)
 						  			  .or(colTest).isLessOrEqual(10)
 						  			  .build().serialize();
-		Assert.assertEquals(" WHERE COLTEST <= 10" +
+		Assert.assertEquals("WHERE COLTEST <= 10" +
 				" OR COLTEST <= 10",predResult3);
 
 		String predResult4 = Predicate.where(Expression.parm(Types.BIGINT, 10))
@@ -136,14 +136,14 @@ class PredicateWhereTest {
 						  			  .or(Expression.parm(Types.BIGINT, 10))
 						  			  .isLessOrEqual(10)
 						  			  .build().serialize();
-		Assert.assertEquals(" WHERE ? <= 10 OR ? <= 10",predResult4);
+		Assert.assertEquals("WHERE ? <= 10 OR ? <= 10",predResult4);
 
 		String predResult5 = Predicate.where(Expression.number(10).add(10))
 						  			  .isLessOrEqual(10)
 						  			  .or(Expression.number(10).add(10))
 						  			  .isLessOrEqual(10)
 						  			  .build().serialize();
-		Assert.assertEquals(" WHERE 10 + 10 <= 10" +
+		Assert.assertEquals("WHERE 10 + 10 <= 10" +
 				" OR 10 + 10 <= 10",predResult5);
 
 		String predResult6 = Predicate.where(Expression.string("abc").concat("def"))
@@ -151,7 +151,7 @@ class PredicateWhereTest {
 							  		  .or(Expression.string("abc").concat("def"))
 							  		  .isLessOrEqual("abcdef")
 							  		  .build().serialize();
-		Assert.assertEquals(" WHERE 'abc' || 'def' <= 'abcdef'" +
+		Assert.assertEquals("WHERE 'abc' || 'def' <= 'abcdef'" +
 					" OR 'abc' || 'def' <= 'abcdef'",predResult6);
 	
 	}
@@ -163,7 +163,7 @@ class PredicateWhereTest {
 		String predResult = Predicate.where(10).isEqual(10)
 				 .and(10).isEqual(10)
 				 .or(10).isEqual(10).build().serialize();
-		Assert.assertEquals(" WHERE 10 = 10 AND 10 = 10" +
+		Assert.assertEquals("WHERE 10 = 10 AND 10 = 10" +
 							" OR 10 = 10",predResult);
 
 		String predResult2 = Predicate.where(Expression.number(10))
@@ -173,7 +173,7 @@ class PredicateWhereTest {
 				  .and(Expression.number(10))
 				  .isLessOrEqual(10)
 				  .build().serialize();
-		Assert.assertEquals(" WHERE 10 <= 10 OR 10 <= 10 AND 10 <= 10",predResult2);
+		Assert.assertEquals("WHERE 10 <= 10 OR 10 <= 10 AND 10 <= 10",predResult2);
 
 		Column colTest = new Column("coltest",Types.INTEGER);
 		String predResult3 = Predicate.where(colTest).isLessOrEqual(10)
@@ -181,7 +181,7 @@ class PredicateWhereTest {
 				  .or(colTest).isLessOrEqual(10)
 				  .and(colTest).isLess(10)
 				  .build().serialize();
-		Assert.assertEquals(" WHERE COLTEST <= 10" +
+		Assert.assertEquals("WHERE COLTEST <= 10" +
 				" AND COLTEST <= 10" +
 				" OR COLTEST <= 10"  +
 				" AND COLTEST < 10",predResult3);
@@ -196,7 +196,7 @@ class PredicateWhereTest {
 						  .and(Expression.parm(Types.DOUBLE, 10.01))
 						  .isNotEqual(10.01)
 						  .build().serialize();
-		Assert.assertEquals(" WHERE ? <= 10"
+		Assert.assertEquals("WHERE ? <= 10"
 				+ " OR ? > 10"
 				+ " OR ? >= 10"
 				+ " AND ? <= 10"
@@ -215,7 +215,7 @@ class PredicateWhereTest {
 						  .or(Expression.number(10).add(10))
 						  .isNot(10)
 						  .build().serialize();
-		Assert.assertEquals(" WHERE 10 + 10 <= 10" +
+		Assert.assertEquals("WHERE 10 + 10 <= 10" +
 				" AND 10 + 10 <= 10" +
 				" OR 10 + 10 <= 10" 		 +
 				" AND 10 + 10 <= 10" 	 +
@@ -235,7 +235,7 @@ class PredicateWhereTest {
 							  .and(Expression.string("abc6").concat("def6"))
 							  .isLessOrEqual("abc6def6")
 							  .build().serialize();
-		Assert.assertEquals(" WHERE 'abc' || 'def' <= 'abcdef'" +
+		Assert.assertEquals("WHERE 'abc' || 'def' <= 'abcdef'" +
 					" AND 'abc2' || 'def2' <= 'abc2def2'" +
 					" AND 'abc3' || 'def3' <= 'abc3def3'" +
 					" OR 'abc4' || 'def4' <= 'abc4def4'" +

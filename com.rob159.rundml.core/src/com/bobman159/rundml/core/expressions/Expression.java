@@ -1,9 +1,11 @@
 package com.bobman159.rundml.core.expressions;
 
 import com.bobman159.rundml.core.exprtypes.ExprString;
+import com.bobman159.rundml.core.exprtypes.ExprTypeHelper;
 import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.exprtypes.NumericValue;
 import com.bobman159.rundml.core.exprtypes.ParmMarker;
+import com.bobman159.rundml.core.sql.OrderByExpression;
 
 /** 
  * Factory class for creating SQL Expression types. 
@@ -67,5 +69,24 @@ public class Expression {
 	public static CaseWhenExpression caseWhen() {
 		return new CaseWhenExpression();
 	}
+	
+	/**
+	 * Creates a numeric (1 2 etc) ORDER BY clause expression
+	 * @param orderByExpr - numeric number for ORDER BY clause
+	 */
+	public static OrderByExpression orderBy(int orderByExpr) {
+		IExpression iExpr= ExprTypeHelper.convertExpression(Integer.valueOf(orderByExpr));
+		return new OrderByExpression(iExpr);
+	}
+	
+	/**
+	 * Creates an <code>IExpression</code> (column, number, string) 
+	 * based ORDER BY expression
+	 */
+	public static OrderByExpression orderBy(IExpression orderByExpr) {
+		return new OrderByExpression(orderByExpr);
+	}
+	
+	
 			
 }

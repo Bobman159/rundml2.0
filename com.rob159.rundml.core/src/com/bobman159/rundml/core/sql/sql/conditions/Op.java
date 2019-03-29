@@ -25,19 +25,19 @@ package com.bobman159.rundml.core.sql.sql.conditions;
  *
  */
 public enum Op {
-		   EQ(" = "),
-		   GT(" > "), 
-		   GTE(" >= "), 
-		   LT(" < "),
-		   LTE(" <= "),
-		   NOT(" ! "),
-		   NOTEQ(" <> "),
-		   ADD(" + "),
-		   SUB(" - "),
-		   MULT(" * "),
-		   DIVIDE(" / "),
-		   PARMMARK(" ? "),
-		   CONCAT(" || ");
+		   EQ("="),
+		   GT(">"), 
+		   GTE(">="), 
+		   LT("<"),
+		   LTE("<="),
+		   NOT("!"),
+		   NOTEQ("<>"),
+		   ADD("+"),
+		   SUB("-"),
+		   MULT("*"),
+		   DIVIDE("/"),
+		   PARMMARK("?"),
+		   CONCAT("||");
 		   	   
 		   private String operator;
 		   

@@ -13,5 +13,4 @@ Bundle-ClassPath: lib/h2-1.3.176-sources.jar,
  lib/h2-1.3.176.jar,
  .
 Export-Package: com.bobman159.rundml.h2
-Import-Package: com.bobman159.rundml.compat.builder.select,
- com.bobman159.rundml.compat.model
+Import-Package: com.bobman159.rundml.compat.select.builder

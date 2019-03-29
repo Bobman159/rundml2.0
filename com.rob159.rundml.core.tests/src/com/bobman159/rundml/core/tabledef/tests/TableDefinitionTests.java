@@ -43,15 +43,15 @@ class TableDefinitionTests {
 		
 		Assert.assertEquals(3,tbDef.columns().count());
 		
-		Column col01 = tbDef.getColumnName("dfltInteger");
+		Column col01 = tbDef.column("dfltInteger");
 		Assert.assertEquals("DFLTINTEGER", col01.getName());
 		Assert.assertEquals(Types.INTEGER, col01.getType());
 		
-		Column col02 = tbDef.getColumnName("dfltNumber72");
+		Column col02 = tbDef.column("dfltNumber72");
 		Assert.assertEquals("DFLTNUMBER72", col02.getName());
 		Assert.assertEquals(Types.DECIMAL, col02.getType());
 		
-		Column col03 = tbDef.getColumnName("notNullChar");
+		Column col03 = tbDef.column("notNullChar");
 		Assert.assertEquals("NOTNULLCHAR", col03.getName());
 		Assert.assertEquals(Types.CHAR, col03.getType());
 		

@@ -32,7 +32,8 @@ public class StringOperation implements IExpression, IStringOperations {
 	public String serialize() {
 		String expression = "";
 		
-		expression = lhs.serialize() + operator.getOperator() + rhs.serialize();
+		expression = lhs.serialize() + " " + operator.getOperator() + " " + 
+					 rhs.serialize();
 		return expression;
 	}
 

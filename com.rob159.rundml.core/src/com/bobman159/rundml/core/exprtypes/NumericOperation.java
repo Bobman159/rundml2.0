@@ -33,7 +33,8 @@ public class NumericOperation implements IExpression, IMathOperations {
 	public String serialize() {
 		String expression = "";
 		
-		expression = lhs.serialize() + operator.getOperator() + rhs.serialize() ;
+		expression = lhs.serialize() + " " + operator.getOperator() + " " + 
+					 rhs.serialize() ;
 		return expression;
 
 	}
