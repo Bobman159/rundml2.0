@@ -15,7 +15,11 @@ import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
  *
  */
 public class CompatibleSQLStatement {
-
+	
+	private CompatibleSQLStatement() {
+		//Private constructor
+	}
+	
 	/**
 	 * Create the builder for a compatible SELECT statement using an existing 
 	 * <code>Connection</code> object.

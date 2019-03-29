@@ -17,33 +17,37 @@ import com.bobman159.rundml.core.tabledef.TableDefinition;
 class TableDefinitionTests {
 	
 	private static TableDefinition tbDef;
+	private static final String DFLTINTEGER = "dfltInteger";
 
 	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
+	static void setUpBeforeClass() {
 		tbDef = new TableDefinition("rundml","typetest");
 	}
 
 	@AfterAll
-	static void tearDownAfterClass() throws Exception {
+	static void tearDownAfterClass() {
+		//no tear down needed at this time
 	}
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
+		//no set up needed at this time
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
+	void tearDown() {
+		//no tear down needed at this time
 	}
 
 	@Test
 	void testAddColumn() {
-		tbDef.addColumn("dfltInteger", Types.INTEGER);
+		tbDef.addColumn(DFLTINTEGER, Types.INTEGER);
 		tbDef.addColumn("dfltNumber72", Types.DECIMAL);
 		tbDef.addColumn("notNullChar", Types.CHAR);
 		
 		Assert.assertEquals(3,tbDef.columns().count());
 		
-		Column col01 = tbDef.column("dfltInteger");
+		Column col01 = tbDef.column(DFLTINTEGER);
 		Assert.assertEquals("DFLTINTEGER", col01.getName());
 		Assert.assertEquals(Types.INTEGER, col01.getType());
 		
@@ -58,7 +62,7 @@ class TableDefinitionTests {
 		
 		tbDef.columns().forEach(col -> {
 
-			if (col.getName().equalsIgnoreCase("dfltInteger")) {
+			if (col.getName().equalsIgnoreCase(DFLTINTEGER)) {
 				Assert.assertEquals("DFLTINTEGER",col.getName());
 				Assert.assertEquals(Types.INTEGER,col.getType());				
 			} else if (col.getName().equalsIgnoreCase("dfltnumber72")) {

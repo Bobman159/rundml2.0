@@ -16,6 +16,7 @@ import com.zaxxer.hikari.HikariPoolMXBean;
  * DefaultConnectionProvider is needed for each instance of a defined connection pool.
  * 
  * @see com.bobman159.rundml.jdbc.pool.PoolFactory
+ * @see com.bobman159.rundml.jdbc.pool.IConnectionProvider
  * @author Robert Anderson
  *
  */
@@ -33,6 +34,9 @@ public class DefaultConnectionProvider implements IConnectionProvider {
 		dataSource = source;
 	}
 	
+	/**
+	 * @see com.bobman159.rundml.jdbc.pool.IConnectionProvider#getConnection()
+	 */
 	@Override
 	public Connection getConnection() throws SQLException {
 
@@ -59,10 +63,7 @@ public class DefaultConnectionProvider implements IConnectionProvider {
 	}
 
 	/**
-	 * Returns a <code>Connection</code> back to the pool, and indicates 
-	 * it is available.
-	 * 
-	 * @param conn - the <code>Connection</code> to be returned
+	 * @see com.bobman159.rundml.jdbc.pool.IConnectionProvider#releaseConnection(Connection)
 	 */
 	@Override
 	public synchronized void releaseConnection(Connection conn) throws SQLException {
@@ -78,10 +79,7 @@ public class DefaultConnectionProvider implements IConnectionProvider {
 	}
 
 	/**
-	 * Closes and removes <b>all available and in use connections</b>.
-	 * In use connections will issue a commit prior to closing the connection.
-	 * This method should be called to prevent resource leaks from 
-	 * connections which are not properly closed.
+	 * @see com.bobman159.rundml.jdbc.pool.IConnectionProvider#closePool()
 	 */
 	@Override
 	public void closePool() {
@@ -91,12 +89,7 @@ public class DefaultConnectionProvider implements IConnectionProvider {
 	}
 	
 	/**
-	 * Set indicator for whether connections pool trace information should be logged when connections 
-	 * are obtained and released.  Logging shows 1) the total number of available connections, 2) the
-	 * number of active connections and 3) number of idle connections. Connection tracing is off by default.
-	 * 
-	 * @param - trace indicator true turns connection tracing on, false turns connection tracing off.
-	 *  
+	 * @see com.bobman159.rundml.jdbc.pool.IConnectionProvider#setPoolConnectionTrace(boolean)
 	 */
 	@Override 
 	public void setPoolConnectionTrace(boolean trace) {

@@ -11,6 +11,10 @@ import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
  */
 public class H2SQLStatement {
 
+	private H2SQLStatement() {
+		//make sonar lint happy
+	}
+	
 	/**
 	 * Create the builder for an H2 DBMS SELECT statement using an existing 
 	 * <code>Connection</code> object

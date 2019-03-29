@@ -14,34 +14,41 @@ import com.bobman159.rundml.core.exprtypes.Column;
 
 class ColumnTest {
 
+	private static final String COLLHS = "COLLHS";
+	private static final String COLRHS = "COLRHS";
+	
 	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
+	static void setUpBeforeClass() {
+		//No set up needed
 	}
 
 	@AfterAll
-	static void tearDownAfterClass() throws Exception {
+	static void tearDownAfterClass() {
+		//no tear down needed
 	}
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
+		//no set up needed
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
+	void tearDown() {
+		//no tear down needed
 	}
 
 	@Test
 	void testAdd() {
 		
-		Column colLhs = new Column("COLLHS",Types.INTEGER);
+		Column colLhs = new Column(COLLHS,Types.INTEGER);
 		String expr = colLhs.add(10).serialize();
 		Assert.assertEquals("COLLHS + 10",expr);
 		
-		Column colLhs2 = new Column("collhs",Types.INTEGER);
+		Column colLhs2 = new Column(COLLHS,Types.INTEGER);
 		String expr2 = colLhs2.add(10).serialize();
 		Assert.assertEquals("COLLHS + 10",expr2);
 		
-		Column colRhs = new Column("COLRHS",Types.SMALLINT);
+		Column colRhs = new Column(COLRHS,Types.SMALLINT);
 		String expr3 = colRhs.add(10).serialize();
 		Assert.assertEquals("COLRHS + 10",expr3);
 		
@@ -58,15 +65,15 @@ class ColumnTest {
 	@Test
 	void testSubtract() {
 		
-		Column colLhs = new Column("COLLHS",Types.INTEGER);
+		Column colLhs = new Column(COLLHS,Types.INTEGER);
 		String expr = colLhs.subtract(10).serialize();
 		Assert.assertEquals("COLLHS - 10",expr);
 		
-		Column colLhs2 = new Column("collhs",Types.INTEGER);
+		Column colLhs2 = new Column(COLLHS,Types.INTEGER);
 		String expr2 = colLhs2.subtract(10).serialize();
 		Assert.assertEquals("COLLHS - 10",expr2);
 		
-		Column colRhs = new Column("COLRHS",Types.SMALLINT);
+		Column colRhs = new Column(COLRHS,Types.SMALLINT);
 		String expr3 = colRhs.subtract(10).serialize();
 		Assert.assertEquals("COLRHS - 10",expr3);
 		
@@ -83,15 +90,15 @@ class ColumnTest {
 	@Test
 	void testMultiply() {
 		
-		Column colLhs = new Column("COLLHS",Types.INTEGER);
+		Column colLhs = new Column(COLLHS,Types.INTEGER);
 		String expr = colLhs.multiply(10).serialize();
 		Assert.assertEquals("COLLHS * 10",expr);
 		
-		Column colLhs2 = new Column("collhs",Types.INTEGER);
+		Column colLhs2 = new Column(COLLHS,Types.INTEGER);
 		String expr2 = colLhs2.multiply(10).serialize();
 		Assert.assertEquals("COLLHS * 10",expr2);
 		
-		Column colRhs = new Column("COLRHS",Types.SMALLINT);
+		Column colRhs = new Column(COLRHS,Types.SMALLINT);
 		String expr3 = colRhs.multiply(10).serialize();
 		Assert.assertEquals("COLRHS * 10",expr3);
 		
@@ -108,15 +115,15 @@ class ColumnTest {
 	@Test
 	void testDivide() {
 		
-		Column colLhs = new Column("COLLHS",Types.INTEGER);
+		Column colLhs = new Column(COLLHS,Types.INTEGER);
 		String expr = colLhs.divide(10).serialize();
 		Assert.assertEquals("COLLHS / 10",expr);
 		
-		Column colLhs2 = new Column("collhs",Types.INTEGER);
+		Column colLhs2 = new Column(COLLHS,Types.INTEGER);
 		String expr2 = colLhs2.divide(10).serialize();
 		Assert.assertEquals("COLLHS / 10",expr2);
 		
-		Column colRhs = new Column("COLRHS",Types.SMALLINT);
+		Column colRhs = new Column(COLRHS,Types.SMALLINT);
 		String expr3 = colRhs.divide(10).serialize();
 		Assert.assertEquals("COLRHS / 10",expr3);
 		
@@ -133,8 +140,8 @@ class ColumnTest {
 	@Test
 	void testColumn() {
 		
-		Column colLhs = new Column("COLLHS",Types.INTEGER);
-		Assert.assertEquals("COLLHS",colLhs.getName());
+		Column colLhs = new Column(COLLHS,Types.INTEGER);
+		Assert.assertEquals(COLLHS,colLhs.getName());
 		Assert.assertEquals(Types.INTEGER,colLhs.getType());
 	
 	}

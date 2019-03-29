@@ -11,6 +11,10 @@ import com.bobman159.rundml.mysql.select.builder.MySQLSelectStatement;
  */
 public class MySQLSQLStatement {
 
+	private MySQLSQLStatement() {
+		//make sonar lint happy
+	}
+	
 	/**
 	 * Create the builder for an MySQL DBMS SELECT statement using an existing 
 	 * <code>Connection</code> object

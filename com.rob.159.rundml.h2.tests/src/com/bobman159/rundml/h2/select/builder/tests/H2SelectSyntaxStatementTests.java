@@ -514,7 +514,7 @@ class H2SelectSyntaxStatementTests {
 								 .isEqual(20)
 								 .and(20).isGreater(10)
 								 .and(10).isLess(30)
-								 .and(Expression.parm(Types.CHAR, "Abcdefg")).isEqual("Abcdefg")
+								 .and(Expression.parm(Types.CHAR, ABCDEFG_LITERAL)).isEqual("Abcdefg")
 								 .build()))
 				.toStmt();
 

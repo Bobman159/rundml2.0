@@ -7,6 +7,10 @@ package com.bobman159.rundml.core.util;
  */
 public class RunDMLUtils {
 
+	private RunDMLUtils() {
+		//To make Sonar Lint happy
+	}
+	
 	/**
 	 * Returns a qualified table name (schema.tableName)
 	 * @param schema

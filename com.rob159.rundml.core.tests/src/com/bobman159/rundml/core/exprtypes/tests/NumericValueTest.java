@@ -13,35 +13,43 @@ class NumericValueTest {
 
 	//TODO: Test math operations (add, subtract etc) number to other expression types (CASE, COLUMN, parm marker)
 	
-	short shortTen = 10;
-	short twenty = 20;
-	double dblTen = 10.001;
-	double dblThirty = 30.225;
+	private short shortTen = 10;
+	private short twenty = 20;
+	private double dblTen = 10.001;
+	private double dblThirty = 30.225;
+	
+	private static final String TENTIMES20 = "10 * 20";
+	private static final String TENPLUS20 = "10 + 20";
+	private static final String TENDIV20 = "10 / 20";
 	
 	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
+	static void setUpBeforeClass()  {
+		//no set up needed at this time
 	}
 
 	@AfterAll
-	static void tearDownAfterClass() throws Exception {
+	static void tearDownAfterClass() {
+		//no tear down needed at this time
 	}
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
+		//no set up needed at this time
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
+	void tearDown() {
+		//no tear down needed at this time
 	}
 
 	@Test
 	void addPrimitives() {
 
 		String expr = Expression.number(10).add(20).serialize();
-		Assert.assertEquals("10 + 20",expr);
+		Assert.assertEquals(TENPLUS20,expr);
 		
 		String expr2 = Expression.number(shortTen).add(twenty).serialize();
-		Assert.assertEquals("10 + 20",expr2);
+		Assert.assertEquals(TENPLUS20,expr2);
 		
 		String expr3 = Expression.number(dblTen).add(20).add(dblThirty).serialize();
 		Assert.assertEquals("10.001 + 20 + 30.225",expr3);
@@ -56,11 +64,11 @@ class NumericValueTest {
 	void addExpressions() {
 
 		String expr = Expression.number(10).add(Expression.number(20)).serialize();
-		Assert.assertEquals("10 + 20",expr);
+		Assert.assertEquals("TENPLUS20",expr);
 		
 		String expr2 = Expression.number(shortTen).add(Expression.number(twenty))
 								 .serialize();
-		Assert.assertEquals("10 + 20",expr2);
+		Assert.assertEquals("TENPLUS20",expr2);
 		
 		String expr3 = Expression.number(dblTen)
 								 .add(Expression.number(20))
@@ -122,10 +130,10 @@ class NumericValueTest {
 	void multiplyPrimitives() {
 		
 		String expr = Expression.number(10).multiply(20).serialize();
-		Assert.assertEquals("10 * 20",expr);
+		Assert.assertEquals(TENTIMES20,expr);
 		
 		String expr2 = Expression.number(shortTen).multiply(twenty).serialize();
-		Assert.assertEquals("10 * 20",expr2);
+		Assert.assertEquals(TENTIMES20,expr2);
 		
 		String expr3 = Expression.number(dblTen).multiply(20).multiply(dblThirty)
 								 .serialize();
@@ -146,7 +154,7 @@ class NumericValueTest {
 		
 		String expr2 = Expression.number(shortTen)
 								 .multiply(Expression.number(twenty)).serialize();
-		Assert.assertEquals("10 * 20",expr2);
+		Assert.assertEquals("TENTIMES20",expr2);
 		
 		String expr3 = Expression.number(dblTen)
 								 .multiply(Expression.number(20))
@@ -166,10 +174,10 @@ class NumericValueTest {
 	void dividePrimitives() {
 		
 		String expr = Expression.number(10).divide(20).serialize();
-		Assert.assertEquals("10 / 20",expr);
+		Assert.assertEquals(TENDIV20,expr);
 		
 		String expr2 = Expression.number(shortTen).divide(twenty).serialize();
-		Assert.assertEquals("10 / 20",expr2);
+		Assert.assertEquals(TENDIV20,expr2);
 		
 		String expr3 = Expression.number(dblTen).divide(20).divide(dblThirty)
 								 .serialize();
@@ -190,7 +198,7 @@ class NumericValueTest {
 		
 		String expr2 = Expression.number(shortTen)
 								 .divide(Expression.number(twenty)).serialize();
-		Assert.assertEquals("10 / 20",expr2);
+		Assert.assertEquals(TENDIV20,expr2);
 		
 		String expr3 = Expression.number(dblTen)
 								 .divide(Expression.number(20))

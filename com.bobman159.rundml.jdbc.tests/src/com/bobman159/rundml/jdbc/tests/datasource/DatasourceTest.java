@@ -18,34 +18,36 @@ import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
 
 class DatasourceTest {
-	static final String TEST_URL_PASSWORD = "//localhost/rssreader";
+	static final String TEST_URL = "//localhost/rssreader";
 
 	private static DefaultConnectionProvider h2Provider;
 	private static DefaultConnectionProvider mysqlProvider;
 	private static Logger logger = LogManager.getLogger(DatasourceTest.class.getName());
 
 	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
+	static void setUpBeforeClass() {
 		String dir = System.getProperty("user.dir");
 		String dbPath = dir + "\\db\\" + "datasource_test";
-		System.out.println("dbPath: " + dbPath);
+		logger.info("dbPath: " + dbPath);
 
 		h2Provider = PoolFactory.makeH2DataSource(dbPath, "EzMenuUser", "Aqpk3728", "10");
-		mysqlProvider = PoolFactory.makeMySQLDataSource(TEST_URL_PASSWORD, "rssuser", "Ghum8546", "10");
+		mysqlProvider = PoolFactory.makeMySQLDataSource(TEST_URL, "rssuser", "Ghum8546", "10");
 
 	}
 
 	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-
+	static void tearDownAfterClass() {		
+		//no tear down needed at this time
 	}
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
+		//no set up needed at this time
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
+	void tearDown() {
+		//no tear down needed at this time
 	}
 
 	/**

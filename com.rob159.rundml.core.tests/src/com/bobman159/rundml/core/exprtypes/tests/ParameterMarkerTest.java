@@ -14,19 +14,23 @@ import com.bobman159.rundml.core.exprtypes.ParmMarker;
 class ParameterMarkerTest {
 
 	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
+	static void setUpBeforeClass() {
+		//no set up needed at this time
 	}
 
 	@AfterAll
-	static void tearDownAfterClass() throws Exception {
+	static void tearDownAfterClass() {
+		//no tear down needed at this time
 	}
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp()  {
+		//no set up needed at time
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
+	void tearDown() {
+		//no tear down needed at this time
 	}
 
 	/**

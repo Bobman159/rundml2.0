@@ -15,19 +15,23 @@ import com.bobman159.rundml.core.exprtypes.Column;
 class ExprStringTest {
 
 	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
+	static void setUpBeforeClass() {
+		//No Set up needed at this time
 	}
 
 	@AfterAll
-	static void tearDownAfterClass() throws Exception {
+	static void tearDownAfterClass() {
+		//No tear down needed at this time
 	}
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
+		//no set up needed at this time
 	}
 
 	@AfterEach
-	void tearDown() throws Exception {
+	void tearDown() {
+		//no tear down needed at this time
 	}
 
 	@Test

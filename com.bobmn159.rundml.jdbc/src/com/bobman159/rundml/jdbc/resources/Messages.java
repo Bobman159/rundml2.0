@@ -24,6 +24,10 @@ package com.bobman159.rundml.jdbc.resources;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * Messages class for connection pool
+ *
+ */
 public class Messages extends NLS {
 	
 	private static final String BUNDLE_NAME = "com.bobman159.rundml.jdbc.resources.messages";

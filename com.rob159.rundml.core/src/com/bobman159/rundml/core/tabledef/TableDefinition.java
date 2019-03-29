@@ -3,6 +3,9 @@ package com.bobman159.rundml.core.tabledef;
 import java.util.LinkedHashMap;
 import java.util.stream.Stream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.bobman159.rundml.core.exprtypes.Column;
 import com.bobman159.rundml.core.util.RunDMLUtils;
 
@@ -16,6 +19,7 @@ public class TableDefinition {
 	private String schema;
 	private String tbName;
 	LinkedHashMap<String,Column> columnMap;
+	private static Logger logger = LogManager.getLogger(TableDefinition.class);
 
 	/**
 	 * Define the Table 
@@ -26,7 +30,7 @@ public class TableDefinition {
 	public TableDefinition(String schema,String tbName) {
 		this.schema = schema;
 		this.tbName = tbName;
-		columnMap = new LinkedHashMap<String,Column>();
+		columnMap = new LinkedHashMap<>();
 	}
 	
 	/**
@@ -81,7 +85,7 @@ public class TableDefinition {
 			try {
 					throw new ColumnNotFoundException(msg);
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				logger.error(ex);
 			}
  
 		} 
