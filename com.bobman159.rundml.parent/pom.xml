@@ -2,8 +2,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>rundml.parent</groupId>
-  <artifactId>rundml.parent</artifactId>
+  <groupId>com.bobman159.rundml.parent</groupId>
+  <artifactId>com.bobman159.rundml.parent</artifactId>
   <version>2.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
@@ -14,6 +14,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+<!--  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -22,21 +23,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+-->  
   <modules>
+  	<module>../com.bobman159.rundml.log4j2</module>
+  	<module>../com.bobman159.rundml.logslf4j</module>
+  	<module>../com.bobman159.rundml.mysql</module>
   	
-  	
-  	
-  	<module>
-  		C:/Users/Robert
-  		Anderson/git/rundml2.0/com.bobman159.rundml.log4j2
-  	</module>
-  	<module>
-  		C:/Users/Robert
-  		Anderson/git/rundml2.0/com.bobman159.rundml.logslf4j
-  	</module>
-  	<module>
-  		C:/Users/Robert
-  		Anderson/git/rundml2.0/com.bobman159.rundml.mysql
-  	</module>
+  	<module>../com.bobmn159.rundml.jdbc</module>
+  	<module>../com.bobman59.rundml.core</module>
   </modules>
 </project>
