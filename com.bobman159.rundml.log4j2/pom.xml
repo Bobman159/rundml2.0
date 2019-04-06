@@ -1,7 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.bobman159.rundml.log4j2</groupId>
-  <artifactId>com.bobman159.rundml.log4j2</artifactId>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -38,10 +36,11 @@
   	</dependency>
   </dependencies>
   <parent>
-  	<groupId>com.bobman159.rundml.parent</groupId>
   	<version>2.0.1-SNAPSHOT</version>
   	<relativePath>../com.bobman159.rundml.parent</relativePath>
-  	<artifactId>com.bobman159.rundml.parent</artifactId>
+  	<groupId>io.github.bobman159</groupId>
+  	<artifactId>rundml-parent</artifactId>
   </parent>
- <version>2.0.1-SNAPSHOT</version>
+  <groupId>io.github.bobman159</groupId>
+  <artifactId>rundml-log4j2</artifactId>
 </project>

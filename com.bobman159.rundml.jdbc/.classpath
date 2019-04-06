@@ -11,6 +11,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry exported="true" kind="lib" path="lib/HikariCP-2.7.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Eclipse IDE/Photon_RCP/eclipse/plugins/org.eclipse.osgi_3.13.0.v20180409-1500.jar" sourcepath="C:/Eclipse IDE/Photon_RCP/eclipse/plugins/org.eclipse.osgi.source_3.13.0.v20180409-1500.jar">
 		<attributes>

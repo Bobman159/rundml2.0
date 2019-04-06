@@ -5,12 +5,9 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" output="target/classes" path="src">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry excluding="tests/java/|test/resources/|test/java/" kind="src" output="target/classes" path="src"/>
+	<classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.bobman159.rundml.core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.bobman159.rundml.jdbc"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.bobman159.rundml.log4j2"/>

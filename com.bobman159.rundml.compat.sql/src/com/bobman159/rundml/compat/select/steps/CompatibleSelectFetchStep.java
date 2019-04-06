@@ -11,7 +11,7 @@ public interface CompatibleSelectFetchStep {
 	
 	/**
 	 * Returns a list of the results from the executed query.
-	 * @return - a list of the SELECT results
+	 * @return a list of the SELECT results
 	 */
 	public List<String> fetch();
 

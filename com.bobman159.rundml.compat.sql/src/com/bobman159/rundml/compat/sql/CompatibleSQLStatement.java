@@ -23,8 +23,8 @@ public class CompatibleSQLStatement {
 	/**
 	 * Create the builder for a compatible SELECT statement using an existing 
 	 * <code>Connection</code> object.
-	 * @param - a JDBC connection
-	 * @return - compatible SELECT statement builder
+	 * @param conn a JDBC connection
+	 * @return compatible SELECT statement builder
 	 */
 	public static CompatibleSelectStatement selectStatement(Connection conn) {
 		return new CompatibleSelectStatement(conn);
@@ -33,8 +33,8 @@ public class CompatibleSQLStatement {
 	/**
 	 * Create the builder for a compatible SELECT statement using an existing 
 	 * <code>DefaultConnectionProvider</code> for a connection pool.
-	 * @param - a JDBC connection pool
-	 * @return - compatible SELECT statement builder.
+	 * @param provider the JDBC connection pool provider
+	 * @return a compatible SELECT statement builder.
 	 */
 	public static CompatibleSelectStatement selectStatement(DefaultConnectionProvider provider) {
 		return new CompatibleSelectStatement(provider);

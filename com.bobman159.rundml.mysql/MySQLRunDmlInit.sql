@@ -1,6 +1,21 @@
+-- =============================================================================
+-- = Create Test object(s) used by the RunDML JUnit tests                      =
+-- = This script should be executed on a MySQL database, once the script has   =
+-- = executed successfully, the JUnit Tests in com.bobman159.rundml.jdbc.tests =
+-- = should be updated.                                                        =
+-- =============================================================================
+
+-- =============================================================================
+-- = Define a user id and password for testing                                 =
+-- = Once these SQL statements have executed successfully, they can be         =
+-- = commented out.                                                            =
+-- =============================================================================
 -- create user 'RunDmlUser'@'localhost' indentified by 'Tgbn6929';
 -- grant select,insert, update, delete on rundml.typetest to 'RunDmlUser'@'localhost';
 
+-- =============================================================================
+-- = Delete then create the rundml.typetest table for testing                  =
+-- =============================================================================
 drop table rundml.typetest;
 create table rundml.typetest
 (
@@ -20,15 +35,15 @@ create table rundml.typetest
 	DfltText				text(100)		NOT NULL
 );
 
-
+-- =============================================================================
+-- = Delete the data from the rundml.typetest table                            =
+-- =============================================================================
 DELETE FROM RUNDML.TYPETEST;
 COMMIT;
 
--- select 
--- 	   cast('0123456789' as BINARY),
--- 	   CAST('0123456789' AS BINARY)
--- from rundml.typetest
--- ;
+-- =============================================================================
+-- = Add test data to the rundml.typetest table                                =
+-- =============================================================================
 
 INSERT INTO RUNDML.TypeTest 
 (DfltInteger, NotNullMediumInt, DfltIntUnsigned, DfltTinyInt,

@@ -24,7 +24,7 @@ import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 /**
  * Defines a compatbile SQL SELECT statement that can be executed on different DBMS platforms.
  * 
- * <b> No guarantee is made regarding the compatibility of this SELECT builder on all DBMS platforms.
+ * <b> No guarantee is made regarding the compatibility of this SELECT builder on all DBMS platforms.</b>
  *
  */
 public class CompatibleSelectStatement implements CompatibleSelectListStep, 
@@ -39,7 +39,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 	
 	/**
 	 * Create a compatible SELECT statement to be executed on a database.
-	 * @param conn - JDBC connection for a database.
+	 * @param conn JDBC connection for a database.
 	 */
 	public CompatibleSelectStatement(Connection conn) {
 		this.conn = conn;
@@ -47,7 +47,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 	
 	/**
 	 * Create a SELECT statement that may be executed against a database
-	 * @param provider - a JDBC connection pool provider for a database
+	 * @param provider a JDBC connection pool provider for a database
 	 */
 	public CompatibleSelectStatement(DefaultConnectionProvider provider) {
 		this.provider = provider;
@@ -73,7 +73,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 	}
 
 	/**
-	 * Specify a SELECT statement using a </code>TableDefinition</code>
+	 * Specify a SELECT statement using a <code>TableDefinition</code>
 	 * Generates a "SELECT column-name[,] FROM schema.tbName clause
 	 */
 	@Override
@@ -104,7 +104,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 	
 	/**
 	 * Add an expression to be selected for the SELECT statement
-	 * @param - an <code>IExpression</code> 
+	 * @param expr an <code>IExpression</code> to be selected
 	 * @see com.bobman159.rundml.core.exprtypes.IExpression
 	 */
 	@Override
@@ -115,8 +115,8 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 
 	/**
 	 * Specify the table for the SELECT statement
-	 * @param - schema - the table name schema
-	 * @param - tbName - the table name
+	 * @param schema the table name schema
+	 * @param tbName the table name
 	 */
 	@Override
 	public CompatibleSelectFromStep from(String schema, String tbName) {
@@ -128,7 +128,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 	 * Specify the WHERE clause for the SELECT statement to return table
 	 * rows matching the Predicate condition.
 	 * 
-	 * @param - pred - the predicate conditions
+	 * @param pred the predicate conditions
 	 * @see com.bobman159.rundml.core.predicates.Predicate
 	 */
 	@Override
@@ -139,7 +139,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 
 	/**
 	 * Specify a GROUP BY clause for the SELECT statement.
-	 * @param - list of expressions 1 to n 
+	 * @param groupByExprs list of expressions 1 to n 
 	 * @see com.bobman159.rundml.core.exprtypes.IExpression
 	 */
 	@Override
@@ -150,7 +150,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 	
 	/**
 	 * Specifies a HAVING clause for the SELECT statement
-	 * @param - a <code>Predicate</code>
+	 * @param havingPred a <code>Predicate</code>
 	 * @see com.bobman159.rundml.core.predicates.Predicate
 	 */
 	@Override
@@ -161,7 +161,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 
 	/**
 	 * Specify a ORDER BY clause for the SELECT statement.
-	 * @param - orderByExprs - expression(s) for the ORDER BY
+	 * @param orderByExprs - expression(s) for the ORDER BY
 	 * @see com.bobman159.rundml.core.sql.OrderByExpression
 	 */
 	@Override

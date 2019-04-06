@@ -15,15 +15,15 @@ public interface CompatibleSelectOrderStep {
 
 	/**
 	 * Specifies a GROUP BY clause to group the results by the given expression(s)
-	 * @param groupByExpr - expressions specifying the grouping
-	 * @return - the ordering build step
+	 * @param groupByExprs expressions specifying the grouping
+	 * @return the ordering build step
 	 */
 	public CompatibleSelectOrderStep groupBy(IExpression... groupByExprs);
 	
 	/**
 	 * Specifies an ORDER BY clause to sort the results by the given expression(s)
-	 * @param orderByExpr - expressions specifying the sort order
-	 * @return - the ordering build step
+	 * @param orderByExprs expressions specifying the sort order
+	 * @return the ordering build step
 	 */
 	public CompatibleSelectOrderStep orderBy(OrderByExpression... orderByExprs);
 	
@@ -31,13 +31,13 @@ public interface CompatibleSelectOrderStep {
 	 * Specifies a HAVING clause to filter the row results after a GROUP BY.
 	 * This clause is specified after a groupBy()
 	 * @param havingExpr - expression to filter the rows.
-	 * @return - the ordering build step
+	 * @return the ordering build step
 	 */
 	public CompatibleSelectOrderStep having(Predicate havingExpr);
 	
 	/**
 	 * @see com.bobman159.rundml.compat.select.steps.CompatibleSelectFetchStep#fetch()
-	 * @return
+	 * @return the results of the SELECT statement as objects
 	 */
 	public List<String> fetch();
 }

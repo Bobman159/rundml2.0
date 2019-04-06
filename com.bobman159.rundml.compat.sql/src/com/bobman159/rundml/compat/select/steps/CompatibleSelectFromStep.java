@@ -16,28 +16,28 @@ public interface CompatibleSelectFromStep {
 	/**
 	 * Specifies a GROUP BY clause to group the results by the given expression(s)
 	 * @param groupByExpr - expressions specifying the grouping
-	 * @return - the ordering build step
+	 * @return the ordering build step
 	 */
 	CompatibleSelectOrderStep groupBy(IExpression... groupByExpr);
 	
 	/**
 	 * Specifies an ORDER BY clause to sort the results by the given expression(s)
-	 * @param orderByExpr - expressions specifying the sort order
-	 * @return - the ordering build step
+	 * @param orderByExprs - expressions specifying the sort order
+	 * @return the ordering build step
 	 */
 	CompatibleSelectOrderStep orderBy(OrderByExpression... orderByExprs);
 	
 	/**
 	 * Specifies a WHERE clause to specify what results are returned by the SELECT
 	 * 
-	 * @param pred - predicate clause for the SELECT
-	 * @return - the ordering build step
+	 * @param pred predicate clause for the SELECT
+	 * @return the ordering build step
 	 */
 	CompatibleSelectOrderStep where(Predicate pred);
 	
 	/**
 	 * @see com.bobman159.rundml.compat.select.steps.CompatibleSelectFetchStep#fetch()
-	 * @return
+	 * @return the results of the SELECT statement
 	 */
 	List<String> fetch();
 	
