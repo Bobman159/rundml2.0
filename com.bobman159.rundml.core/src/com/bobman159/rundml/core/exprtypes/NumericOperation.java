@@ -16,9 +16,10 @@ public class NumericOperation implements IExpression, IMathOperations {
 	 	
 	/**
 	 * Define a numeric operation between a SQL Expression and an SQL Expression
-	 * @param lhs - left side of the operation
-	 * @param rhs - right side of the operation
-	 * @param op - the operation
+	 * @param <T> an object implementing <code>IExpression</code>
+	 * @param lhs left side of the operation
+	 * @param rhs right side of the operation
+	 * @param op the operation
 	 */
 	public <T extends IExpression> NumericOperation(T lhs, T rhs, Op op) {
 		this.lhs = lhs;

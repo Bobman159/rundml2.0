@@ -23,8 +23,8 @@ public class TableDefinition {
 
 	/**
 	 * Define the Table 
-	 * @param schema - the table schema 
-	 * @param tbName - name of the table
+	 * @param schema the table schema 
+	 * @param tbName name of the table
 	 * 
 	 */
 	public TableDefinition(String schema,String tbName) {
@@ -35,8 +35,8 @@ public class TableDefinition {
 	
 	/**
 	 * Add a column to the table definition.  
-	 * @param columnName - name of column as defined in table
-	 * @param jdbcType - the JDBC type matching column's data type
+	 * @param columnName name of column as defined in table
+	 * @param jdbcType the JDBC type matching column's data type
 	 * 
 	 * @see com.bobman159.rundml.core.exprtypes.Column
 	 */
@@ -47,7 +47,7 @@ public class TableDefinition {
 	/**
 	 * The fully qualified table name (schema.table)
 	 * 
-	 * @return - fully qualified table name.
+	 * @return the fully qualified table name.
 	 */
 	public String qualifedTableName() {
 		return RunDMLUtils.qualifiedTbName(schema, tbName);
@@ -57,7 +57,7 @@ public class TableDefinition {
 	 * Returns a non modifiable list of the <code>Column</code>s defined 
 	 * for this table definition.
 	 * 
-	 * @return - the list of defined columns
+	 * @return the list of defined columns
 	 */
 	public Stream<Column> columns() {
 		return columnMap.values().stream();
@@ -67,8 +67,8 @@ public class TableDefinition {
 	 * Obtain column information for a column in the table definition.
 	 * Column names are case sensitive.
 	 * 
-	 * @param columnName - the name of the column
-	 * @return - <code>Column</code> information for the column, null otherwise
+	 * @param columnName the name of the column
+	 * @return <code>Column</code> information for the column, null otherwise
 	 */
 	/*
 	 * At this time I don't feel this violates encapsulation since there are

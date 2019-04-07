@@ -20,14 +20,14 @@ public class PredicatesList implements IPredicate {
 	/**
 	 * Add a predicate to the current list of predicates
 	 * 
-	 * @param pred - the predicate to add to the current list
+	 * @param pred the predicate to add to the current list
 	 */
 	public void addPredicate(IPredicate pred) {
 		predicateList.add(pred);
 	}
 	
 	/**
-	 * @see net.bobs.own.db.rundml.sql.predicates.IPredicate#serialize()
+	 * @see com.bobman159.rundml.core.predicates.IPredicate#serialize()
 	 */
 	@Override
 	public String serialize() {

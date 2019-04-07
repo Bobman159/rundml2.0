@@ -15,9 +15,10 @@ public class StringOperation implements IExpression, IStringOperations {
 	
 	/**
 	 * Define a string operation between two SQL expressions
-	 * @param lhs - left side of the operation
-	 * @param rhs - right side of the operation
-	 * @param op - the operation
+	 * @param <T> an object implementing <code>IExpression</code>* 
+	 * @param lhs left side of the operation
+	 * @param rhs right side of the operation
+	 * @param op the operation
 	 */
 	public <T extends IExpression> StringOperation(T lhs, T rhs, Op op) {
 		this.lhs = lhs;

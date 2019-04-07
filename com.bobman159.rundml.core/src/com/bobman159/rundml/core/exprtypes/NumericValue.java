@@ -13,7 +13,7 @@ public class NumericValue implements IExpression, IMathOperations {
 	 * Create a numeric value expression from a java primitive value
 	 * (int,short, double etc).
 	 * 
-	 * @param lhs - java primitive type value
+	 * @param lhs java primitive type value
 	 */
 	public NumericValue(Number lhs) {
 		this.number = lhs;

@@ -21,7 +21,7 @@ class SQLModelNode implements ISQLModelNode {
 
 	/**
 	 * Define a SQL clause with no arguments
-	 * @param enumeration - the enumeration of an SQL clause syntax
+	 * @param enumeration the enumeration of an SQL clause syntax
 	 */
 	public SQLModelNode(ISQLEnum enumeration) {
 		enumClause = enumeration;
@@ -30,8 +30,8 @@ class SQLModelNode implements ISQLModelNode {
 	
 	/**
 	 * Define an SQL clause with an argument
-	 * @param enumeration - the enumeration of an SQL clause syntax
-	 * @param arg - the argument of that clause
+	 * @param enumeration the enumeration of an SQL clause syntax
+	 * @param arg the argument of that clause
 	 */
 	public SQLModelNode(ISQLEnum enumeration,Object arg) {
 		enumClause = enumeration;

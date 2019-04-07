@@ -14,8 +14,8 @@ public abstract class SQLStatementSerializer { //NOSONAR
 	
 	/**
 	 * Serialize an SQL SELECT statement from a model.
-	 * @param model - the model to build the SELECT statement from
-	 * @return - text of the SELECT statement
+	 * @param model the model to build the SELECT statement from
+	 * @return text of the SELECT statement
 	 */
 	public static String serializeSelect(SQLStatementModel model) {
 		

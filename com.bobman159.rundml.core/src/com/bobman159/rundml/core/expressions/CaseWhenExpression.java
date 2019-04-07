@@ -35,11 +35,11 @@ public class CaseWhenExpression implements IExpression, IMathOperations, IString
 	
 	/**
 	 * Creates a WHEN expression condition between two numerical values
-	 * @param lhs - the number to the of the operator
-	 * @param op - the condition operator (EQ,GT,LTE, etc)
-	 * @param rhs - the number to the right of the operator
+	 * @param lhs the number to the of the operator
+	 * @param op the condition operator (EQ,GT,LTE, etc)
+	 * @param rhs the number to the right of the operator
 	 * @see com.bobman159.rundml.core.sql.sql.conditions.Op
-	 * @return - the CASE WHEN Expression
+	 * @return the CASE WHEN Expression
 	 */
 	public CaseWhenExpression when(Number lhs, Op op, Number rhs) {
 	
@@ -75,7 +75,8 @@ public class CaseWhenExpression implements IExpression, IMathOperations, IString
 	
 	/**
 	 * Creates a ELSE expression clause
-	 * @param expr - the <code>IExpression</code> for the ELSE clause
+	 * @param expr the <code>IExpression</code> for the ELSE clause
+	 * @return the CASE expression
 	 */
 	public CaseWhenExpression elseClause(IExpression expr) {
 		elseCondition = expr;
@@ -84,7 +85,7 @@ public class CaseWhenExpression implements IExpression, IMathOperations, IString
 	
 	/**
 	 * Generate the END clause for the CASE
-	 * @return
+	 * @return the CASE expression
 	 */
 	public CaseWhenExpression end() {
 		//Does nothing, implemented for readability during coding

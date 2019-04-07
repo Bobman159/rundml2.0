@@ -13,8 +13,9 @@ public class RunDMLUtils {
 	
 	/**
 	 * Returns a qualified table name (schema.tableName)
-	 * @param schema
-	 * @param tbName
+	 * @param schema the database schema 
+	 * @param tbName the table name
+	 * @return the fully qualifed table name
 	 */
 	public static String qualifiedTbName(String schema,String tbName) {
 		return String.format("%s.%s", schema,tbName);

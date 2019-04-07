@@ -17,19 +17,19 @@ public interface ISQLModelNode {
 	/**
 	 * Return the base type <code>ISQLEnum</code> of the java Enum for an SQL 
 	 * clause
-	 * @return - a ISQLEnum of a Java enum for an SQL clause.
+	 * @return a ISQLEnum of a Java enum for an SQL clause.
 	 */
 	public ISQLEnum 	getEnum();
 
 	/**
 	 * Return the argument if any for the SQL clause
-	 * @return - the argument for this instance returned as a String, null otherwise
+	 * @return the argument for this instance returned as a String, null otherwise
 	 */
 	public String argToString();
 	
 	/**
 	 * Return the argument if any for the SQL clause
-	 * @return - the argument for this instance returned as a String, null otherwise
+	 * @return the argument for this instance returned as a String, null otherwise
 	 */
 	public Object getArg();
 }

@@ -11,7 +11,7 @@ public interface ISQLEnum {
 	/**
 	 * Serialize the ISQLEnum of an SQL clause to a String of text.
 	 * 
-	 * @return - the text for the SQL clause syntax
+	 * @return the text for the SQL clause syntax
 	 */
 	public String serializeClause();
 	

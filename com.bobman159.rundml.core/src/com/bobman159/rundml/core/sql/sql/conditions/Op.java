@@ -3,23 +3,24 @@ package com.bobman159.rundml.core.sql.sql.conditions;
 /** 
  * Operator for SQL conditions 
  * 
+ * <p> Comparison Operators</p>
  * <ul>
- * 	<p> Comparison Operators
- * 	<li>Op.EQ results in an "=" sign
- * 	<li>Op.GT results in an ">" sign
- * 	<li>Op.GTE results in an ">=" sign
- * 	<li>Op.LT results in an "<" sign
- * 	<li>Op.LTE results in an "<=" sign
- * 	<li>Op.NOT results in an "!" sign
- * 	<li>Op.NOTEQ results in an "<>" sign
+ * 	
+ * 	<li>Op.EQ results in an "=" sign</li>
+ * 	<li>Op.GT results in an "&gt;" sign</li>
+ * 	<li>Op.GTE results in an "&gt;=" sign</li>
+ * 	<li>Op.LT results in an "&lt;" sign</li>
+ * 	<li>Op.LTE results in an "&lt;=" sign</li>
+ * 	<li>Op.NOT results in an "!" sign</li>
+ * 	<li>Op.NOTEQ results in an "&lt;&gt;" sign</li>
  *  </ul>
  *
  *  <p> Mathmatical operators
  *  <ul>
- * 	<li>Op.ADD results in an "+" sign
- *  <li>Op.SUB results in an "-" sign
- *  <li>Op.MULT results in an "*" sign
- *  <li>Op.DIVIDE results in an "/" sign
+ * 	<li>Op.ADD results in an "+" sign</li>
+ *  <li>Op.SUB results in an "-" sign</li>
+ *  <li>Op.MULT results in an "*" sign</li>
+ *  <li>Op.DIVIDE results in an "/" sign</li>
  *</ul>
  *
  *

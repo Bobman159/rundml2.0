@@ -10,7 +10,7 @@ public interface IPredicate {
 	/**
 	 * Serialize the predicate to an SQL predicate condition.
 	 * 
-	 * @return - the SQL predicate as a string
+	 * @return the SQL predicate as a string
 	 */
 	public String serialize();
 

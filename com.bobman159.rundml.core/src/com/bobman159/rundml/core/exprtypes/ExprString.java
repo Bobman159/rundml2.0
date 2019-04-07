@@ -12,12 +12,15 @@ public class ExprString implements IExpression, IStringOperations {
 	 * Defines an SQL String expression, the <code>stringExpr</code> is 
 	 * automatically escaped with "\'" at the start and end of the string.
 	 * 
-	 * @param stringExpr - the escaped SQL string expression
+	 * @param stringExpr the escaped SQL string expression
 	 */
 	public ExprString(String stringExpr) {
 		this.stringExpr = String.format("\'%s\'", stringExpr);
 	}
 	
+	/**
+	 * @see com.bobman159.rundml.core.exprtypes.IExpression#serialize()
+	 */
 	@Override
 	public String serialize() {
 

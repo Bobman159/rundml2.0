@@ -5,7 +5,7 @@ import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
 
 /**
- * Represents the comparison (<, > etc) clause for an SQL predicate 
+ * Represents the comparison (&lt;,&gt; etc) clause for an SQL predicate 
  * WHERE, AND or OR clause.
  *
  */
@@ -16,8 +16,8 @@ public class PredicateComparison implements IPredicate {
 
 	/**
 	 * Define a predicate comparison clause
-	 * @param compareOp - the comparison operator (<, >, etc)
-	 * @param expr - the right side expression of the comparison.
+	 * @param compareOp the comparison operator (&lt;, &gt;, etc)
+	 * @param expr the right side expression of the comparison.
 	 * 
 	 * @see com.bobman159.rundml.core.sql.sql.conditions.Op
 	 */
@@ -26,6 +26,9 @@ public class PredicateComparison implements IPredicate {
 		this.compareOp = compareOp;
 	}
 
+	/**
+	 * @see com.bobman159.rundml.core.predicates.IPredicate#serialize()
+	 */
 	@Override
 	public String serialize() {
 		return compareOp.getOperator() + " " + exprRhs.serialize() + " ";

@@ -24,7 +24,8 @@ public class OrderByClause implements IExpression {
 	
 	/**
 	 * Add an expression to the ORDER BY clause
-	 * @param orderByExpr - the expression for the ORDER BY
+	 * @param orderByExpr the expression for the ORDER BY
+	 * @return the ORDER BY clause
 	 */
 	public OrderByClause addExpression(OrderByExpression orderByExpr) {
 		orderByExprs.add(orderByExpr);

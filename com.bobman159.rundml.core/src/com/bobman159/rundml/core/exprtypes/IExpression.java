@@ -11,7 +11,7 @@ public interface IExpression {
 	/**
 	 * Serialize the expression to an SQL statement clause.
 	 * 
-	 * @return - the SQL clause
+	 * @return the SQL clause as a text string
 	 */
 	public String serialize();
 	

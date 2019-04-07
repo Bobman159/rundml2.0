@@ -9,21 +9,21 @@ public interface IPredicateClauseStep {
 
 	/**
 	 * Create an SQL AND clause predicate
-	 * @param expr - expression for the AND
-	 * @return - predicate builder
+	 * @param expr expression for the AND
+	 * @return predicate builder
 	 */
 	public IPredicateComparisonStep and(Object expr);
 
 	/**
 	 * Create an SQL OR clause predicate 
-	 * @param expr - expression for the OR
-	 * @return - predicate builder
+	 * @param expr expression for the OR
+	 * @return predicate builder
 	 */
 	public IPredicateComparisonStep or(Object expr);
 	
 	/**
 	 * Finalize the predicate clause(s) for the current predicate
-	 * @return = the <code>Predicate</code> 
+	 * @return the <code>Predicate</code> 
 	*/
 	public Predicate build();
 

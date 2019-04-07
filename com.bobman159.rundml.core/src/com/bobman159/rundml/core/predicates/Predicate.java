@@ -14,14 +14,14 @@ public class Predicate implements IPredicate {
 	/**
 	 * Define all the current predicate conditions
 	 * 
-	 * @param predList - current defined predicate list
+	 * @param predList current defined predicate list
 	 */
 	public Predicate(PredicatesList predList) {
 		this.predList = predList;
 	}
 	
 	/**
-	 * @see net.bobs.own.db.rundbml.sql.predicates.IPredicate#serialize
+	 * @see com.bobman159.rundml.core.predicates.IPredicate#serialize
 	 */
 	@Override
 	public String serialize() {
@@ -42,8 +42,8 @@ public class Predicate implements IPredicate {
 	
 	/**
 	 * Create an SQL WHERE clause predicate
-	 * @param expr - expression for the WHERE
-	 * @return - predicate builder next step
+	 * @param expr  expression for the WHERE
+	 * @return predicate builder next step
 	 */
 	public static IPredicateComparisonStep where(Object expr) {
 		return new PredicateSteps(PredOperand.WHERE,expr);
@@ -51,8 +51,8 @@ public class Predicate implements IPredicate {
 	
 	/**
 	 * Create an SQL HAVING clause predicate
-	 * @param expr - expression for the HAVING
-	 * @return - predicate builder next step
+	 * @param expr expression for the HAVING
+	 * @return predicate builder next step
 	 */
 	public static IPredicateComparisonStep having(Object expr) {
 		return new PredicateSteps(PredOperand.HAVING,expr);
@@ -61,7 +61,6 @@ public class Predicate implements IPredicate {
 	/**
 	 * Predicate clause builder class
 	 *
-	 * @param <T>
 	 */
 	public static class PredicateSteps implements //PredWhereStep,
 												  IPredicateClauseStep,
@@ -72,8 +71,8 @@ public class Predicate implements IPredicate {
 		
 		/**
 		 * Define an SQL predicate builder and the initial WHERE or HAVING clause
-		 * @param predOp - predicate operand WHERE or HAVING
-		 * @param whereExpr - expression for the SQL WHERE clause
+		 * @param predOp predicate operand WHERE or HAVING
+		 * @param predExpr expression for the SQL WHERE clause
 		 */
 		public PredicateSteps(PredOperand predOp,Object predExpr) {
 			predList = new PredicatesList();
@@ -101,7 +100,7 @@ public class Predicate implements IPredicate {
 		}
 		
 		/**
-		 * @see net.bobs.own.db.rundml.sql.builders.predicatesIPredicateComparisonStep#isEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isEqual(Object)
 		 */
 		@Override
 		public IPredicateClauseStep isEqual(Object expr) {
@@ -111,7 +110,7 @@ public class Predicate implements IPredicate {
 		}
 		
 		/**
-		 * @see net.bobs.own.db.rundml.sql.builders.predicatesIPredicateComparisonStep#isGreater(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreater(Object)
 		 */
 		@Override
 		public IPredicateClauseStep isGreater(Object expr) {
@@ -121,7 +120,7 @@ public class Predicate implements IPredicate {
 		}
 
 		/**
-		 * @see net.bobs.own.db.rundml.sql.builders.predicatesIPredicateComparisonStep#isGreaterOrEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreaterOrEqual(Object)
 		 */
 		@Override
 		public IPredicateClauseStep isGreaterOrEqual(Object expr) {
@@ -131,7 +130,7 @@ public class Predicate implements IPredicate {
 		}
 
 		/**
-		 * @see net.bobs.own.db.rundml.sql.builders.predicatesIPredicateComparisonStep#isLess(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLess(Object)
 		 */
 		@Override
 		public IPredicateClauseStep isLess(Object expr) {
@@ -141,7 +140,7 @@ public class Predicate implements IPredicate {
 		}
 
 		/**
-		 * @see net.bobs.own.db.rundml.sql.builders.predicatesIPredicateComparisonStep#isLessOrEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLessOrEqual(Object)
 		 */
 		@Override
 		public IPredicateClauseStep isLessOrEqual(Object expr) {
@@ -151,7 +150,7 @@ public class Predicate implements IPredicate {
 		}
 
 		/**
-		 * @see net.bobs.own.db.rundml.sql.builders.predicatesIPredicateComparisonStep#isNot(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNot(Object)
 		 */
 		@Override
 		public IPredicateClauseStep isNot(Object expr) {
@@ -161,7 +160,7 @@ public class Predicate implements IPredicate {
 		}
 
 		/**
-		 * @see net.bobs.own.db.rundml.sql.builders.predicatesIPredicateComparisonStepp#isNotEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNotEqual(Object)
 		 */
 		@Override
 		public IPredicateClauseStep isNotEqual(Object expr) {

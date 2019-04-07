@@ -27,7 +27,7 @@ public class ExpressionList {
 	 * Add a list of expressions to the list of expressions being tracked 
 	 * by this class.
 	 * 
-	 * @param expressions - list of expressions
+	 * @param expressionList expressions list of expressions
 	 */
 	public void addExpressions(IExpression[] expressionList) {
 		for (IExpression expr : expressionList) {
@@ -37,24 +37,17 @@ public class ExpressionList {
 	
 	/**
 	 * Add an expression to list of expressions being tracked by this class
-	 * @param expresion - the expression to be added
+	 * @param expresion the expression to be added
 	 */
 	public void addExpression(IExpression expresion) {
 		expressions.add(expresion);
 	}
 	
 	/**
-	 * @see java.lang.Iterable#forEach(Consumer)
-	 */
-	public void forEach(Consumer<? super IExpression> action) {
-		expressions.forEach(action);
-	}
-	
-	/**
 	 * Returns a list of SQL expressions as comma separated text 
 	 * "expr1,expr2,expr3..."
 	 * 
-	 * @return - comma separated text string
+	 * @return comma separated text string
 	 */
 	public String toCSV() {
 	

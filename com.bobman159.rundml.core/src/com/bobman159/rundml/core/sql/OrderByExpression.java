@@ -16,7 +16,7 @@ public class OrderByExpression implements IExpression {
 	
 	/**
 	 * Create an Order By Expression
-	 * @param orderByExpr
+	 * @param orderByExpr the SQL ORDER BY expression
 	 */
 	public OrderByExpression(IExpression orderByExpr) {
 		this.orderByExpr = orderByExpr;
@@ -26,6 +26,7 @@ public class OrderByExpression implements IExpression {
 	
 	/**
 	 * Specify a sort order of ascending for this expression
+	 * @return the ORDER BY expression
 	 */
 	public OrderByExpression asc() {
 		this.sortDir = OrderBySortEnum.ASC;
@@ -34,6 +35,7 @@ public class OrderByExpression implements IExpression {
 	
 	/**
 	 * Specify a sort order of descending for this expression
+	 * @return the ORDER BY expression
 	 */
 	public OrderByExpression desc() {
 		this.sortDir = OrderBySortEnum.DESC;
@@ -45,6 +47,7 @@ public class OrderByExpression implements IExpression {
 	 * <p>NOTE: Not all DBMS will allow the NULLS FIRT clause in an ORDER BY,
 	 * review the documentation for your specific DBMS to determine if the clause is 
 	 * supported.
+	 * @return the ORDER BY expression
 	 */
 	public OrderByExpression nullsFirst() {
 		orderByNull = OrderByNullsEnum.NULLS_FIRST;
@@ -56,6 +59,7 @@ public class OrderByExpression implements IExpression {
 	 * <p>NOTE: Not all DBMS will allow the NULLS LAST clause in an ORDER BY,
 	 *  review the documentation for your specific DBMS to determine if the clause is 
 	 *  supported.
+	 * @return the ORDER BY expression*  
 	 */
 	public OrderByExpression nullsLast() {
 		orderByNull = OrderByNullsEnum.NULLS_LAST;

@@ -33,7 +33,7 @@ public class SQLStatementModel {
 
 	/**
 	 * Add an SQL clause for the current model 
-	 * @param clause - the clause being added
+	 * @param clause the clause being added
 	 */
 	public void addClause(ISQLEnum clause) {
 		addNode(clause);
@@ -44,8 +44,8 @@ public class SQLStatementModel {
 	 * This method may be called multiple times to add values 
 	 * for the same SQL clause.
 	 * 
-	 * @param clause - the clause being added
-	 * @param value - the value for the current clause being added
+	 * @param clause the clause being added
+	 * @param value the value for the current clause being added
 	 */
 	public void addClause(ISQLEnum clause,Object value) {
 		addNode(clause,value);
@@ -53,8 +53,8 @@ public class SQLStatementModel {
 	
 	/**
 	 * Add a list of columns from a <code>TableDefinition</code> for an SQL clause
-	 * @param clause - enumeration of the type of clause to be added
-	 * @param tbDef - table definition for the columns
+	 * @param clause enumeration of the type of clause to be added
+	 * @param tbDef table definition for the columns
 	 */
 	public void addColumnList(ISQLEnum clause, TableDefinition tbDef) {
 		ExpressionList columns = new ExpressionList();
@@ -68,8 +68,8 @@ public class SQLStatementModel {
 	 * <code>SQLClause</code> enumerations defined for SQL expressions that are 
 	 * comma separated list such as SELECT_EXPR or GROUP_BY should use this method. 
 	 * 
-	 * @param clause - <code>SQLClause</code> enumeration
-	 * @param expr - SQL expression 
+	 * @param clause <code>SQLClause</code> enumeration
+	 * @param expr an SQL expression 
 	 */
 	@SuppressWarnings("unchecked")
 	public void addExpressionList(ISQLEnum clause, IExpression expr) {
@@ -99,8 +99,8 @@ public class SQLStatementModel {
 	 * for SQL expressions that are comma separated list such as SELECT_EXPR 
 	 * or GROUP_BY should use this method. 
 	 * 
-	 * @param clause - <code>SQLClause</code> enumeration
-	 * @param expressions - SQL expression list 
+	 * @param clause <code>SQLClause</code> enumeration
+	 * @param expressions SQL expression list 
 	 */
 	public void addExpressionList(ISQLEnum clause,IExpression... expressions) {
 
@@ -113,7 +113,7 @@ public class SQLStatementModel {
 	 * Return a non-modifiable <code>Stream</code> of the SQL clauses 
 	 * for the current model.
 	 * 
-	 * @return - the <code>Stream</code> of <code>SQLClause</code> objects
+	 * @return the <code>Stream</code> of <code>SQLClause</code> objects
 	 */
 	public Stream<SQLModelNode> sqlClauses() {
 		return model.stream();

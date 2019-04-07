@@ -10,9 +10,9 @@ public class ParmMarker implements IExpression, IMathOperations, IStringOperatio
 	/**
 	 * Creates a parameter marker expression expression type.
 	 * A "?" will be generated for each parameter marker expression type.
-	 * @param jdbcType - the JDBC Data Type to be used when binding the parameter
+	 * @param jdbcType the JDBC Data Type to be used when binding the parameter
 	 * marker.
-	 * @param value - the data value for the parameter marker
+	 * @param value the data value for the parameter marker
 	 * @see java.sql.Types
 	 */
 	public ParmMarker(int jdbcType,Object value) {
@@ -22,7 +22,7 @@ public class ParmMarker implements IExpression, IMathOperations, IStringOperatio
 	
 	/**
 	 * Return the JDBC data type for this parameter marker.
-	 * @return - the JDBC data type
+	 * @return the JDBC data type
 	 * @see java.sql.Types
 	 */
 	public int getParmType() {
@@ -31,7 +31,7 @@ public class ParmMarker implements IExpression, IMathOperations, IStringOperatio
 	
 	/**
 	 * Returns the value this parameter marker.
-	 * @return - the value as a string
+	 * @return the value as a string
 	 */
 	public String getValue() {
 		return value.toString();

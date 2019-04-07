@@ -24,8 +24,8 @@ public class Column implements IExpression, IMathOperations, IStringOperations {
 	/**
 	 * Define a column in a table
 	 * 
-	 * @param column  - name of the column (case insensitive)
-	 * @param colType - <b>jdbc type</b> of column used for jdbc data binding
+	 * @param column name of the column (case insensitive)
+	 * @param colType <b>jdbc type</b> of column used for jdbc data binding
 	 * 
 	 */
 	public Column(String column, int colType) {
@@ -36,7 +36,7 @@ public class Column implements IExpression, IMathOperations, IStringOperations {
 	/**
 	 * Return the name of the table column for this column.
 	 * 
-	 * @return - the column name
+	 * @return the column name
 	 */
 	public String getName() {
 		return columnName;
@@ -45,14 +45,14 @@ public class Column implements IExpression, IMathOperations, IStringOperations {
 	/**
 	 * Return the JDBC data binding type for this column.
 	 * 
-	 * @return - the jdbc type.
+	 * @return the jdbc type.
 	 */
 	public int getType() {
 		return jdbcType;
 	}
 
 	/**
-	 * @see net.bobs.own.db.rundml.sql.expression.types.IExpression#serialize()
+	 * @see com.bobman159.rundml.core.exprtypes.IExpression#serialize()
 	 */
 	@Override
 	public String serialize() {

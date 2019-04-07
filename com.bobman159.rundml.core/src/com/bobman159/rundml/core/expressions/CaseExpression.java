@@ -26,7 +26,7 @@ public class CaseExpression implements IExpression, IMathOperations, IStringOper
 	
 	/**
 	 * Creates a CASE expression clause
-	 * @param expr - the <code>IExpression</code> for the CASE clause
+	 * @param expr the <code>IExpression</code> for the CASE clause
 	 */
 	public CaseExpression(IExpression expr) {
 		this.caseExpr = expr;
@@ -35,7 +35,8 @@ public class CaseExpression implements IExpression, IMathOperations, IStringOper
 	
 	/**
 	 * Creates a WHEN expression clause
-	 * @param expr - the <code>IExpression</code> for the WHEN condition
+	 * @param expr the <code>IExpression</code> for the WHEN condition
+	 * @return the WHEN expression
 	 */
 	public CaseExpression when(IExpression expr) {
 		whenCondition = expr;
@@ -44,7 +45,8 @@ public class CaseExpression implements IExpression, IMathOperations, IStringOper
 
 	/**
 	 * Creates a THEN expression clause
-	 * @param expr - the <code>IExpression</code> for the WHEN clause
+	 * @param expr the <code>IExpression</code> for the WHEN clause
+	 * @return the THEN expression
 	 */
 	public CaseExpression then(IExpression expr) {
 		CaseWhenThenCondition condition = new CaseWhenThenCondition(whenCondition,expr);
@@ -54,7 +56,8 @@ public class CaseExpression implements IExpression, IMathOperations, IStringOper
 	
 	/**
 	 * Creates a ELSE expression clause
-	 * @param expr - the <code>IExpression</code> for the ELSE clause
+	 * @param expr the <code>IExpression</code> for the ELSE clause
+	 * @return the ELSE expression
 	 */
 	public CaseExpression elseClause(IExpression expr) {
 		elseCondition = expr;
@@ -63,7 +66,7 @@ public class CaseExpression implements IExpression, IMathOperations, IStringOper
 	
 	/**
 	 * Generate the END clause for the CASE
-	 * @return - CASE expression
+	 * @return CASE expression
 	 */
 	public CaseExpression end() {
 		//Does nothing, implemented for readability during coding

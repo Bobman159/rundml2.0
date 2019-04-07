@@ -27,7 +27,7 @@ public class PredicateClause implements IPredicate {
 		
 		/**
 		 * Returns the string representation for the predicate
-		 * @return - the predicate as a <Code>String</code>
+		 * @return the predicate as a <Code>String</code>
 		 */
 		public String getPredicate() {
 			return this.operand;
@@ -39,8 +39,8 @@ public class PredicateClause implements IPredicate {
 	/**
 	 * Define an SQL WHERE, AND or OR clause
 	 * 
-	 * @param predicate - type of predicate
-	 * @param lhs - expression for the predicated
+	 * @param predicate type of predicate
+	 * @param lhs expression for the predicated
 	 * 
 	 */
 	public PredicateClause(PredOperand predicate, Object lhs) {

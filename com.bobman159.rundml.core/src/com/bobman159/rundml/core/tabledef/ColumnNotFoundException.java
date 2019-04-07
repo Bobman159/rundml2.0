@@ -15,7 +15,7 @@ public class ColumnNotFoundException extends Exception {
 
 	/**
 	 * Creates a column not found exception
-	 * @param column - the column name not found
+	 * @param msg the column name not found error message
 	 */
 	public ColumnNotFoundException(String msg) {
 		super(msg);
