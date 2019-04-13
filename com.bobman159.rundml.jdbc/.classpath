@@ -5,91 +5,25 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src">
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
+		<attributes>
+			<attribute name="test" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry exported="true" kind="lib" path="lib/HikariCP-2.7.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Eclipse IDE/Photon_RCP/eclipse/plugins/org.eclipse.osgi_3.13.0.v20180409-1500.jar" sourcepath="C:/Eclipse IDE/Photon_RCP/eclipse/plugins/org.eclipse.osgi.source_3.13.0.v20180409-1500.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/C:/Eclipse%20IDE/Photon_RCP/eclipse/plugins/org.eclipse.platform.doc.isv_4.8.0.v20180611-0826.jar!/reference/api"/>
-		</attributes>
-		<accessrules>
-			<accessrule kind="discouraged" pattern="org/eclipse/core/runtime/adaptor/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/core/runtime/internal/adaptor/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/equinox/log/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/container/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/container/builders/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/container/namespaces/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/framework/console/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/framework/eventmgr/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/framework/internal/reliablefile/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/framework/log/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/framework/util/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/debug/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/framework/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/hookregistry/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/loader/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/loader/buddy/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/loader/classpath/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/loader/sources/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/location/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/messages/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/provisional/service/security/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/provisional/verifier/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/service/security/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/serviceregistry/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/signedcontent/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/internal/url/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/launch/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/report/resolution/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/datalocation/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/debug/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/environment/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/localization/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/pluginconversion/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/resolver/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/runnable/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/security/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/service/urlconversion/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/signedcontent/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/storage/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/storage/bundlefile/*"/>
-			<accessrule kind="discouraged" pattern="org/eclipse/osgi/storage/url/reference/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/storagemanager/*"/>
-			<accessrule kind="accessible" pattern="org/eclipse/osgi/util/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/dto/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/dto/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/hooks/bundle/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/hooks/resolver/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/hooks/service/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/hooks/weaving/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/launch/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/namespace/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/startlevel/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/startlevel/dto/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/wiring/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/framework/wiring/dto/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/resource/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/resource/dto/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/service/condpermadmin/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/service/log/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/service/log/admin/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/service/packageadmin/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/service/permissionadmin/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/service/resolver/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/service/startlevel/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/service/url/*"/>
-			<accessrule kind="accessible" pattern="org/osgi/util/tracker/*"/>
-			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
-		</accessrules>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.bobman159.rundml.log4j2"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

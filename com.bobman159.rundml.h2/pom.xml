@@ -5,7 +5,6 @@
   	<rundml.version>2.0.1-SNAPSHOT</rundml.version>
   </properties>
   <build>
-    <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

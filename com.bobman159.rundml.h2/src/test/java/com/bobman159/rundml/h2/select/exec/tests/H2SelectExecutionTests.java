@@ -1,4 +1,4 @@
-package test.java.com.bobman159.rundml.h2.select.exec.tests;
+package com.bobman159.rundml.h2.select.exec.tests;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
