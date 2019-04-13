@@ -71,7 +71,7 @@ public class Expression {
 	
 	/**
 	 * Creates a numeric (1 2 etc) ORDER BY clause expression
-	 * @param orderByExpr - numeric number for ORDER BY clause
+	 * @param orderByExpr numeric number for ORDER BY clause
 	 * @return SQL ORDER BY expression 
 	 */
 	public static OrderByExpression orderBy(int orderByExpr) {
@@ -82,7 +82,7 @@ public class Expression {
 	/**
 	 * Creates an <code>IExpression</code> (column, number, string) 
 	 * based ORDER BY expression
-	 * @param orderByExpr - the SQL expresion for the ORDER BY
+	 * @param orderByExpr the SQL expresion for the ORDER BY
 	 * @return SQL ORDER BY expression
 	 */
 	public static OrderByExpression orderBy(IExpression orderByExpr) {

@@ -51,11 +51,11 @@ public class CaseWhenExpression implements IExpression, IMathOperations, IString
 	
 	/**
 	 * Creates a CASE WHEN condition between two expressions 
-	 * @param lhs - the expression to the left of the condition
-	 * @param op - the condition operator (EQ,GT,LTE, etc)
-	 * @param rhs - the expression to the right of the condition
+	 * @param lhs the expression to the left of the condition
+	 * @param op  the condition operator (EQ,GT,LTE, etc)
+	 * @param rhs the expression to the right of the condition
 	 * @see com.bobman159.rundml.core.sql.sql.conditions.Op
-	 * @return - the CASE WHEN expression
+	 * @return the CASE WHEN expression
 	 */
  	public CaseWhenExpression when(IExpression lhs, Op op, IExpression rhs) {
  		whenCondition = new SQLCondition(lhs,op,rhs);
@@ -64,8 +64,8 @@ public class CaseWhenExpression implements IExpression, IMathOperations, IString
  	
  	/**
  	 * Create a THEN expression clause
- 	 * @param then - expression for the THEN clause
- 	 * @return - the CASE WHEN expression
+ 	 * @param then expression for the THEN clause
+ 	 * @return the CASE WHEN expression
  	 */
 	public CaseWhenExpression then(IExpression then) {
 		CaseWhenThenCondition condition = new CaseWhenThenCondition(whenCondition,then);

@@ -48,7 +48,7 @@ public enum Op {
 		   
 		   /**
 		    * Return the string representation for the operator.
-		    * @return - the operator
+		    * @return the operator
 		    */
 		   public String getOperator() {
 			   return this.operator;

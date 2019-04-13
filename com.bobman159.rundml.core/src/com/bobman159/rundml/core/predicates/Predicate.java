@@ -35,7 +35,7 @@ public class Predicate implements IPredicate {
 	public interface PredBuildStep {
 		/**
 		 * Finalize the current predicate clause(s) being generated
-		 * @return - the generated predicate
+		 * @return the generated predicate
 		 */
 		public Predicate build();
 	}

@@ -161,7 +161,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 
 	/**
 	 * Specify a ORDER BY clause for the SELECT statement.
-	 * @param orderByExprs - expression(s) for the ORDER BY
+	 * @param orderByExprs expression(s) for the ORDER BY
 	 * @see com.bobman159.rundml.core.sql.OrderByExpression
 	 */
 	@Override
@@ -172,7 +172,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 
 	/**
 	 * Execute the generated SELECT statement and return the results
-	 * @return - a <code>List</code> of the resulting rows, empty otherwise.
+	 * @return a <code>List</code> of the resulting rows, empty otherwise.
 	 */
 	@Override
 	public List<String> fetch() {
@@ -182,7 +182,7 @@ public class CompatibleSelectStatement implements CompatibleSelectListStep,
 	/**
 	 * Returns the SQL SELECT statement text for the current  
 	 * statement instance.
-	 * @return - the SELECT statement text
+	 * @return the SELECT statement text
 	 */
 	public String toStmt() {
 		return SQLStatementSerializer.serializeSelect(model);

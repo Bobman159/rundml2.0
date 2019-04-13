@@ -58,7 +58,7 @@ public class ExprTypeHelper {
 	 * @param lhs the expression to the left of the string operator
 	 * @param rhs the expression to the right of the string operator
 	 * @param op the string operation operator (concat, etc)
-	 * @return - the string operation expression
+	 * @return the string operation expression
 	 */
 	public static StringOperation stringOperation(IExpression lhs, IExpression rhs, Op op) {
 		return new StringOperation(lhs,rhs,op);

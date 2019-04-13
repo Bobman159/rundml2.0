@@ -30,7 +30,7 @@ public interface CompatibleSelectOrderStep {
 	/**
 	 * Specifies a HAVING clause to filter the row results after a GROUP BY.
 	 * This clause is specified after a groupBy()
-	 * @param havingExpr - expression to filter the rows.
+	 * @param havingExpr expression to filter the rows.
 	 * @return the ordering build step
 	 */
 	public CompatibleSelectOrderStep having(Predicate havingExpr);

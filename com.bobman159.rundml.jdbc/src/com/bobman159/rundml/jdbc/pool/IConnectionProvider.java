@@ -12,16 +12,16 @@ public interface IConnectionProvider {
 
 	/**
 	 * Obtain a JDBC <code>Connection</code> object from the pool
-	 * @return - a JDBC connection
-	 * @throws SQLException
+	 * @return a JDBC connection
+	 * @throws SQLException if an error occurs obtaining a connection
 	 */
 	public Connection getConnection() throws SQLException;
 	
 	/**
 	 * Release a JDBC <code>Connection</code> back to the connection pool 
 	 * and indicates it is available.
-	 * @param conn - the <code>Connection</code> to be released
-	 * @throws SQLException
+	 * @param conn the <code>Connection</code> to be released
+	 * @throws SQLException if an error occurs releasing the connection
 	 */
 	public void releaseConnection(Connection conn) throws SQLException;
 	
@@ -39,7 +39,7 @@ public interface IConnectionProvider {
 	 * 1) the total number of available connections, 2) the number of active connections 
 	 * and 3) number of idle connections. Connection tracing is off by default.
 	 * 
-	 * @param - trace indicator true turns connection tracing on, 
+	 * @param trace indicator true turns connection tracing on, 
 	 * false turns connection tracing off.
 	 *  
 	 */

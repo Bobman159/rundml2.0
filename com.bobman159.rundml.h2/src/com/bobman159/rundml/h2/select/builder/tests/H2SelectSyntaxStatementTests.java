@@ -22,9 +22,6 @@ import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
  *	*	Unless noted otherwise, the SQL syntax generated and checked 
  *		was verified as executable in H2
  *
- *	*	Because of how the SQLStatementModel is serialized, there will be a 
- *		extra " " at the end of each SQL SELECT.  This is something I can 
- *		live with at this time.
  */
 class H2SelectSyntaxStatementTests {
 

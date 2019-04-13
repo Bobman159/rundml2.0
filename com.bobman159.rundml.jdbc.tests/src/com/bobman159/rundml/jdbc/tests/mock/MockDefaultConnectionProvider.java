@@ -31,7 +31,7 @@ public class MockDefaultConnectionProvider extends DefaultConnectionProvider imp
 	
 	
 	/**
-	 * @return - number of active data source connections
+	 * @return number of active data source connections
 	 */
 	public int getActiveConnections() {
 		return poolBean.getActiveConnections();
@@ -39,7 +39,7 @@ public class MockDefaultConnectionProvider extends DefaultConnectionProvider imp
 	
 	/**
 	 * 
-	 * @return -  number of total connections
+	 * @return number of total connections
 	 */
 	public int getTotalConnections() {
 		return poolBean.getTotalConnections();
@@ -47,7 +47,7 @@ public class MockDefaultConnectionProvider extends DefaultConnectionProvider imp
 	
 	/**
 	 * 
-	 * @return -  number of idle connections
+	 * @return number of idle connections
 	 */
 	public int getIdleConnections() {
 		return poolBean.getIdleConnections();
@@ -55,7 +55,7 @@ public class MockDefaultConnectionProvider extends DefaultConnectionProvider imp
 	
 	/**
 	 * 
-	 * @return - the pool name for the data source
+	 * @return the pool name for the data source
 	 */
 	public String getPoolName() {
 		return this.source.getPoolName();

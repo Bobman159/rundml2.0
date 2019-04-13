@@ -28,7 +28,7 @@ public class DefaultConnectionProvider implements IConnectionProvider {
 	
 	/**
 	 * Creates an instance of a default connection provider for JDBC connections.
-	 * @param source - DataSource object which represents a HikariCP Connection pool.
+	 * @param source DataSource object which represents a HikariCP Connection pool.
 	 */
 	public DefaultConnectionProvider(HikariDataSource source) {
 		dataSource = source;

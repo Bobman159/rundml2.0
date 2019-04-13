@@ -33,7 +33,30 @@
 			-->
 			</plugins>
 		</pluginManagement>
+		
+		<plugins>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-javadoc-plugin</artifactId>
+		        <version>3.1.0</version>
+		        
+		        <configuration>
+					<classifier>javadoc</classifier>
+		            	<outputDirectory>${project.build.director}/javadoc</outputDirectory>
+		        </configuration>
+		        <executions>
+		          <execution>
+		            <id>aggregate</id>
+		            <goals>
+		              <goal>aggregate-jar</goal>
+		            </goals>
+		            <phase>package</phase>
+		          </execution>
+		        </executions>
+	      </plugin>
+      </plugins>
 	</build>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>

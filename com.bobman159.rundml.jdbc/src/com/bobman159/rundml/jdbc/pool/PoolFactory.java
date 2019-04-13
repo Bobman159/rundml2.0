@@ -28,12 +28,12 @@ public class PoolFactory {
 	 * <b>Do not specify the file extension <code>.h2.db</code> for the dbPath parameter.</b>
 	 * It will result in database not found messages in h2 1.3.176.
 	 * 
-	 * @param dbPath - full path to the specified H2 database 
-	 * @param userId - the user Id for logon information, null if no userid
-	 * @param password - password for the user Id, null if no password
-	 * @param numberConnections - the number of connections to be defined in the pool
+	 * @param dbPath full path to the specified H2 database 
+	 * @param userId the user Id for logon information, null if no userid
+	 * @param password password for the user Id, null if no password
+	 * @param numberConnections the number of connections to be defined in the pool
 	 * 
-	 * @return - a <code>DefaultConnectionProvider</code> data source.
+	 * @return a <code>DefaultConnectionProvider</code> data source.
 	 */
 	public static DefaultConnectionProvider makeH2DataSource(String dbPath,String userId, String password, 
 			 						  String numberConnections) {
@@ -63,12 +63,12 @@ public class PoolFactory {
 	/**
 	 * Define a MySQL connection pool using the specified information for configuration. 
 	 * 
-	 * @param dbUrl - url for MySql database
-	 * @param userId - the user Id for logon information, null if no userid
-	 * @param password - password for the user Id, null if no password
-	 * @param numberConnections - the number of connections to be defined in the pool
+	 * @param dbUrl url for MySql database
+	 * @param userId the user Id for logon information, null if no userid
+	 * @param password password for the user Id, null if no password
+	 * @param numberConnections the number of connections to be defined in the pool
 	 * 
- 	 * @return - a <code>DefaultConnectionProvider</code> interface for the data source.
+ 	 * @return a <code>DefaultConnectionProvider</code> interface for the data source.
 	 */
 
 	public static DefaultConnectionProvider makeMySQLDataSource(String dbUrl,String userId, String password, 
@@ -98,11 +98,11 @@ public class PoolFactory {
 	 /**
 	  * Create a connection pool using a .properties file with the necessary information for defining the pool.
 	  * 
-	  * @param propFile - full path to .properties file.
+	  * @param propFile full path to .properties file.
 	  * 
 	  * For .properties file parameters, see https://github.com/brettwooldridge/HikariCP#configuration.
 	  * 	  
- 	  * @return - a <code>DefaultConnectionProvider</code> interface for the data source. 	  
+ 	  * @return a <code>DefaultConnectionProvider</code> interface for the data source. 	  
  	  * 
 	  */
 	public static DefaultConnectionProvider makeDataSource(String propFile)  {

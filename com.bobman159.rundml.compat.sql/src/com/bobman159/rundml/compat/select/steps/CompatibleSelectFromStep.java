@@ -15,14 +15,14 @@ public interface CompatibleSelectFromStep {
 
 	/**
 	 * Specifies a GROUP BY clause to group the results by the given expression(s)
-	 * @param groupByExpr - expressions specifying the grouping
+	 * @param groupByExpr expressions specifying the grouping
 	 * @return the ordering build step
 	 */
 	CompatibleSelectOrderStep groupBy(IExpression... groupByExpr);
 	
 	/**
 	 * Specifies an ORDER BY clause to sort the results by the given expression(s)
-	 * @param orderByExprs - expressions specifying the sort order
+	 * @param orderByExprs expressions specifying the sort order
 	 * @return the ordering build step
 	 */
 	CompatibleSelectOrderStep orderBy(OrderByExpression... orderByExprs);
