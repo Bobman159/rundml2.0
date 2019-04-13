@@ -9,7 +9,7 @@ import java.util.List;
 public interface H2SelectFetchStep {
 	/**
 	 * Executes a SELCT statement and returns the results
-	 * @return - results of the select or empty is no rows returned
+	 * @return results of the select or empty is no rows returned
 	 */
 	List<String> fetch();    
 

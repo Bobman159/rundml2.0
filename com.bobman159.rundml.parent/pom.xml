@@ -42,11 +42,11 @@
 		        
 		        <configuration>
 					<classifier>javadoc</classifier>
-		            	<outputDirectory>${project.build.director}/javadoc</outputDirectory>
+		            	<outputDirectory>${project.build.directory}/javadoc</outputDirectory>
 		        </configuration>
 		        <executions>
 		          <execution>
-		            <id>aggregate</id>
+		            <id>aggregate-jar</id>
 		            <goals>
 		              <goal>aggregate-jar</goal>
 		            </goals>

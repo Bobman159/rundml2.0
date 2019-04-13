@@ -18,8 +18,8 @@ public class MySQLSQLStatement {
 	/**
 	 * Create the builder for an MySQL DBMS SELECT statement using an existing 
 	 * <code>Connection</code> object
-	 * @param conn - a JDBC connection
-	 * @return - MySQL SELECT statement builder
+	 * @param conn a JDBC connection
+	 * @return MySQL SELECT statement builder
 	 */
 	public static MySQLSelectStatement selectStatement(Connection conn) {
 		return new MySQLSelectStatement(conn);
@@ -28,8 +28,8 @@ public class MySQLSQLStatement {
 	/**
 	 * Create the builder for a MySQL DBMS SELECT statement using an existing
 	 * <code>DefaultConnectionProvider</code> for a connection pool.
-	 * @param provider - a JDBC connection pool
-	 * @return - MySQL SELECT statement builder
+	 * @param provider a JDBC connection pool
+	 * @return MySQL SELECT statement builder
 	 */
 	public static MySQLSelectStatement selectStatement(DefaultConnectionProvider provider) {
 		return new MySQLSelectStatement(provider);

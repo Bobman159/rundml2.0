@@ -11,7 +11,7 @@ public interface MySQLSelectFetchStep {
 	
 	/**
 	 * Returns a list of the results from the executed query
-	 * @return - a list of SELECT results
+	 * @return a list of SELECT results
 	 */
 	public List<String> fetch();
 }

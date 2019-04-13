@@ -41,7 +41,7 @@ public class MySQLSelectStatement implements MySQLSelectListStep,
 
 	/**
 	 * Create a SELECT statement that may be executed against a MySQL database table
-	 * @param conn - JDBC connection for the MySQL database.
+	 * @param conn JDBC connection for the MySQL database.
 	 */
 	public MySQLSelectStatement(Connection conn) {
 		this.conn = conn;
@@ -49,7 +49,7 @@ public class MySQLSelectStatement implements MySQLSelectListStep,
 	
 	/**
 	 * Create a SELECT statement that may be executed against an MySQL database table.
-	 * @param provider - a JDBC connection pool for an H2 database
+	 * @param provider a JDBC connection pool for an H2 database
 	 */
 	public MySQLSelectStatement(DefaultConnectionProvider provider) {
 		this.provider = provider;
@@ -213,7 +213,7 @@ public class MySQLSelectStatement implements MySQLSelectListStep,
 	
 	/**
 	 * Returns the SQL SELECT statement for the current statement instance
-	 * @return - the SELECT statement text
+	 * @return the SELECT statement text
 	 */
 	public String toStmt() {
 		return SQLStatementSerializer.serializeSelect(model);

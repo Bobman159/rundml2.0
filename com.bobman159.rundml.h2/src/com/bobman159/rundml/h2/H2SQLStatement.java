@@ -18,8 +18,8 @@ public class H2SQLStatement {
 	/**
 	 * Create the builder for an H2 DBMS SELECT statement using an existing 
 	 * <code>Connection</code> object
-	 * @param conn - a JDBC connection
-	 * @return - H2 SELECT statement builder
+	 * @param conn a JDBC connection
+	 * @return H2 SELECT statement builder
 	 */
 	public static H2SelectStatement selectStatement(Connection conn) {
 		return new H2SelectStatement(conn);
@@ -29,8 +29,8 @@ public class H2SQLStatement {
 	/**
 	 * Create the builder for an H2 DBMS SELECT statement using an existing 
 	 * <code>DefaultConnectionProvider</code> for a connection pool.
-	 * @param conn - a JDBC connection pool
-	 * @return - H2 SELECT statement builder
+	 * @param provider a JDBC connection pool
+	 * @return H2 SELECT statement builder
 	 */
 	public static H2SelectStatement selectStatement(DefaultConnectionProvider provider) {
 		return new H2SelectStatement(provider);

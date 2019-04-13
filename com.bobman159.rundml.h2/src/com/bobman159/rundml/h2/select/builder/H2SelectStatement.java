@@ -40,7 +40,7 @@ public class H2SelectStatement implements  H2SelectListStep,
 	/**
 	 * Create a SELECT statement that may be executed against an H2 database
 	 * 
-	 * @param conn - JDBC connection for the H2 database
+	 * @param conn JDBC connection for the H2 database
 	 */
 	public H2SelectStatement(Connection conn) {
 		this.conn = conn;
@@ -49,7 +49,7 @@ public class H2SelectStatement implements  H2SelectListStep,
 	/**
 	 * Create a SELECT statement that may be executed against an H2 database
 	 * 
-	 * @param provider - a JDBC connection pool provider for an H2 database.
+	 * @param provider a JDBC connection pool provider for an H2 database.
 	 */
 	
 	public H2SelectStatement(DefaultConnectionProvider provider) {
@@ -111,7 +111,7 @@ public class H2SelectStatement implements  H2SelectListStep,
 	
 	/**
 	 * Add an expression to be selected for the SELECT statement
-	 * @param - an <code>IExpression</code> 
+	 * @param expr an expression for the SELECT clause
 	 * 
 	 * @see com.bobman159.rundml.core.exprtypes.IExpression
 	 */
@@ -125,8 +125,9 @@ public class H2SelectStatement implements  H2SelectListStep,
 	/**
 	 * Specify the table for the SELECT statement
 	 * 
-	 * @param schema - the table name schema
-	 * @param tBName - the table name
+	 * @param schema the schema of the table 
+	 * @param tbName the name of the table 
+	 * @return the SELECT statement builder
 	 */
 	@Override
 	public H2SelectStatement from(String schema, String tbName) {
@@ -138,7 +139,8 @@ public class H2SelectStatement implements  H2SelectListStep,
 	 * Specify the WHERE clause for the SELECT statement to 
 	 * return table rows matching the Predicate condition.
 	 * 
-	 * @param - the SQL predicate
+	 * @param pred the SQL predicate
+	 * @return the SELECT statement builder
 	 * @see com.bobman159.rundml.core.predicates.Predicate
 	 */
 	@Override
@@ -149,7 +151,8 @@ public class H2SelectStatement implements  H2SelectListStep,
 	
 	/**
 	 * Specify a ORDER BY clause for the SELECT statement.
-	 * @param orderByExprs - expression(s) for the ORDER BY
+	 * @param orderByExprs expression(s) for the ORDER BY
+	 * @return the SELECT statement builder
 	 * @see com.bobman159.rundml.core.sql.OrderByExpression
 	 */
 	@Override
@@ -161,7 +164,8 @@ public class H2SelectStatement implements  H2SelectListStep,
 	/**
 	 * 
 	 * Specify a GROUP BY clause for the SELECT statement.
-	 * @param - list of expressions 1 to n
+	 * @param groupByExprs of expressions 1 to n
+	 * @return the SELECT statement builder
 	 * @see com.bobman159.rundml.core.exprtypes.IExpression
 	 */
 	@Override
@@ -172,7 +176,8 @@ public class H2SelectStatement implements  H2SelectListStep,
 		
 	/**
 	 * Specify a HAVING clause for the SELECT statement.
-	 * @param - a <code>Predicate</code>
+	 * @param havingPred a predicate clause for the HAVING
+	 * @return the SELECT statement builder
 	 * @see com.bobman159.rundml.core.predicates.Predicate
 	 */
 	@Override
@@ -183,8 +188,9 @@ public class H2SelectStatement implements  H2SelectListStep,
 	
 	/**
 	 * Specify a LIMIT clause for the SELECT statement
-	 * @param - an expression 
-	 * @see com.rob159.rundml.core.exprtypes.IExpression	 * 
+	 * @param limitTerm an expression to limit the number of results returned
+	 * @return the SELECT statement builder
+	 * @see com.bobman159.rundml.core.exprtypes.IExpression
 	 * 
 	 */
 	@Override
@@ -196,7 +202,8 @@ public class H2SelectStatement implements  H2SelectListStep,
 	/**
 	 * Specify an OFFSET clause for the LIMIT clause in a SELECT
 	 * statement.
-	 * @param - offset 
+	 * @param offset specifies how many rows to skip
+	 * @return the SELECT statement builder
 	 */
 	@Override
 	public H2SelectOrderStep offset(IExpression offset) {
@@ -206,8 +213,9 @@ public class H2SelectStatement implements  H2SelectListStep,
 
 	/**
 	 * Specify a TOP clause for the SELECT statement
-	 * @param - an expression 
-	 * @see com.rob159.rundml.core.exprtypes.IExpression	 * 
+	 * @param topExpr an expression that limits the number of rows returned
+	 * @return the SELECT statement builder
+	 * @see com.bobman159.rundml.core.exprtypes.IExpression
 	 * 
 	 */
 	@Override
@@ -218,7 +226,7 @@ public class H2SelectStatement implements  H2SelectListStep,
 
 	/**
 	 * Execute the generated SELECT statement and return the results 
-	 * @return - a <code>List</code> of the resulting rows, empty otherwise
+	 * @return a <code>List</code> of the resulting rows, empty otherwise
 	 */
 	@Override
 	public List<String> fetch() {
@@ -228,7 +236,7 @@ public class H2SelectStatement implements  H2SelectListStep,
 	/**
 	 * Returns the SQL SELECT statement text for the current  
 	 * statement instance.
-	 * @return - the SELECT statement text
+	 * @return the SELECT statement text
 	 */
 	public String toStmt() {
 		return SQLStatementSerializer.serializeSelect(model);
