@@ -82,5 +82,8 @@ class TableDefinitionTests {
 		String qualTbName = tbDef.qualifedTableName();
 		Assertions.assertEquals("rundml.typetest", qualTbName);
 	}
+	
+	//TODO: Add test for TableDefinition specifying a Result set mapping class different than table name
+	//TODO: Add test for TableDefintion with column(s) specify columns for fields different than table column names
 
 }

@@ -20,6 +20,7 @@ public class Column implements IExpression, IMathOperations, IStringOperations {
 
 	private String columnName;
 	int jdbcType;
+	String mappedField;
 
 	/**
 	 * Define a column in a table
@@ -31,6 +32,18 @@ public class Column implements IExpression, IMathOperations, IStringOperations {
 	public Column(String column, int colType) {
 		columnName = column.toUpperCase();
 		jdbcType = colType;
+	}
+	
+	/**
+	 * Define a column in a table and specify a field name to be mapped.
+	 * @param column name of the column (case insensitive)
+	 * @param colType <b>jdbc type</b> of the column used for jdbc data binding
+	 * @param mapField class name field to contain values for column (case insensitive)
+	 */
+	public Column(String column, int colType, String mapField) {
+		columnName = column.toUpperCase();
+		jdbcType = colType;
+		mappedField = mapField;
 	}
 
 	/**
@@ -49,6 +62,14 @@ public class Column implements IExpression, IMathOperations, IStringOperations {
 	 */
 	public int getType() {
 		return jdbcType;
+	}
+	
+	/**
+	 * Return the mapping field name for this column
+	 * @return the mapped name, null if no mapping defined
+	 */
+	public String getMappedField() {
+		return mappedField;
 	}
 
 	/**

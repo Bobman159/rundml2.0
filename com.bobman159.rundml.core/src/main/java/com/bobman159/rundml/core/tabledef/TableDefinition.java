@@ -10,16 +10,23 @@ import com.bobman159.rundml.core.exprtypes.Column;
 import com.bobman159.rundml.core.util.RunDMLUtils;
 
 /**
- * Defines a database table with the columns that may be used in SQL statements
- * that are executed by rundml.   
+ * Defines a database table with the columns that may be used in SQL 
+ * statements that are executed by RunDML.  The purpose of TableDefintion is 
+ * used for easier generation of multiple columns in a table in SQL statements.
+ * It allows for defining a list of columns and then passing the instance to
+ * a SQL statement builder which will use all the columns defined in the 
+ * table definition.
+ * 
+ * TableDefinition is <b>not</b> required for SQL execution or generation.
  *
  */
 public class TableDefinition {
 	
 	private String schema;
 	private String tbName;
-	LinkedHashMap<String,Column> columnMap;
+
 	private static Logger logger = LogManager.getLogger(TableDefinition.class);
+	LinkedHashMap<String,Column> columnMap;
 
 	/**
 	 * Define the Table 
@@ -43,7 +50,7 @@ public class TableDefinition {
 	public void addColumn(String columnName,int jdbcType) {
 		columnMap.put(columnName, new Column(columnName,jdbcType));
 	}
-	
+		
 	/**
 	 * The fully qualified table name (schema.table)
 	 * 
@@ -92,8 +99,5 @@ public class TableDefinition {
 
 		return col;
 	}
-	
-	
-	
 
 }

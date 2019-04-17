@@ -1,4 +1,4 @@
-package com.bobman159.rundml.core.exprtypes.tests;
+package com.bobman159.rundml.core.tabledef.tests;
 
 import java.sql.Types;
 

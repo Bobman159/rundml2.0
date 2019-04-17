@@ -14,6 +14,7 @@ public class SQLClauses {
 	 * Define non DBMS specifc SQL clauses.  Clauses are defined in alphabetical order.	 *
 	 */
 	public enum SQLClause implements ISQLEnum  {
+		//TODO: Add AS clause support
 		ALL("all"),
 		DISTINCT("distinct"),
 		FROM("from"),
