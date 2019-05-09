@@ -38,7 +38,7 @@ public class DefaultConnectionProvider implements IConnectionProvider {
 	 * @see com.bobman159.rundml.jdbc.pool.IConnectionProvider#getConnection()
 	 */
 	@Override
-	public Connection getConnection() throws SQLException {
+	public Connection getConnection()  {
 
 		Connection conn = null;
 		final String DEBUG_STATUS="PoolId {0} get connection total= {2} active= {2} idle= {3}";

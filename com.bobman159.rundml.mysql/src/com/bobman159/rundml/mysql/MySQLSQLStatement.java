@@ -2,6 +2,7 @@ package com.bobman159.rundml.mysql;
 
 import java.sql.Connection;
 
+import com.bobman159.rundml.core.tabledef.TableDefinition;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.mysql.select.builder.MySQLSelectStatement;
 
@@ -19,10 +20,11 @@ public class MySQLSQLStatement {
 	 * Create the builder for an MySQL DBMS SELECT statement using an existing 
 	 * <code>Connection</code> object
 	 * @param conn a JDBC connection
+	 * @param mapper table mapping definition for the SELECT
 	 * @return MySQL SELECT statement builder
 	 */
-	public static MySQLSelectStatement selectStatement(Connection conn) {
-		return new MySQLSelectStatement(conn);
+	public static MySQLSelectStatement selectStatement(Connection conn,TableDefinition mapper) {
+		return new MySQLSelectStatement(conn,mapper);
 	}
 	
 	/**
@@ -31,7 +33,8 @@ public class MySQLSQLStatement {
 	 * @param provider a JDBC connection pool
 	 * @return MySQL SELECT statement builder
 	 */
-	public static MySQLSelectStatement selectStatement(DefaultConnectionProvider provider) {
-		return new MySQLSelectStatement(provider);
+	public static MySQLSelectStatement selectStatement(DefaultConnectionProvider provider,
+													   TableDefinition mapper) {
+		return new MySQLSelectStatement(provider,mapper);
 	}
 }

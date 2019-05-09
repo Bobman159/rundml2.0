@@ -119,10 +119,11 @@ public class SQLStatementModel {
 		return model.stream();
 	}
 	
-	/* 
+	/**
 	 * Check the model for an occurrence of the specified clause.
-	 * returns index of entry found, or -1 if no entry found
-	 */	
+	 * @param srchClause the clause to search the model for
+	 * @return true if an entry was found, false otherwise.
+	 */
 	private boolean containsSQLClause(ISQLEnum srchClause) {
 		
 		boolean clauseFound = false;

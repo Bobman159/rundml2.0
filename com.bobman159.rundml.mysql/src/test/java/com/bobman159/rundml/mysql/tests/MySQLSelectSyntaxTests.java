@@ -69,7 +69,7 @@ class MySQLSelectSyntaxTests {
 
 	@Test
 	void mySQLHavingTest() {
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -82,7 +82,7 @@ class MySQLSelectSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "group by DFLTINTEGER HAVING DFLTINTEGER > 100000",stmtText);
 
-		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -95,7 +95,7 @@ class MySQLSelectSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "group by NOTNULLCHAR HAVING NOTNULLCHAR > '0123456789'",stmtText2);
 
-		String stmtText3 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText3 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -113,7 +113,7 @@ class MySQLSelectSyntaxTests {
 				     "OR NOTNULLCHAR = '223456789' AND NOTNULLCHAR < " +
 				     "'1123456789'",stmtText3);
 
-		String stmtText4 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText4 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -130,7 +130,7 @@ class MySQLSelectSyntaxTests {
 				     "group by 'Abcdef','Hiklmnop' HAVING 'Abcdef' = 'Abcdef2' " +
 				     "OR 'Hijklmnop' > 'Hijklmno'",stmtText4);
 
-		String stmtText5 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText5 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(10))
 				.selectExpression(Expression.number(20))
@@ -159,7 +159,7 @@ class MySQLSelectSyntaxTests {
 	void mySQLOffsetTest() {
 		
 
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.selectStar()
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(Expression.number(5)).offset(Expression.number(1)))
@@ -173,7 +173,7 @@ class MySQLSelectSyntaxTests {
 	@Test
 	void mySQLGroupByTest() {
 		
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -194,7 +194,7 @@ class MySQLSelectSyntaxTests {
 	@Test
 	void mySQLLimitTest() {
 		
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.selectStar()
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(Expression.number(5)))
@@ -207,7 +207,7 @@ class MySQLSelectSyntaxTests {
 	@Test
 	void mySQLOrderByTest() {
 		
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -220,7 +220,7 @@ class MySQLSelectSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2,3",stmtText);
 		
-		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -235,7 +235,7 @@ class MySQLSelectSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2,DFLTINTEGER",stmtText2);		
 		
-		String stmtText3 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText3 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -248,7 +248,7 @@ class MySQLSelectSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 'Abcdefg'",stmtText3);
 		
-		String stmtText4 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText4 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -261,7 +261,7 @@ class MySQLSelectSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1 asc",stmtText4);
 		
-		String stmtText5 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText5 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -274,7 +274,7 @@ class MySQLSelectSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by DFLTINTEGER desc",stmtText5);
 
-		String stmtText6 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText6 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -288,7 +288,7 @@ class MySQLSelectSyntaxTests {
 				     "order by 1,2 desc",stmtText6);		
 
 		
-		String stmtText7 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText7 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -302,7 +302,7 @@ class MySQLSelectSyntaxTests {
 				     "order by 1,2 desc",stmtText7);		
 
 
-		String stmtText8 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText8 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -316,7 +316,7 @@ class MySQLSelectSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by DFLTINTEGER,NOTNULLVARCHAR desc",stmtText8);	
 
-		String stmtText9 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText9 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.selectExpression(tbDef.column(NOTNULLDEC72))
@@ -332,7 +332,7 @@ class MySQLSelectSyntaxTests {
 				     "order by NOTNULLVARCHAR desc,1 asc," +
 				     "NOTNULLDEC72",stmtText9);
 		
-		String stmtText10 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText10 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -366,7 +366,7 @@ class MySQLSelectSyntaxTests {
 				  .build();
 				  
 
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 						.select()
 						.selectExpression(tbDef.column(DFLTINTEGER))
 						.selectExpression(tbDef.column(NOTNULLDEC72))
@@ -389,7 +389,7 @@ class MySQLSelectSyntaxTests {
 
 	@Test
 	void mySQLSelectStarTest() {
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				  .selectStar()
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE))
 				  .toStmt();
@@ -401,7 +401,7 @@ class MySQLSelectSyntaxTests {
 	@Test
 	void mySQLSelectProviderTest() {
 		
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(provider)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(provider,tbDef)
 				  .selectStar()
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE))
 				  .toStmt();
@@ -414,7 +414,7 @@ class MySQLSelectSyntaxTests {
 	@Test
 	void mySQLSelectTableDefinitionTest() {
 		
-		String stmtText =  ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText =  ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				  .select(tbDef))
 				  .toStmt();
 		
@@ -428,7 +428,7 @@ class MySQLSelectSyntaxTests {
 	@Test
 	void mySQLAllTest() {
 		
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.all()
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -444,7 +444,7 @@ class MySQLSelectSyntaxTests {
 	@Test
 	void mySQLDistinctTest() {
 		
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select().distinct()
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE))
@@ -460,7 +460,7 @@ class MySQLSelectSyntaxTests {
 		
 		//SELECT DISTINCT ALL is not valid in MySQL
 		//This test should return no rows  (possibly throw an exception?)
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.distinct().all()
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -470,7 +470,7 @@ class MySQLSelectSyntaxTests {
 		Assertions.assertEquals("select distinct all DFLTINTEGER " +
 							FROM_CLAUSE,stmtText);
 
-		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.distinct().all()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
@@ -487,7 +487,7 @@ class MySQLSelectSyntaxTests {
 	void mySQLsmallResultTest() {
 		
 //		VALID
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.smallResult()
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -498,7 +498,7 @@ class MySQLSelectSyntaxTests {
 							FROM_CLAUSE,stmtText);
 
 //		INVALID 	
-		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
 				.smallResult()
@@ -514,7 +514,7 @@ class MySQLSelectSyntaxTests {
 	void mySQLbigResultTest() {
 		
 //		VALID
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.bigResult()
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -525,7 +525,7 @@ class MySQLSelectSyntaxTests {
 							FROM_CLAUSE,stmtText);
 
 //		INVALID
-		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
 				.bigResult()
@@ -541,7 +541,7 @@ class MySQLSelectSyntaxTests {
 	void mySQLbufferResultTest() {
 		
 //		VALID
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.bufferResult()
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -552,7 +552,7 @@ class MySQLSelectSyntaxTests {
 							FROM_CLAUSE,stmtText);
 
 //		VALID? - Executed ok in rundml db
-		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText2 = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
 				.bufferResult()
@@ -567,7 +567,7 @@ class MySQLSelectSyntaxTests {
 	@Test
 	void mySQLselectExpressionTest() {
 		
-		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn)
+		String stmtText = ((MySQLSelectStatement) MySQLSQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(10))
 				.selectExpression(Expression.string("This is a string"))

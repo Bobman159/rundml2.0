@@ -44,7 +44,8 @@ class H2SelectSyntaxStatementTests {
 
 	@BeforeAll
 	static void setUpBeforeClass() {
-				
+		
+		/* TableDefintion needed only to test SQL Syntax generation. */
 		tbDef = new TableDefinition(RUNDML_SCHEMA,RUNDML_TABLE);
 		tbDef.addColumn(DFLTINTEGER, Types.INTEGER);
 		tbDef.addColumn(NOTNULLDEC72, Types.DECIMAL);
@@ -74,7 +75,8 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectStarTest() {
 		
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement
+				  .selectStatement(conn,tbDef)
 				  .selectStar()
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE))
 				  .toStmt();
@@ -86,7 +88,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void mySQLSelectProviderTest() {
 		
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(provider)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(provider,tbDef)
 				  .selectStar()
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE))
 				  .toStmt();
@@ -97,7 +99,7 @@ class H2SelectSyntaxStatementTests {
 	
 	@Test
 	void h2SelectTableDefinitionTest() {
-		String stmtText =  ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText =  ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				  .select(tbDef))
 				  .toStmt();
 		
@@ -113,7 +115,7 @@ class H2SelectSyntaxStatementTests {
 		 * The expression type combinations (math, concat, etc) are tested by 
 		 * the com.bobman159.rundml.core.exprtypes.tests JUnits.
 		 */
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(10))
 				.selectExpression(Expression.string("This is a string"))
@@ -130,7 +132,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectTopTest() {
 
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.top(Expression.number(5))
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -140,7 +142,7 @@ class H2SelectSyntaxStatementTests {
 		Assertions.assertEquals("select top 5 DFLTINTEGER " +
 							FROM_CLAUSE,stmtText);
 		
-		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.top(Expression.string(NUMERIC_LITERAL))
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
@@ -155,7 +157,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectTopDistinctTest() {
 
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.top(Expression.number(5)).distinct()
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -165,7 +167,7 @@ class H2SelectSyntaxStatementTests {
 		Assertions.assertEquals("select top 5 distinct DFLTINTEGER " +
 							FROM_CLAUSE,stmtText);
 
-		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.top(Expression.string(NUMERIC_LITERAL)).distinct()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
@@ -180,7 +182,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectTopAllTest() {
 
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.top(Expression.number(5)).all()
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -190,7 +192,7 @@ class H2SelectSyntaxStatementTests {
 		Assertions.assertEquals("select top 5 all DFLTINTEGER " +
 							FROM_CLAUSE,stmtText);
 
-		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.top(Expression.string("5")).all()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
@@ -207,7 +209,7 @@ class H2SelectSyntaxStatementTests {
 		
 		//SELECT DISTINCT ALL is not valid in H2
 		//This test should return no rows  (possibly throw an exception?)
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.distinct().all()
 				.selectExpression(tbDef.column(DFLTINTEGER))
@@ -217,7 +219,7 @@ class H2SelectSyntaxStatementTests {
 		Assertions.assertEquals("select distinct all DFLTINTEGER " +
 							FROM_CLAUSE,stmtText);
 
-		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.distinct().all()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
@@ -244,8 +246,7 @@ class H2SelectSyntaxStatementTests {
 								  .isEqual(Expression.parm(Types.BIGINT, "This is a test"))
 								  .build();
 								  
-		
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 								.select()
 								.selectExpression(tbDef.column(DFLTINTEGER))
 								.selectExpression(tbDef.column(NOTNULLDEC72))
@@ -267,7 +268,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectGroupByTest() {
 		
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -288,7 +289,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectOrderByTest() {
 
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -301,7 +302,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2,3",stmtText);
 		
-		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -316,7 +317,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2,DFLTINTEGER",stmtText2);		
 		
-		String stmtText3 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText3 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -329,7 +330,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 'Abcdefg'",stmtText3);
 		
-		String stmtText4 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText4 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -342,7 +343,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1 asc",stmtText4);
 		
-		String stmtText5 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText5 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -355,7 +356,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by DFLTINTEGER desc",stmtText5);
 
-		String stmtText6 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText6 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -368,7 +369,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2 desc",stmtText6);		
 
-		String stmtText7 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText7 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -381,7 +382,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2 desc nulls last",stmtText7);		
 
-		String stmtText8 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText8 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -396,7 +397,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by DFLTINTEGER,NOTNULLVARCHAR desc nulls first",stmtText8);	
 
-		String stmtText9 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText9 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.selectExpression(tbDef.column(NOTNULLDEC72))
@@ -413,7 +414,7 @@ class H2SelectSyntaxStatementTests {
 				     "order by NOTNULLVARCHAR desc nulls last,1 asc nulls first," +
 				     "NOTNULLDEC72",stmtText9);
 		
-		String stmtText10 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText10 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -437,7 +438,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectHavingTest() {
 				
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -450,7 +451,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "group by DFLTINTEGER HAVING DFLTINTEGER > 100000",stmtText);
 
-		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText2 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -463,7 +464,7 @@ class H2SelectSyntaxStatementTests {
 				     FROM_CLAUSE_SPACE +
 				     "group by NOTNULLCHAR HAVING NOTNULLCHAR > '0123456789'",stmtText2);
 
-		String stmtText3 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText3 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -481,7 +482,7 @@ class H2SelectSyntaxStatementTests {
 				     "OR NOTNULLCHAR = '223456789' AND NOTNULLCHAR < " +
 				     "'1123456789'",stmtText3);
 
-		String stmtText4 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText4 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -498,7 +499,7 @@ class H2SelectSyntaxStatementTests {
 				     "group by 'Abcdef','Hiklmnop' HAVING 'Abcdef' = 'Abcdef2' " +
 				     "OR 'Hijklmnop' > 'Hijklmno'",stmtText4);
 
-		String stmtText5 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText5 = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.select()
 				.selectExpression(Expression.number(10))
 				.selectExpression(Expression.number(20))
@@ -526,7 +527,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectLimitTest() {
 
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.selectStar()
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(Expression.number(5)))
@@ -539,7 +540,7 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectLimitOffsetTest() {
 
-		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn)
+		String stmtText = ((H2SelectStatement) H2SQLStatement.selectStatement(conn,tbDef)
 				.selectStar()
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(Expression.number(5)).offset(Expression.number(1)))

@@ -3,6 +3,9 @@ CREATE USER IF NOT EXISTS DmlTestUser Password 'Tgbn6929';
 
 CREATE SCHEMA IF NOT EXISTS RUNDML;
 
+drop table rundml.TypeTest;
+commit;
+
 CREATE TABLE IF NOT EXISTS RUNDML.TypeTest 
 (
 	DfltInteger			integer		DEFAULT	100000,
@@ -19,7 +22,13 @@ CREATE TABLE IF NOT EXISTS RUNDML.TypeTest
 	NotNullVarchar		Varchar(256)	NOT NULL,
 	NotNullChar			char(10)		NOT NULL,
 	DfltBlob			blob(100)		NOT NULL,
-	DfltClob			clob(100)		NOT NULL
+	DfltClob			clob(100)		NOT NULL,
+	NotNullBoolean		boolean			NOT NULL,
+	NotNullBool			bool			NOT NULL,
+	NotNullBit			bit				NOT NULL,
+	DfltBigInt			bigint			DEFAULT 2147483648,
+	DfltInt8			int8			DEFAULT 2147483648,
+	NotNullIdentity		IDENTITY		NOT NULL	
 );
 
 

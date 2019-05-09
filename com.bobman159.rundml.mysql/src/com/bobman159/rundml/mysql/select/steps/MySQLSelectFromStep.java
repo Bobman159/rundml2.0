@@ -5,6 +5,7 @@ import java.util.List;
 import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.predicates.Predicate;
 import com.bobman159.rundml.core.sql.OrderByExpression;
+import com.bobman159.rundml.jdbc.select.ITableRow;
 
 /**
  * Second build for an SQL SELECT statement
@@ -46,6 +47,6 @@ public interface MySQLSelectFromStep {
 	 * @see com.bobman159.rundml.mysql.select.steps.MySQLSelectFetchStep#fetch()
 	 * @return the results of the select statement
 	 */
-	List<String> fetch();	
+	List<ITableRow> fetch();	
 
 }

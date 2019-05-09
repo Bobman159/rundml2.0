@@ -13,9 +13,8 @@ public interface IConnectionProvider {
 	/**
 	 * Obtain a JDBC <code>Connection</code> object from the pool
 	 * @return a JDBC connection
-	 * @throws SQLException if an error occurs obtaining a connection
 	 */
-	public Connection getConnection() throws SQLException;
+	public Connection getConnection();
 	
 	/**
 	 * Release a JDBC <code>Connection</code> back to the connection pool 

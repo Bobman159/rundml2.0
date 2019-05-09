@@ -32,6 +32,7 @@ public class Column implements IExpression, IMathOperations, IStringOperations {
 	public Column(String column, int colType) {
 		columnName = column.toUpperCase();
 		jdbcType = colType;
+		mappedField = null;
 	}
 	
 	/**
@@ -65,8 +66,9 @@ public class Column implements IExpression, IMathOperations, IStringOperations {
 	}
 	
 	/**
-	 * Return the mapping field name for this column
-	 * @return the mapped name, null if no mapping defined
+	 * Return the alternate mapped field name for this column.  By 
+	 * default columns names are mapped to the field name matching the column name.
+	 * @return the alternate mapped name, null if no alternate mapping defined
 	 */
 	public String getMappedField() {
 		return mappedField;

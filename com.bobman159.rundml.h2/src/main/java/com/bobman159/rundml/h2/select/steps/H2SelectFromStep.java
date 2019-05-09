@@ -5,6 +5,7 @@ import java.util.List;
 import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.predicates.Predicate;
 import com.bobman159.rundml.core.sql.OrderByExpression;
+import com.bobman159.rundml.jdbc.select.ITableRow;
 
 /**
  * Second Builder Step in the Select build steps.
@@ -45,6 +46,6 @@ public interface H2SelectFromStep {
 	 * @see com.bobman159.rundml.h2.select.steps.H2SelectFetchStep#fetch()
 	 * @return - the results of the SELECT statement
 	 */
-	List<String> fetch();  
+	List<ITableRow> fetch();  
 
 }

@@ -10,26 +10,47 @@ import com.bobman159.rundml.core.exprtypes.Column;
 import com.bobman159.rundml.core.util.RunDMLUtils;
 
 /**
- * Defines a database table with the columns that may be used in SQL 
- * statements that are executed by RunDML.  The purpose of TableDefintion is 
- * used for easier generation of multiple columns in a table in SQL statements.
- * It allows for defining a list of columns and then passing the instance to
- * a SQL statement builder which will use all the columns defined in the 
- * table definition.
+ * Defines a database table and the columns that will be used in SQL 
+ * statements that are executed by RunDML.  TableDefintion serves two 
+ * related purposes:
  * 
- * TableDefinition is <b>not</b> required for SQL execution or generation.
- *
+ * 	*	Easier generation of multiple columns in a table in SQL statements.
+ * 		It allows for defining a list of columns and then passing the instance to
+ * 		a SQL statement builder which will use all the columns defined in the 
+ * 		table definition.
+ * 
+ * 	*	Identifies the java class and optionally it's fields that will be 
+ * 		used by RunDML.  RunDML uses this class to map results from an 
+ * 		SQL <code>ResultSet</code> to an implementation of an 
+ * 		<code>ITableRow</code> interface.  By default the field name(s) in 
+ * 		the object being mapped, should match the name of the column in the 
+ * 		table for the value being contained. If other naming conventions are 
+ * 		required, then the addMapColumn method may be used to specify the field 
+ * 		name for the class.
+ * 
+ * RunDML requires a mapping class to be defined in the TableDefinition for 
+ * any SQL execution.  
+ * 
+ */
+
+/*
+ * Observant coders could argue that TableDefinition violates the Single Object,
+ * one responsibility principles in SOLID.  I initially split the two functions
+ * this class has into two classes.  I didn't like having too class with 
+ * large portions of duplicate code so I chose to place the functionality 
+ * back in one class. 
  */
 public class TableDefinition {
 	
 	private String schema;
 	private String tbName;
+	private Class  mappingClass;
 
 	private static Logger logger = LogManager.getLogger(TableDefinition.class);
 	LinkedHashMap<String,Column> columnMap;
 
 	/**
-	 * Define the Table 
+	 * Define the Table, used if no sql 
 	 * @param schema the table schema 
 	 * @param tbName name of the table
 	 * 
@@ -41,15 +62,45 @@ public class TableDefinition {
 	}
 	
 	/**
+	 * Defines the implementation of <code>ITableRow</code> object that 
+	 * will be mapped.
+	 * @param schema the table schema
+	 * @param tbName the name of the table
+	 * @param mapClass the class for mapping results for this table
+	 */
+	@SuppressWarnings("rawtypes")
+	public TableDefinition(String schema, String tbName, Class mapClass) {
+		this.schema = schema;
+		this.tbName = tbName;
+		this.mappingClass = mapClass;
+		columnMap = new LinkedHashMap<>();
+	}
+	
+	/**
 	 * Add a column to the table definition.  
-	 * @param columnName name of column as defined in table
+	 * @param columnName name of column as defined in table, case insensitive
 	 * @param jdbcType the JDBC type matching column's data type
 	 * 
 	 * @see com.bobman159.rundml.core.exprtypes.Column
 	 */
 	public void addColumn(String columnName,int jdbcType) {
+		columnName = columnName.toUpperCase();
 		columnMap.put(columnName, new Column(columnName,jdbcType));
 	}
+	
+	/**
+	 * Specify an alternate/non-default field name in the class being mapped
+	 * for use by RunDML.
+	 * 
+	 * @param columnName name of column 
+	 * @param jdbcType the JDBC type matching column's data type
+	 * @param mapField the field name in the mapping class 
+	 */
+	public void addMapColumn(String columnName,int jdbcType,String mapField) {
+		columnName = columnName.toUpperCase();
+		columnMap.put(columnName, new Column(columnName,jdbcType,mapField));
+	}
+
 		
 	/**
 	 * The fully qualified table name (schema.table)
@@ -74,7 +125,7 @@ public class TableDefinition {
 	 * Obtain column information for a column in the table definition.
 	 * Column names are case sensitive.
 	 * 
-	 * @param columnName the name of the column
+	 * @param columnName the name of the column, case insensitive
 	 * @return <code>Column</code> information for the column, null otherwise
 	 */
 	/*
@@ -85,6 +136,7 @@ public class TableDefinition {
 		
 		Column col = null;
 
+		columnName = columnName.toUpperCase();
 		col = columnMap.get(columnName);
 		if (col == null) {
 			String msg = String.format("Column name %s was not found for table %s", 
@@ -98,6 +150,14 @@ public class TableDefinition {
 		} 
 
 		return col;
+	}
+	
+	/**
+	 * Obtain the <code>Class</code> instance of the mapping class.
+	 * @return the <code>Class</code> object
+	 */
+	public Class getMapClass() {
+		return mappingClass;
 	}
 
 }

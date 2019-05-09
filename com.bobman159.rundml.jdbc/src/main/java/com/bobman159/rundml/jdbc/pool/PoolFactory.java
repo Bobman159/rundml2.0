@@ -14,14 +14,13 @@ import com.zaxxer.hikari.HikariDataSource;
  *	A factory class for creating connection pools for runDML supported DBMS databases.
  *	HikariCP is used for the connection pooling.
  * 	
- * 
- * @author Robert Anderson
- *
  */
 public class PoolFactory {
 
 	private static Logger logger = LogManager.getLogger(PoolFactory.class);
 	
+	//TODO: Add makeH2Connection method to define single H2 Connection?
+	//TODO: Add makeMySQLConnection method to define single MySQL Connection?
 
 	/**
 	 * Define a connection pool using the specified information for configuration. 

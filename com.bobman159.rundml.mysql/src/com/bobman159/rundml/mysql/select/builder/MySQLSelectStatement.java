@@ -6,6 +6,9 @@ package com.bobman159.rundml.mysql.select.builder;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +21,9 @@ import com.bobman159.rundml.core.sql.OrderByExpression;
 import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.tabledef.TableDefinition;
 import com.bobman159.rundml.core.util.RunDMLUtils;
+import com.bobman159.rundml.jdbc.execution.RunDMLExecutor;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
+import com.bobman159.rundml.jdbc.select.ITableRow;
 import com.bobman159.rundml.mysql.select.builder.MySQLClauses.MySQLClause;
 import com.bobman159.rundml.mysql.select.steps.MySQLSelectFetchStep;
 import com.bobman159.rundml.mysql.select.steps.MySQLSelectFromStep;
@@ -35,24 +40,31 @@ public class MySQLSelectStatement implements MySQLSelectListStep,
 											 MySQLSelectFetchStep {
 	
 	private Logger logger = LogManager.getLogger(MySQLSelectStatement.class);
-	private SQLStatementModel model = new SQLStatementModel();
+	private SQLStatementModel model;
 	private Connection conn = null;
 	private DefaultConnectionProvider provider = null;
+	private TableDefinition tbDef = null;
 
 	/**
 	 * Create a SELECT statement that may be executed against a MySQL database table
 	 * @param conn JDBC connection for the MySQL database.
+	 * @param mapper table mapping definition for the SELECT
 	 */
-	public MySQLSelectStatement(Connection conn) {
+	public MySQLSelectStatement(Connection conn,TableDefinition mapper) {
 		this.conn = conn;
+		this.tbDef = mapper;
+		model = new SQLStatementModel();
 	}
 	
 	/**
 	 * Create a SELECT statement that may be executed against an MySQL database table.
-	 * @param provider a JDBC connection pool for an H2 database
+	 * @param provider a JDBC connection pool for an MySQL database
+	 * @param mapper table mapping definition for the SELECT 
 	 */
-	public MySQLSelectStatement(DefaultConnectionProvider provider) {
+	public MySQLSelectStatement(DefaultConnectionProvider provider,TableDefinition mapper) {
 		this.provider = provider;
+		this.tbDef = mapper;
+		model = new SQLStatementModel();
 	}
 
 	/**
@@ -114,8 +126,32 @@ public class MySQLSelectStatement implements MySQLSelectListStep,
 	 * @see com.bobman159.rundml.mysql.select.steps.MySQLSelectFetchStep#fetch()
 	 */
 	@Override
-	public List<String> fetch() {
-		return new ArrayList<>();
+	public List<ITableRow> fetch() {
+		List<ITableRow> results = new ArrayList<>();
+		Future <List<ITableRow>> task;
+		
+		/*
+		 * For now this seems to work well in that it executes the SELECT
+		 * in another thread. Since I don't expect to be using this for 
+		 * results > 5000 rows.  I will leave it this way for now.
+		 */
+		if (conn != null) {
+			task = RunDMLExecutor.getInstance().executeSelect(conn, model,tbDef);			
+		} else {
+			//ASSUME: provider != null if the connection is null
+			task = RunDMLExecutor.getInstance().executeSelect(
+						provider.getConnection(), model,tbDef);
+		}
+		
+		try {
+			results = task.get();
+		} catch (CancellationException | ExecutionException | InterruptedException ex) {
+			logger.error(ex.getMessage(), ex);
+			Thread.currentThread().interrupt();
+		}
+			
+		return results;
+
 	}
 
 	/**

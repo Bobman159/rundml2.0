@@ -5,6 +5,7 @@ import java.util.List;
 import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.predicates.Predicate;
 import com.bobman159.rundml.core.sql.OrderByExpression;
+import com.bobman159.rundml.jdbc.select.ITableRow;
 
 /**
  * The third step in the SELECT build process. Allows for ordering and grouping of
@@ -56,6 +57,6 @@ public interface MySQLSelectOrderStep {
 	 * @see com.bobman159.rundml.mysql.select.steps.MySQLSelectFetchStep#fetch()
 	 * @return the results of the SELECT statement
 	*/
-	public List<String> fetch();
+	public List<ITableRow> fetch();
 
 }

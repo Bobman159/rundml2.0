@@ -3,6 +3,9 @@ package com.bobman159.rundml.h2.select.builder;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +23,9 @@ import com.bobman159.rundml.h2.select.steps.H2SelectFetchStep;
 import com.bobman159.rundml.h2.select.steps.H2SelectFromStep;
 import com.bobman159.rundml.h2.select.steps.H2SelectListStep;
 import com.bobman159.rundml.h2.select.steps.H2SelectOrderStep;
+import com.bobman159.rundml.jdbc.execution.RunDMLExecutor;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
+import com.bobman159.rundml.jdbc.select.ITableRow;
 
 /**
  * Define a SELECT statement that can be executed against a table in an 
@@ -33,27 +38,34 @@ public class H2SelectStatement implements  H2SelectListStep,
 										   H2SelectFetchStep {
 
 	private Logger logger = LogManager.getLogger(H2SelectStatement.class);
-	private SQLStatementModel model = new SQLStatementModel();
+	private SQLStatementModel model;
 	private Connection conn = null;
 	private DefaultConnectionProvider provider = null;
+	private TableDefinition tbDef = null;
 	
 	/**
 	 * Create a SELECT statement that may be executed against an H2 database
 	 * 
 	 * @param conn JDBC connection for the H2 database
+	 * @param mapper table mapping definition for the SELECT
 	 */
-	public H2SelectStatement(Connection conn) {
+	public H2SelectStatement(Connection conn,TableDefinition mapper) {
 		this.conn = conn;
+		this.tbDef = mapper;
+		model = new SQLStatementModel();	
 	}
 	
 	/**
 	 * Create a SELECT statement that may be executed against an H2 database
 	 * 
 	 * @param provider a JDBC connection pool provider for an H2 database.
+	 * @param mapper table mapping definition for the SELECT
 	 */
 	
-	public H2SelectStatement(DefaultConnectionProvider provider) {
+	public H2SelectStatement(DefaultConnectionProvider provider, TableDefinition mapper) {
 		this.provider = provider;
+		this.tbDef = mapper;
+		model = new SQLStatementModel();
 	}
 	
 
@@ -226,11 +238,35 @@ public class H2SelectStatement implements  H2SelectListStep,
 
 	/**
 	 * Execute the generated SELECT statement and return the results 
-	 * @return a <code>List</code> of the resulting rows, empty otherwise
+	 * @return a <code>List</code> of the resulting rows, empty if an error occurred
 	 */
 	@Override
-	public List<String> fetch() {
-		return new ArrayList<>();
+	public List<ITableRow> fetch() {
+		
+		List<ITableRow> results = new ArrayList<>();
+		Future <List<ITableRow>> task;
+		
+		/*
+		 * For now this seems to work well in that it executes the SELECT
+		 * in another thread. Since I don't expect to be using this for 
+		 * results > 5000 rows.  I will leave it this way for now.
+		 */
+		if (conn != null) {
+			task = RunDMLExecutor.getInstance().executeSelect(conn, model,tbDef);			
+		} else {
+			//ASSUME: provider != null if the connection is null
+			task = RunDMLExecutor.getInstance().executeSelect(
+						provider.getConnection(), model,tbDef);
+		}
+		
+		try {
+			results = task.get();
+		} catch (CancellationException | ExecutionException | InterruptedException ex) {
+			logger.error(ex.getMessage(), ex);
+			Thread.currentThread().interrupt();
+		}
+			
+		return results;
 	}
 	
 	/**
