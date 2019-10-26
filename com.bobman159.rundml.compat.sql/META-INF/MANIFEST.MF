@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Ansi
-Bundle-SymbolicName: com.bobman159.rundml.compat.sql
-Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: ROB159
-Automatic-Module-Name: com.rob159.rundml.ansi
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: com.bobman159.rundml.compat.select.builder

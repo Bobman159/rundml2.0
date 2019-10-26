@@ -124,7 +124,7 @@ class H2SelectExecutionTests {
 	 *
 	 */
 	@Test
-	void allColumnTypesObjetTest() {
+	void allColumnTypesObjectTest() {
 
 		tbDef = typeTestObjectsTableDef();
 		

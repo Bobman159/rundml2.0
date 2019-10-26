@@ -1,8 +1,8 @@
-package com.bobman159.rundml.compat.sql;
+package com.bobman159.rundml.core.sql;
 
 import java.sql.Connection;
 
-import com.bobman159.rundml.compat.select.builder.CompatibleSelectStatement;
+import com.bobman159.rundml.core.select.builder.BaseSelectStatementBuilder;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 
 /**
@@ -26,8 +26,8 @@ public class CompatibleSQLStatement {
 	 * @param conn a JDBC connection
 	 * @return compatible SELECT statement builder
 	 */
-	public static CompatibleSelectStatement selectStatement(Connection conn) {
-		return new CompatibleSelectStatement(conn);
+	public static BaseSelectStatementBuilder selectStatement(Connection conn) {
+		return new BaseSelectStatementBuilder(conn);
 	}
 	
 	/**
@@ -36,8 +36,8 @@ public class CompatibleSQLStatement {
 	 * @param provider the JDBC connection pool provider
 	 * @return a compatible SELECT statement builder.
 	 */
-	public static CompatibleSelectStatement selectStatement(DefaultConnectionProvider provider) {
-		return new CompatibleSelectStatement(provider);
+	public static BaseSelectStatementBuilder selectStatement(DefaultConnectionProvider provider) {
+		return new BaseSelectStatementBuilder(provider);
 	}
 	
 }

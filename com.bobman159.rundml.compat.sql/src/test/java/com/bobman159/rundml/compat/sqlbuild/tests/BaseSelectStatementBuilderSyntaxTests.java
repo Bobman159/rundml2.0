@@ -10,15 +10,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.compat.select.builder.CompatibleSelectStatement;
-import com.bobman159.rundml.compat.sql.CompatibleSQLStatement;
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.exprtypes.ParmMarker;
+import com.bobman159.rundml.core.factory.RunDMLSQLFactory;
 import com.bobman159.rundml.core.predicates.Predicate;
 import com.bobman159.rundml.core.tabledef.TableDefinition;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 
-class CompatibleSelectSyntaxStatementTests {
+class BaseSelectStatementBuilderSyntaxTests {
 	
 	private static final String ABCDEFG_LITERAL = "Abcdefg";
 	private static final String DFLTINTEGER = "dfltInteger";
@@ -71,11 +70,10 @@ class CompatibleSelectSyntaxStatementTests {
 	@Test
 	void compatibleSelectTest() {
 		
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement
-				.selectStatement(provider)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.selectStar()
-				.from(RUNDML_SCHEMA,RUNDML_TABLE))
-				.toStmt();
+				.from(RUNDML_SCHEMA,RUNDML_TABLE)
+				.getStatementText();
 	
 		Assertions.assertEquals("select * from rundml.typetest",stmtText);
 
@@ -84,11 +82,10 @@ class CompatibleSelectSyntaxStatementTests {
 	@Test
 	void compatibleSelectStarTest() {
 		
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement
-				.selectStatement(conn)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.selectStar()
-				.from(RUNDML_SCHEMA,RUNDML_TABLE))
-				.toStmt();
+				.from(RUNDML_SCHEMA,RUNDML_TABLE)
+				.getStatementText();
 	
 		Assertions.assertEquals("select * from rundml.typetest",stmtText);
 
@@ -101,15 +98,14 @@ class CompatibleSelectSyntaxStatementTests {
 		 * The expression type combinations (math, concat, etc) are tested by 
 		 * the com.bobman159.rundml.core.exprtypes.tests JUnits.
 		 */
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement
-				.selectStatement(conn)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(10))
 				.selectExpression(Expression.string("This is a string"))
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.selectExpression(new ParmMarker(Types.VARCHAR,"This is a string too"))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE))
-				.toStmt();
+				.from(RUNDML_SCHEMA,RUNDML_TABLE)
+				.getStatementText();
 			
 		Assertions.assertEquals("select 10,'This is a string',DFLTINTEGER," +
 							"? from rundml.typetest",stmtText);
@@ -119,10 +115,9 @@ class CompatibleSelectSyntaxStatementTests {
 	@Test
 	void compatSelectTableDefinitionTest() {
 				
-		String stmtText =  ((CompatibleSelectStatement)
-				CompatibleSQLStatement.selectStatement(conn)
-				.select(tbDef))
-				.toStmt();
+		String stmtText =  RunDMLSQLFactory.createBaseSelectStatement(conn)
+				.select(tbDef)
+				.getStatementText();
 
 		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLDATE," + 
 						    "NOTNULLCHAR,DFLTSIGNED,DFLTTINYINT,NOTNULLVARCHAR "	   + 
@@ -132,20 +127,20 @@ class CompatibleSelectSyntaxStatementTests {
 	
 	@Test
 	void comptibleSelectAllTest() {
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select().all()
 				.selectExpression(tbDef.column(DFLTINTEGER))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE))
-				.toStmt();
+				.from(RUNDML_SCHEMA,RUNDML_TABLE)
+				.getStatementText();
 		
 		Assertions.assertEquals("select all DFLTINTEGER " + FROM_CLAUSE,stmtText);
 
-		String stmtText2 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.all()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE))
-				.toStmt();
+				.from(RUNDML_SCHEMA,RUNDML_TABLE)
+				.getStatementText();
 		
 		Assertions.assertEquals("select all NOTNULLVARCHAR " +
 							FROM_CLAUSE,stmtText2);
@@ -156,22 +151,22 @@ class CompatibleSelectSyntaxStatementTests {
 	void compatibleSelectDistinctAllTest() {
 		
 		//This test should return no rows  (possibly throw an exception?)
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.distinct().all()
 				.selectExpression(tbDef.column(DFLTINTEGER))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE))
-				.toStmt();
+				.from(RUNDML_SCHEMA,RUNDML_TABLE)
+				.getStatementText();
 		
 		Assertions.assertEquals("select distinct all DFLTINTEGER " +
 							FROM_CLAUSE,stmtText);
 
-		String stmtText2 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.distinct().all()
 				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE))
-				.toStmt();
+				.from(RUNDML_SCHEMA,RUNDML_TABLE)
+				.getStatementText();
 		
 		Assertions.assertEquals("select distinct all NOTNULLVARCHAR " +
 							FROM_CLAUSE,stmtText2);
@@ -195,15 +190,15 @@ class CompatibleSelectSyntaxStatementTests {
 				  .build();
 					  
 	
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 						.select()
 						.selectExpression(tbDef.column(DFLTINTEGER))
 						.selectExpression(tbDef.column(NOTNULLDEC72))
 						.selectExpression(tbDef.column(NOTNULLDATE))
 						.selectExpression(tbDef.column(NOTNULLVARCHAR))
 						.from(RUNDML_SCHEMA,RUNDML_TABLE)
-						.where(pred))
-						.toStmt();
+						.where(pred)
+						.getStatementText();
 		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLDATE," +
 				     "NOTNULLVARCHAR from rundml.typetest " + 
 				     "WHERE DFLTINTEGER > 100000 " + 
@@ -218,7 +213,7 @@ class CompatibleSelectSyntaxStatementTests {
 	@Test
 	void compatibleSelectGroupByTest() {
 		
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -227,8 +222,8 @@ class CompatibleSelectSyntaxStatementTests {
 				.groupBy(Expression.number(100000),
 						 Expression.string(ABCDEFG_LITERAL),
 						 Expression.parm(Types.DECIMAL, 100000),
-						 tbDef.column(DFLTINTEGER)))
-				.toStmt();
+						 tbDef.column(DFLTINTEGER))
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -239,20 +234,20 @@ class CompatibleSelectSyntaxStatementTests {
 	@Test
 	void compatibleSelectOrderByTest() {
 		
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(1),Expression.orderBy(2),Expression.orderBy(3)))
-				.toStmt();
+				.orderBy(Expression.orderBy(1),Expression.orderBy(2),Expression.orderBy(3))
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2,3",stmtText);
 		
-		String stmtText2 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -260,79 +255,79 @@ class CompatibleSelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),
 						 Expression.orderBy(2),
-						 Expression.orderBy(tbDef.column(DFLTINTEGER))))
-				.toStmt();
+						 Expression.orderBy(tbDef.column(DFLTINTEGER)))
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2,DFLTINTEGER",stmtText2);		
 		
-		String stmtText3 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText3 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(Expression.string(ABCDEFG_LITERAL))))
-				.toStmt();
+				.orderBy(Expression.orderBy(Expression.string(ABCDEFG_LITERAL)))
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by 'Abcdefg'",stmtText3);
 		
-		String stmtText4 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText4 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(1).asc()))
-				.toStmt();
+				.orderBy(Expression.orderBy(1).asc())
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by 1 asc",stmtText4);
 		
-		String stmtText5 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText5 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(tbDef.column(DFLTINTEGER)).desc()))
-				.toStmt();
+				.orderBy(Expression.orderBy(tbDef.column(DFLTINTEGER)).desc())
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by DFLTINTEGER desc",stmtText5);
 
-		String stmtText6 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText6 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc()))
-				.toStmt();
+				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc())
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2 desc",stmtText6);		
 
-		String stmtText7 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText7 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc().nullsLast()))
-				.toStmt();
+				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc().nullsLast())
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2 desc nulls last",stmtText7);		
 
-		String stmtText8 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText8 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -340,14 +335,14 @@ class CompatibleSelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(tbDef.column(DFLTINTEGER)),
 						 Expression.orderBy(tbDef.column(NOTNULLVARCHAR)).desc()
-						 			.nullsFirst()))
-				.toStmt();
+						 			.nullsFirst())
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by DFLTINTEGER,NOTNULLVARCHAR desc nulls first",stmtText8);	
 
-		String stmtText9 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText9 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.selectExpression(tbDef.column(NOTNULLDEC72))
@@ -356,15 +351,15 @@ class CompatibleSelectSyntaxStatementTests {
 				.orderBy(Expression.orderBy(tbDef.column(NOTNULLVARCHAR)).desc()
 								   .nullsLast(),
 						 Expression.orderBy(1).asc().nullsFirst(),
-						 Expression.orderBy(tbDef.column(NOTNULLDEC72))))
-				.toStmt();
+						 Expression.orderBy(tbDef.column(NOTNULLDEC72)))
+				.getStatementText();
 
 		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLVARCHAR " +
 				     FROM_CLAUSE_SPACE +
 				     "order by NOTNULLVARCHAR desc nulls last,1 asc nulls first," +
 				     "NOTNULLDEC72",stmtText9);
 		
-		String stmtText10 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText10 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
@@ -375,8 +370,8 @@ class CompatibleSelectSyntaxStatementTests {
 						 Expression.orderBy(2).desc().nullsLast(),
 						 Expression.orderBy(3).desc().nullsFirst(),
 						 Expression.orderBy(Expression.parm(Types.TINYINT,10)).asc()
-				 		   .nullsLast()))				
-				.toStmt();
+				 		   .nullsLast())				
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -389,33 +384,33 @@ class CompatibleSelectSyntaxStatementTests {
 	@Test
 	void compatibleSelectHavingTest() {
 		
-		String stmtText = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(tbDef.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(tbDef.column(DFLTINTEGER))
 				.having(Predicate.having(tbDef.column(DFLTINTEGER)).isGreater(100000)
-								 .build()))
-				.toStmt();
+								 .build())
+				.getStatementText();
 
 		Assertions.assertEquals("select DFLTINTEGER " +
 				     FROM_CLAUSE_SPACE +
 				     "group by DFLTINTEGER HAVING DFLTINTEGER > 100000",stmtText);
 
-		String stmtText2 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(tbDef.column(NOTNULLCHAR))
 				.having(Predicate.having(tbDef.column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
-								 .build()))
-				.toStmt();
+								 .build())
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
 				     "group by NOTNULLCHAR HAVING NOTNULLCHAR > '0123456789'",stmtText2);
 
-		String stmtText3 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText3 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -424,8 +419,8 @@ class CompatibleSelectSyntaxStatementTests {
 								 .isGreaterOrEqual(NUMERIC_LITERAL)
 								 .or(tbDef.column(NOTNULLCHAR)).isEqual("223456789")
 								 .and(tbDef.column(NOTNULLCHAR)).isLess("1123456789")
-								 .build()))
-				.toStmt();
+								 .build())
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
@@ -433,7 +428,7 @@ class CompatibleSelectSyntaxStatementTests {
 				     "OR NOTNULLCHAR = '223456789' AND NOTNULLCHAR < " +
 				     "'1123456789'",stmtText3);
 
-		String stmtText4 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText4 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(tbDef.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -442,15 +437,15 @@ class CompatibleSelectSyntaxStatementTests {
 				.having(Predicate.having("Abcdef")
 								 .isEqual("Abcdef2")
 								 .or("Hijklmnop").isGreater("Hijklmno")
-								 .build()))
-				.toStmt();
+								 .build())
+				.getStatementText();
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
 				     "group by 'Abcdef','Hiklmnop' HAVING 'Abcdef' = 'Abcdef2' " +
 				     "OR 'Hijklmnop' > 'Hijklmno'",stmtText4);
 
-		String stmtText5 = ((CompatibleSelectStatement) CompatibleSQLStatement.selectStatement(conn)
+		String stmtText5 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 				.select()
 				.selectExpression(Expression.number(10))
 				.selectExpression(Expression.number(20))
@@ -464,8 +459,8 @@ class CompatibleSelectSyntaxStatementTests {
 								 .and(20).isGreater(10)
 								 .and(10).isLess(30)
 								 .and(Expression.parm(Types.CHAR, ABCDEFG_LITERAL)).isEqual(ABCDEFG_LITERAL)
-								 .build()))
-				.toStmt();
+								 .build())
+				.getStatementText();
 
 		Assertions.assertEquals("select 10,20,30 " +
 				     FROM_CLAUSE_SPACE +

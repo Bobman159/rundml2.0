@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- Defines the jdbc data sources available for SQL execution by RunDML
+        *   Datasources are used since jdbc connection pooling (HikariCP) is used
+            by RunDML.
+        *   JDBC urls, userId's, passwords, and configuration are specified for each
+            connection pool generated.  This is done by HikariCP configuration 
+            DO NOT DEFINE THIS INFORMATION IN THIS FILE!
+-->
+<rundml>
+    <datasources>
+        <datasource>
+            <name>mysql</name>
+            <classname>com.mysql.cj.jdbc.MysqlDataSource</classname>
+            <!-- This <path> element is only needed if the datasource/driver is NOT 
+                 specified as a dependency in the maven pom.  You should add
+                 the .jar file to the class path when executing RunDML.  -->
+            <path>C:\some-file-location\mysql-connectorj.jar</path>
+        </datasource>
+            <datasource>
+	            <name>h2</name>
+	            <classname>org.h2.jdbcx.JdbcDataSource</classname>
+	            <!-- This <path> element is only needed if the datasource/driver is NOT 
+	                 specified as a dependency in the maven pom.  You should add
+	                 the .jar file to the class path when executing RunDML.  -->
+	            <path>C:\some-file-location\h2.jar</path>
+        </datasource>
+    </datasources>
+</rundml>
