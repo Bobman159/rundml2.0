@@ -1,5 +1,6 @@
 package com.bobman159.rundml.jdbc.select;
 
+//TODO: Refactor and move this to rundml.core.sql package in rundml.core.sql?
 /**
  * One row in a SQL <code>ResultSet</code>. Implementors of ITableRow 
  * must follow the following conventions:
