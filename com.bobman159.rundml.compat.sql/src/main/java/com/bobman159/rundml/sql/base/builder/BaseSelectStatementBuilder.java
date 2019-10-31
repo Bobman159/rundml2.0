@@ -14,15 +14,14 @@ import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
 import com.bobman159.rundml.core.predicates.Predicate;
-import com.bobman159.rundml.core.sql.ISQLSelect;
-import com.bobman159.rundml.core.sql.ISQLStatement;
 import com.bobman159.rundml.core.sql.OrderByExpression;
 import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.tabledef.TableDefinition;
 import com.bobman159.rundml.core.util.RunDMLUtils;
 import com.bobman159.rundml.jdbc.execution.RunDMLExecutor;
-import com.bobman159.rundml.jdbc.pool.IConnectionProvider;
 import com.bobman159.rundml.jdbc.select.ITableRow;
+import com.bobman159.rundml.sql.ISQLSelect;
+import com.bobman159.rundml.sql.ISQLStatement;
 
 /**
  * Defines a basic SQL SELECT statement that can be executed on different DBMS platforms.
@@ -171,7 +170,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	}
 
 	/**
-	 * @see com.bobman159.rundml.core.sql.ISQLStatement#getStatementText()
+	 * @see com.bobman159.rundml.sql.ISQLStatement#getStatementText()
 	 */
 	@Override
 	public String getStatementText() {
@@ -179,7 +178,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	}
 
 	/**
-	 * @see com.bobman159.rundml.core.sql.ISQLSelect#execute(Connection)
+	 * @see com.bobman159.rundml.sql.ISQLSelect#execute(Connection)
 	 */
 	@Override
 	public List<ITableRow> execute(Connection conn) {
