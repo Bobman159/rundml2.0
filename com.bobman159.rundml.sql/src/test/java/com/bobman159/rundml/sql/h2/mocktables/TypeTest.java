@@ -6,10 +6,11 @@ import java.sql.Clob;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.HashMap;
 
-import com.bobman159.rundml.jdbc.select.ITableRow;
+import com.bobman159.rundml.jdbc.mapping.IFieldMap;
 
-public class TypeTest implements ITableRow {
+public class TypeTest {
 	
 	private Integer 	DfltInteger;
 	private Integer 	NotNullMediumInt;

@@ -39,8 +39,8 @@ class ExprStringTest {
 		String expr = Expression.string("abc").concat("def").serialize();
 		Assertions.assertEquals("\'abc\' || \'def\'",expr);
 
-		Column lhs = new Column("ingredient",Types.CHAR);
-		Column rhs = new Column("unit_of_measure",Types.VARCHAR);
+		Column lhs = new Column("ingredient");
+		Column rhs = new Column("unit_of_measure");
 		
 		String expr2 = lhs.concat(rhs).serialize();
 		Assertions.assertEquals("INGREDIENT || UNIT_OF_MEASURE",expr2);

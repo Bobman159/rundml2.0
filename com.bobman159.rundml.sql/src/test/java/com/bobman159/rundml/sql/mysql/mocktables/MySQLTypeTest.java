@@ -7,9 +7,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
-import com.bobman159.rundml.jdbc.select.ITableRow;
-
-public class TypeTest implements ITableRow {
+public class MySQLTypeTest {
 	Integer				DfltInteger;
 	Integer				NotNullMediumInt;
 	Integer				DfltIntUnsigned;

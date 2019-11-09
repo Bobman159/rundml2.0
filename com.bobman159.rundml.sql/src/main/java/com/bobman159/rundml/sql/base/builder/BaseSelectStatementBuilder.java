@@ -16,10 +16,8 @@ import com.bobman159.rundml.core.model.SQLStatementSerializer;
 import com.bobman159.rundml.core.predicates.Predicate;
 import com.bobman159.rundml.core.sql.OrderByExpression;
 import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
-import com.bobman159.rundml.core.tabledef.TableDefinition;
 import com.bobman159.rundml.core.util.RunDMLUtils;
-import com.bobman159.rundml.jdbc.execution.RunDMLExecutor;
-import com.bobman159.rundml.jdbc.select.ITableRow;
+import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
 import com.bobman159.rundml.sql.ISQLSelect;
 import com.bobman159.rundml.sql.ISQLStatement;
 
@@ -39,16 +37,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 																						 ISQLSelect {
 	
 	private Logger logger = LogManager.getLogger(BaseSelectStatementBuilder.class);
-	private TableDefinition tbDef;
 	protected SQLStatementModel model = new SQLStatementModel();	
-	
-	/**
-	 * Create a compatible SELECT statement to be executed on a database.
-	 * @param mapper table mapping definition for the SELECT
-	 */
-	public BaseSelectStatementBuilder(TableDefinition mapper) {
-		this.tbDef = mapper;
-	}
 
 	/**
 	 *  Specify a SELECT * to select all columns in a table for the SELECT statement 
@@ -68,18 +57,8 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 		model.addClause(SQLClause.SELECT);
 		return self();
 	}
-
-	/**
-	 * Specify a SELECT statement using a <code>TableDefinition</code>
-	 * Generates a "SELECT column-name[,] FROM schema.tbName clause
-	 * @see com.bobman159.rundml.core.tabledef.TableDefinition
-	 * @param tbDef an instance of a <code>TableDefinition</code>
-	 * @return an instance of this builder
-	 */
-	public B select(TableDefinition tbDef) {
-		model.addClause(SQLClause.SELECT);
-		model.addColumnList(SQLClause.SELECTEXPR, tbDef);
-		model.addClause(SQLClause.FROM,tbDef.qualifedTableName());
+	
+	public B selectList(Object...x) {
 		return self();
 	}
 	
@@ -178,19 +157,19 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	}
 
 	/**
-	 * @see com.bobman159.rundml.sql.ISQLSelect#execute(Connection)
+	 * @see com.bobman159.rundml.sql.ISQLSelect#execute(Connection, Class)
 	 */
 	@Override
-	public List<ITableRow> execute(Connection conn) {
-		List<ITableRow> results = new ArrayList<>();
-		Future <List<ITableRow>> task;
+	public List<Object> execute(Connection conn,Class clazz) {
+		List<Object> results = new ArrayList<>();
+		Future <List<Object>> task;
 		
 		/*
 		 * For now this seems to work well in that it executes the SELECT
 		 * in another thread. Since I don't expect to be using this for 
 		 * results > 5000 rows.  I will leave it this way for now.
 		 */
-		task = RunDMLExecutor.getInstance().executeSelect(conn, model,tbDef);			
+		task = RunDMLExecutor.getInstance().executeSelect(conn, model,clazz);			
 		
 		try {
 			results = task.get();

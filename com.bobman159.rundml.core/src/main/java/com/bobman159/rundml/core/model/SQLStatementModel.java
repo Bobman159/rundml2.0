@@ -8,7 +8,6 @@ import com.bobman159.rundml.core.expressions.ExpressionList;
 import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.sql.ISQLEnum;
 import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
-import com.bobman159.rundml.core.tabledef.TableDefinition;
 
 /**
  * Model class for representing SQL clauses for SELECT, INSERT, UPDATE and
@@ -52,17 +51,6 @@ public class SQLStatementModel {
 	}
 	
 	/**
-	 * Add a list of columns from a <code>TableDefinition</code> for an SQL clause
-	 * @param clause enumeration of the type of clause to be added
-	 * @param tbDef table definition for the columns
-	 */
-	public void addColumnList(ISQLEnum clause, TableDefinition tbDef) {
-		ExpressionList columns = new ExpressionList();
-		tbDef.columns().forEach(column -> columns.addExpression(column));  //NOSONAR
-		addNode(clause,columns);
-	}
-
-	/**
 	 * Add an SQL expression represented by an <code>IExpression</code> object
 	 * to a list of other expressions that are defined in the model.  Only 
 	 * <code>SQLClause</code> enumerations defined for SQL expressions that are 
@@ -71,7 +59,6 @@ public class SQLStatementModel {
 	 * @param clause <code>SQLClause</code> enumeration
 	 * @param expr an SQL expression 
 	 */
-	@SuppressWarnings("unchecked")
 	public void addExpressionList(ISQLEnum clause, IExpression expr) {
 		
 		ExpressionList exprList;

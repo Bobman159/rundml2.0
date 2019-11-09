@@ -1,5 +1,6 @@
 package com.bobman159.rundml.core.expressions;
 
+import com.bobman159.rundml.core.exprtypes.Column;
 import com.bobman159.rundml.core.exprtypes.ExprString;
 import com.bobman159.rundml.core.exprtypes.ExprTypeHelper;
 import com.bobman159.rundml.core.exprtypes.IExpression;
@@ -15,6 +16,15 @@ public class Expression {
 
 	private Expression() {
 		throw new IllegalStateException("Expression is a factory class");
+	}
+	
+	/**
+	 * Create a column expression defining a column name in a database table
+	 * @param columnName string column name in table
+	 * @return a <code>Column</code> expression
+	 */
+	public static Column column(String columnName) {
+		return new Column(columnName);
 	}
 	
 	/**

@@ -6,16 +6,16 @@ import java.sql.Clob;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.sql.Types;
 
-import com.bobman159.rundml.jdbc.select.ITableRow;
+import com.bobman159.rundml.jdbc.mapping.CaseInsensitiveFieldsMap;
+import com.bobman159.rundml.jdbc.mapping.IFieldMap;
 
 /**
  * Mock object for testing RunDML mapping SELECT results to 
  * a class with a different fame than the table being queried.
  *
  */
-public class H2MockPrimitivesTypeTest implements ITableRow {
+public class H2MockPrimitivesTypeTest implements IFieldMap {
 
 	private int DfltInteger;
 	private int medIntNotNull;
@@ -102,6 +102,23 @@ public class H2MockPrimitivesTypeTest implements ITableRow {
 	}
 	public long getNotNullIdentity() {
 		return NotNullIdentity;
+	}
+	
+	@Override
+	public CaseInsensitiveFieldsMap<String, String> getFieldMappings() {
+		
+		CaseInsensitiveFieldsMap<String,String> map = new CaseInsensitiveFieldsMap<String,String>();
+		map.put("NotNullMediumInt","medIntNotNull");
+		map.put("DfltSigned","signedDflt");
+		map.put("DfltTinyInt","tinyIntDflt");
+		map.put("DfltNumber72","num72Dflt");
+		map.put("NotNullTime","timeNotNull");
+		map.put("NotNullChar","charNotNull");
+		map.put("DfltClob","lobCharCol");
+		map.put("NotNullBoolean","booleanNotNull");
+		map.put("NotNullBit","bitNotNull");
+		map.put("DfltInt8","dflt8Col");
+		return map;
 	}
 	
 

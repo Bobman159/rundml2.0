@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.tabledef.TableDefinition;
 import com.bobman159.rundml.sql.base.builder.BaseSelectStatementBuilder;
 import com.bobman159.rundml.sql.mysql.MySQLClauses.MySQLClause;
 
@@ -19,15 +18,12 @@ import com.bobman159.rundml.sql.mysql.MySQLClauses.MySQLClause;
 public class MySQLSelectStatementBuilder extends BaseSelectStatementBuilder<MySQLSelectStatementBuilder> {
 	
 	private Logger logger = LogManager.getLogger(MySQLSelectStatementBuilder.class);
-	private TableDefinition tbDef = null;
 
 	/**
 	 * Create a SELECT statement that may be executed against a MySQL database table
-	 * @param mapper table mapping definition for the SELECT
 	 */
-	public MySQLSelectStatementBuilder(TableDefinition mapper) {
-		super(mapper);
-		this.tbDef = mapper;
+	public MySQLSelectStatementBuilder() {
+		super();
 		model = new SQLStatementModel();
 	}
 	

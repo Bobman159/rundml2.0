@@ -12,7 +12,7 @@
 	<modules>
 		<module>../com.bobman159.rundml.core</module>
 		<module>../com.bobman159.rundml.jdbc</module>
-		<module>../com.bobman159.rundml.compat.sql</module>
+		<module>../com.bobman159.rundml.sql</module>
 	</modules>
 	<build>
 		<pluginManagement>

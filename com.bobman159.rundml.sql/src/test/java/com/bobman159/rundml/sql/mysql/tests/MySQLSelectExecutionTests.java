@@ -1,6 +1,5 @@
 package com.bobman159.rundml.sql.mysql.tests;
 
-import java.sql.Types;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,19 +11,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.tabledef.TableDefinition;
+import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
-import com.bobman159.rundml.jdbc.select.ITableRow;
 import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
 import com.bobman159.rundml.sql.mysql.mocktables.MockMySQLPrimitivesTypeTest;
 import com.bobman159.rundml.sql.mysql.mocktables.MockMySQLStringTypeTest;
-import com.bobman159.rundml.sql.mysql.mocktables.TypeTest;
+import com.bobman159.rundml.sql.mysql.mocktables.MySQLTypeTest;
 
 
 class MySQLSelectExecutionTests {
 
-	private static TableDefinition tbDef;
 	private static Logger logger = LogManager.getLogger(MySQLSelectExecutionTests.class.getName());
 	private static DefaultConnectionProvider mySQLProvider;
 	
@@ -92,42 +89,39 @@ class MySQLSelectExecutionTests {
 	@Test
 	void allColumnTypesObjectTest() {
 		
-		tbDef = typeTestObjectsTableMap();
-		
 		logger.info("****** allColumnTypesObjectTest ******");
-		List<ITableRow> results = RunDMLSQLFactory.createMySQLSelectStatement(tbDef)
-				
+		
+		List<Object> results = RunDMLSQLFactory.createMySQLSelectStatement()				
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
-				.selectExpression(tbDef.column(NOTNULLMEDINT))
-				.selectExpression(tbDef.column(DFLTINTUNSIGNED))
-				.selectExpression(tbDef.column(DFLTTINYINT))
-				.selectExpression(tbDef.column(NOTNULLSMINT))
-				.selectExpression(tbDef.column(NOTNULLDEC72))
-				.selectExpression(tbDef.column(NOTNULLTIME))
-				.selectExpression(tbDef.column(NOTNULLDATE))
-				.selectExpression(tbDef.column(NOTNULLTSTAMP))
-				.selectExpression(tbDef.column(NOTNULLDATETIME))
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.selectExpression(tbDef.column(NOTNULLCHAR))
-				.selectExpression(tbDef.column(NOTNULLBLOB))
-				.selectExpression(tbDef.column(NOTNULLTEXT))
-				.selectExpression(tbDef.column(NOTNULLBOOLEAN))
-				.selectExpression(tbDef.column(NOTNULLBIT))
-				.selectExpression(tbDef.column(NOTNULLBIGINT))
-				.selectExpression(tbDef.column(NOTNULLBINARY))
-				.selectExpression(tbDef.column(NOTNULLVARBINARY))
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLMEDINT))
+				.selectExpression(Expression.column(DFLTINTUNSIGNED))
+				.selectExpression(Expression.column(DFLTTINYINT))
+				.selectExpression(Expression.column(NOTNULLSMINT))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(NOTNULLTIME))
+				.selectExpression(Expression.column(NOTNULLDATE))
+				.selectExpression(Expression.column(NOTNULLTSTAMP))
+				.selectExpression(Expression.column(NOTNULLDATETIME))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(NOTNULLBLOB))
+				.selectExpression(Expression.column(NOTNULLTEXT))
+				.selectExpression(Expression.column(NOTNULLBOOLEAN))
+				.selectExpression(Expression.column(NOTNULLBIT))
+				.selectExpression(Expression.column(NOTNULLBIGINT))
+				.selectExpression(Expression.column(NOTNULLBINARY))
+				.selectExpression(Expression.column(NOTNULLVARBINARY))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(mySQLProvider.getConnection());
+				.execute(mySQLProvider.getConnection(),MySQLTypeTest.class);
 		
 		Assertions.assertEquals(6, results.size());
 		
-		TypeTest test = (TypeTest) results.get(0);
+		MySQLTypeTest test = (MySQLTypeTest) results.get(0);
 		Assertions.assertEquals(100000,test.getDfltInteger());
 		Assertions.assertEquals(100000, test.getNotNullMediumInt());
 		Assertions.assertEquals(100000, test.getDfltIntUnsigned());
 		Assertions.assertEquals(50, test.getDfltTinyInt());
-
 
 		short shortVal = 32760;
 		Assertions.assertEquals(new Short(shortVal),test.getNotNullSmint());		
@@ -151,7 +145,7 @@ class MySQLSelectExecutionTests {
 		byte[] varBinaryArray = {0b00000000};
 		Assertions.assertArrayEquals(varBinaryArray,test.getNotNullVarBinary()); 
 		
-		TypeTest test4 = (TypeTest) results.get(4);
+		MySQLTypeTest test4 = (MySQLTypeTest) results.get(4);
 		Assertions.assertEquals(100004,test4.getDfltInteger());
 		Assertions.assertEquals(100004, test4.getNotNullMediumInt());
 		Assertions.assertEquals(100004, test4.getDfltIntUnsigned());
@@ -179,7 +173,7 @@ class MySQLSelectExecutionTests {
 		byte[] varBinaryArray4 = {0b00001111};
 		Assertions.assertArrayEquals(varBinaryArray4,test4.getNotNullVarBinary()); 
 	
-		TypeTest test5 = (TypeTest) results.get(5);
+		MySQLTypeTest test5 = (MySQLTypeTest) results.get(5);
 		Assertions.assertEquals(0, test5.getDfltInteger());
 		Assertions.assertEquals(100005, test5.getNotNullMediumInt());
 		Assertions.assertEquals(0,test5.getDfltIntUnsigned());
@@ -212,33 +206,31 @@ class MySQLSelectExecutionTests {
 	
 	@Test
 	void allColumnTypesPrimitivesTest() {
-		
-		tbDef = mockMySQLPrimitivesTypeTestTableMap();
-		
+
 		logger.info("****** allColumnTypesPrimitivesTest ******");
-		List<ITableRow> results = RunDMLSQLFactory.createMySQLSelectStatement(tbDef)
+		List<Object> results = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
-				.selectExpression(tbDef.column(NOTNULLMEDINT))
-				.selectExpression(tbDef.column(DFLTINTUNSIGNED))
-				.selectExpression(tbDef.column(DFLTTINYINT))
-				.selectExpression(tbDef.column(NOTNULLSMINT))
-				.selectExpression(tbDef.column(NOTNULLDEC72))
-				.selectExpression(tbDef.column(NOTNULLTIME))
-				.selectExpression(tbDef.column(NOTNULLDATE))
-				.selectExpression(tbDef.column(NOTNULLTSTAMP))
-				.selectExpression(tbDef.column(NOTNULLDATETIME))
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.selectExpression(tbDef.column(NOTNULLCHAR))
-				.selectExpression(tbDef.column(NOTNULLBLOB))
-				.selectExpression(tbDef.column(NOTNULLTEXT))
-				.selectExpression(tbDef.column(NOTNULLBOOLEAN))
-				.selectExpression(tbDef.column(NOTNULLBIT))
-				.selectExpression(tbDef.column(NOTNULLBIGINT))
-				.selectExpression(tbDef.column(NOTNULLBINARY))
-				.selectExpression(tbDef.column(NOTNULLVARBINARY))
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLMEDINT))
+				.selectExpression(Expression.column(DFLTINTUNSIGNED))
+				.selectExpression(Expression.column(DFLTTINYINT))
+				.selectExpression(Expression.column(NOTNULLSMINT))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(NOTNULLTIME))
+				.selectExpression(Expression.column(NOTNULLDATE))
+				.selectExpression(Expression.column(NOTNULLTSTAMP))
+				.selectExpression(Expression.column(NOTNULLDATETIME))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(NOTNULLBLOB))
+				.selectExpression(Expression.column(NOTNULLTEXT))
+				.selectExpression(Expression.column(NOTNULLBOOLEAN))
+				.selectExpression(Expression.column(NOTNULLBIT))
+				.selectExpression(Expression.column(NOTNULLBIGINT))
+				.selectExpression(Expression.column(NOTNULLBINARY))
+				.selectExpression(Expression.column(NOTNULLVARBINARY))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(mySQLProvider.getConnection());
+				.execute(mySQLProvider.getConnection(),MockMySQLPrimitivesTypeTest.class);
 		
 		Assertions.assertEquals(6, results.size());
 		
@@ -275,33 +267,31 @@ class MySQLSelectExecutionTests {
 	
 	@Test
 	void allColumnTypesStringsTest() {
-		
-		tbDef = mockMySQLStringTypeTestTableMap();
-		
+
 		logger.info("****** allColumnTypesStringsTest ******");
-		List<ITableRow> results = RunDMLSQLFactory.createMySQLSelectStatement(tbDef)
+		List<Object> results = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
-				.selectExpression(tbDef.column(NOTNULLMEDINT))
-				.selectExpression(tbDef.column(DFLTINTUNSIGNED))
-				.selectExpression(tbDef.column(DFLTTINYINT))
-				.selectExpression(tbDef.column(NOTNULLSMINT))
-				.selectExpression(tbDef.column(NOTNULLDEC72))
-				.selectExpression(tbDef.column(NOTNULLTIME))
-				.selectExpression(tbDef.column(NOTNULLDATE))
-				.selectExpression(tbDef.column(NOTNULLTSTAMP))
-				.selectExpression(tbDef.column(NOTNULLDATETIME))
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.selectExpression(tbDef.column(NOTNULLCHAR))
-				.selectExpression(tbDef.column(NOTNULLBLOB))
-				.selectExpression(tbDef.column(NOTNULLTEXT))
-				.selectExpression(tbDef.column(NOTNULLBOOLEAN))
-				.selectExpression(tbDef.column(NOTNULLBIT))
-				.selectExpression(tbDef.column(NOTNULLBIGINT))
-				.selectExpression(tbDef.column(NOTNULLBINARY))
-				.selectExpression(tbDef.column(NOTNULLVARBINARY))
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLMEDINT))
+				.selectExpression(Expression.column(DFLTINTUNSIGNED))
+				.selectExpression(Expression.column(DFLTTINYINT))
+				.selectExpression(Expression.column(NOTNULLSMINT))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(NOTNULLTIME))
+				.selectExpression(Expression.column(NOTNULLDATE))
+				.selectExpression(Expression.column(NOTNULLTSTAMP))
+				.selectExpression(Expression.column(NOTNULLDATETIME))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(NOTNULLBLOB))
+				.selectExpression(Expression.column(NOTNULLTEXT))
+				.selectExpression(Expression.column(NOTNULLBOOLEAN))
+				.selectExpression(Expression.column(NOTNULLBIT))
+				.selectExpression(Expression.column(NOTNULLBIGINT))
+				.selectExpression(Expression.column(NOTNULLBINARY))
+				.selectExpression(Expression.column(NOTNULLVARBINARY))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(mySQLProvider.getConnection());
+				.execute(mySQLProvider.getConnection(),MockMySQLStringTypeTest.class);
 		
 		Assertions.assertEquals(6, results.size());
 		
@@ -356,99 +346,4 @@ class MySQLSelectExecutionTests {
 	 *	
 	 */
 
-	
-	/*
-	 *	Creates a default TableMapper for the rundml.typetest table
-	 * 		*	No specified mapping for the table class fields
-	 */
-	private static TableDefinition typeTestObjectsTableMap() {
-		
-		TableDefinition tbDef = new TableDefinition("rundml","typetest",TypeTest.class);
-		tbDef.addColumn(DFLTINTEGER , Types.INTEGER);  
-		tbDef.addColumn(NOTNULLMEDINT,Types.INTEGER);
-		tbDef.addColumn(DFLTINTUNSIGNED, Types.INTEGER);
-		tbDef.addColumn(DFLTTINYINT, Types.TINYINT);
-		tbDef.addColumn(NOTNULLSMINT, Types.SMALLINT);
-		tbDef.addColumn(NOTNULLDEC72,Types.DECIMAL);	
-		tbDef.addColumn(NOTNULLTIME,Types.TIME);
-		tbDef.addColumn(NOTNULLDATE,Types.DATE);
-		tbDef.addColumn(NOTNULLTSTAMP,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLDATETIME,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLVARCHAR,Types.VARCHAR);
-		tbDef.addColumn(NOTNULLCHAR,Types.CHAR);
-		tbDef.addColumn(NOTNULLBLOB,Types.BLOB);
-		tbDef.addColumn(NOTNULLTEXT,Types.CLOB);
-		tbDef.addColumn(NOTNULLBOOLEAN,Types.BOOLEAN);
-		tbDef.addColumn(NOTNULLBIT,Types.BIT);
-		tbDef.addColumn(NOTNULLBIGINT,Types.BIGINT);
-		tbDef.addColumn(NOTNULLBINARY,Types.BINARY);
-		tbDef.addColumn(NOTNULLVARBINARY,Types.VARBINARY);
-		
-		return tbDef;
-		
-	}
-	
-	/*
-	 *	Creates a default TableDefinition for the rundml.typetest table
-	 * 		*	Specifies some mapping for the table class fields
-	 * 
-	 */
-	private static TableDefinition mockMySQLPrimitivesTypeTestTableMap() {
-		
-		TableDefinition tbDef = new TableDefinition("rundml","typetest", 
-					MockMySQLPrimitivesTypeTest.class);
-		tbDef.addColumn(DFLTINTEGER , Types.INTEGER);  
-		tbDef.addMapColumn(NOTNULLMEDINT,Types.INTEGER,"medIntNotNull");
-		tbDef.addMapColumn(DFLTINTUNSIGNED, Types.INTEGER,"unsignedDflt");
-		tbDef.addMapColumn(DFLTTINYINT, Types.TINYINT,"tinyIntDflt");
-		tbDef.addColumn(NOTNULLSMINT, Types.SMALLINT);
-		tbDef.addColumn(NOTNULLDEC72,Types.DECIMAL);	
-		tbDef.addMapColumn(NOTNULLTIME,Types.TIME,"timeNotNull");
-		tbDef.addColumn(NOTNULLDATE,Types.DATE);
-		tbDef.addColumn(NOTNULLTSTAMP,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLDATETIME,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLVARCHAR,Types.VARCHAR);
-		tbDef.addMapColumn(NOTNULLCHAR,Types.CHAR,"charNotNull");
-		tbDef.addColumn(NOTNULLBLOB,Types.BLOB);
-		tbDef.addMapColumn(NOTNULLTEXT,Types.CLOB,"lobCharCol");
-		tbDef.addMapColumn(NOTNULLBOOLEAN,Types.BOOLEAN,"booleanNotNull");
-		tbDef.addMapColumn(NOTNULLBIT,Types.BIT,"bitNotNull");
-		tbDef.addColumn(NOTNULLBIGINT,Types.BIGINT);
-		tbDef.addMapColumn(NOTNULLBINARY,Types.BINARY,"binaryNotNull");
-		tbDef.addColumn(NOTNULLVARBINARY,Types.BINARY);
-		
-		return tbDef;
-	}
-	
-	/*
-	 *	Creates a default TableDefinition for the rundml.typetest table
-	 * 		*	Specifies some mapping for the table class fields
-	 * 
-	 */
-	private static TableDefinition mockMySQLStringTypeTestTableMap() {
-		
-		TableDefinition tbDef = new TableDefinition("rundml","typetest", 
-					MockMySQLStringTypeTest.class);
-		tbDef.addColumn(DFLTINTEGER , Types.INTEGER);  
-		tbDef.addMapColumn(NOTNULLMEDINT,Types.INTEGER,"medIntNotNull");
-		tbDef.addMapColumn(DFLTINTUNSIGNED, Types.INTEGER,"unsignedDflt");
-		tbDef.addMapColumn(DFLTTINYINT, Types.TINYINT,"tinyIntDflt");
-		tbDef.addColumn(NOTNULLSMINT, Types.SMALLINT);
-		tbDef.addColumn(NOTNULLDEC72,Types.DECIMAL);	
-		tbDef.addMapColumn(NOTNULLTIME,Types.TIME,"timeNotNull");
-		tbDef.addColumn(NOTNULLDATE,Types.DATE);
-		tbDef.addColumn(NOTNULLTSTAMP,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLDATETIME,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLVARCHAR,Types.VARCHAR);
-		tbDef.addMapColumn(NOTNULLCHAR,Types.CHAR,"charNotNull");
-		tbDef.addColumn(NOTNULLBLOB,Types.BLOB);
-		tbDef.addMapColumn(NOTNULLTEXT,Types.CLOB,"lobCharCol");
-		tbDef.addMapColumn(NOTNULLBOOLEAN,Types.BOOLEAN,"booleanNotNull");
-		tbDef.addMapColumn(NOTNULLBIT,Types.BIT,"bitNotNull");
-		tbDef.addColumn(NOTNULLBIGINT,Types.BIGINT);
-		tbDef.addMapColumn(NOTNULLBINARY,Types.BINARY,"binaryNotNull");
-		tbDef.addColumn(NOTNULLVARBINARY,Types.BINARY);
-		
-		return tbDef;
-	}
 }

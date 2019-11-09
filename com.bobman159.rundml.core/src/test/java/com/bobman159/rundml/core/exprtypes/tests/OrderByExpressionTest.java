@@ -1,7 +1,5 @@
 package com.bobman159.rundml.core.exprtypes.tests;
 
-import java.sql.Types;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -11,20 +9,16 @@ import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.sql.OrderByClause;
-import com.bobman159.rundml.core.tabledef.TableDefinition;
 
 
 class OrderByExpressionTest {
 	
-	private static TableDefinition tbDef;
 	private static final String DFLTINTEGER = "dfltInteger";
 	private static final String NOTNULLVARCHAR = "notNullVarchar";
 
 	@BeforeAll
 	static void setUpBeforeClass() {
-		tbDef = new TableDefinition("rundml","typetest");
-		tbDef.addColumn(DFLTINTEGER, Types.INTEGER);
-		tbDef.addColumn(NOTNULLVARCHAR, Types.VARCHAR);
+		//No setup needed
 	}
 
 	@AfterAll
@@ -63,7 +57,7 @@ class OrderByExpressionTest {
 							.addExpression(Expression.orderBy(1)) 
 						   	.addExpression(Expression.orderBy(2))
 						   	.addExpression(Expression.orderBy(
-						   					tbDef.column(DFLTINTEGER)))
+						   					Expression.column(DFLTINTEGER)))
 							.serialize();			
 		Assertions.assertEquals("order by 1,2,DFLTINTEGER",stmtText2);		
 		
@@ -80,7 +74,7 @@ class OrderByExpressionTest {
 		
 		
 		String stmtText5 = new OrderByClause()
-				.addExpression(Expression.orderBy(tbDef.column(DFLTINTEGER))
+				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER))
 				.desc())
 				.serialize();
 		Assertions.assertEquals("order by DFLTINTEGER desc",stmtText5);
@@ -101,8 +95,8 @@ class OrderByExpressionTest {
 
 		
 		String stmtText8 = new OrderByClause()
-				.addExpression(Expression.orderBy(tbDef.column(DFLTINTEGER)))
-				.addExpression(Expression.orderBy(tbDef.column(NOTNULLVARCHAR))
+				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER)))
+				.addExpression(Expression.orderBy(Expression.column(NOTNULLVARCHAR))
 				.desc().nullsFirst())
 				.serialize();
 		Assertions.assertEquals("order by DFLTINTEGER,NOTNULLVARCHAR desc nulls first",
@@ -110,17 +104,17 @@ class OrderByExpressionTest {
 
 		
 		String stmtText9 = new OrderByClause()
-				.addExpression(Expression.orderBy(tbDef.column(NOTNULLVARCHAR))
+				.addExpression(Expression.orderBy(Expression.column(NOTNULLVARCHAR))
 						.desc().nullsLast())
 				.addExpression(Expression.orderBy(1).asc().nullsFirst())
-				.addExpression(Expression.orderBy(tbDef.column(DFLTINTEGER)))
+				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER)))
 				.serialize();
 		Assertions.assertEquals("order by NOTNULLVARCHAR desc nulls last,1 asc nulls first," +
 				     		"DFLTINTEGER",stmtText9);
 		
 		
 		String stmtText10 = new OrderByClause()
-				.addExpression(Expression.orderBy(tbDef.column(DFLTINTEGER))
+				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER))
 									  .asc().nullsFirst())
 				.addExpression(Expression.orderBy(2).desc().nullsLast())
 				.addExpression(Expression.orderBy(3).desc().nullsFirst())

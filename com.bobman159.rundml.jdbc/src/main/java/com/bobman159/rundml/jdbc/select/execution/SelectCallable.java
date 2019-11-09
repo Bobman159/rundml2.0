@@ -1,4 +1,4 @@
-package com.bobman159.rundml.jdbc.execution;
+package com.bobman159.rundml.jdbc.select.execution;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +13,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
-import com.bobman159.rundml.core.tabledef.TableDefinition;
-import com.bobman159.rundml.jdbc.select.ITableRow;
 
 /**
  * Executes an SQL SELECT statement using JDBC and the callable interface which
@@ -24,17 +22,18 @@ import com.bobman159.rundml.jdbc.select.ITableRow;
  */
 /*
  * ASSUMES:
- * 	*	No special handling for large SELECT results is needed.  Hundreds of
- * 		thousands or millions of result rows will take a VERY long time to 
+ * 	*	No special handling for large SELECT results is needed/done.  Hundreds of
+ * 		thousands or millions of result rows may take a VERY long time to 
  * 		execute.
  */
 
-class SelectCallable implements Callable<List<ITableRow>> {
+class SelectCallable implements Callable<List<Object>> {
 	
 	private Connection conn;
 	private SQLStatementModel model;
-	private List<ITableRow> results;
+	private List<Object> results;
 	private ResultSetMapper mapper;
+	
 
 	private static Logger logger = LogManager.getLogger(SelectCallable.class.getName());
 	
@@ -42,13 +41,11 @@ class SelectCallable implements Callable<List<ITableRow>> {
 	 * Define the Select Runnable to execute the SELECT statement
 	 * @param provider connection pool provider for JDBC connections
 	 * @param model model for an SQL SELECT statement to be executed
-	 * @param tbDef table defintion for mapping results
 	 */
-	public SelectCallable(Connection conn,SQLStatementModel model,
-						  TableDefinition tbDef) {
+	public SelectCallable(Connection conn,SQLStatementModel model,Class<?> rowClass) {
 		this.conn = conn;
 		this.model = model;
-		mapper = new ResultSetMapper(tbDef);
+		mapper = new ResultSetMapper(rowClass);
 		results = new ArrayList<>();
 	}
 
@@ -56,10 +53,9 @@ class SelectCallable implements Callable<List<ITableRow>> {
 	 * @see java.util.concurrent.Callable#call() 
 	 */
 	@Override
-	public List<ITableRow> call() throws SQLException {
-		logger.info("Execute SELECT statement");
+	public List<Object> call() throws SQLException {
 		
-
+		logger.info("Execute SELECT statement");
 		String stmtText = SQLStatementSerializer.serializeSelect(model);
 		try (PreparedStatement ps = conn.prepareStatement(stmtText)) {
 			//TODO: Figure out how to bind parameters....
@@ -78,11 +74,13 @@ class SelectCallable implements Callable<List<ITableRow>> {
 		try {
 		while (rs.next()) {
 			Object mappedRow = mapper.mapResultRow(rs);
-			results.add((ITableRow) mappedRow);
+//			results.add((ITableRow) mappedRow);
+			results.add((Object) mappedRow);
 		}
 		} catch (SQLException ex) {
 			logger.error(ex.getMessage(),ex);
 		}
 
 	}
+
 }

@@ -1,15 +1,10 @@
 package com.bobman159.rundml.sql.h2.mocktables;
 
-import java.math.BigDecimal;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
+import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.jdbc.mapping.CaseInsensitiveFieldsMap;
+import com.bobman159.rundml.jdbc.mapping.IFieldMap;
 
-import com.bobman159.rundml.jdbc.select.ITableRow;
-
-public class H2MockStringTypeTest implements ITableRow {
+public class H2MockStringTypeTest implements IFieldMap {
 	
 	private String	intDflt;
 	private String	medIntNotNull;
@@ -95,6 +90,34 @@ public class H2MockStringTypeTest implements ITableRow {
 	}
 	public String getIdentityNotNull() {
 		return identityNotNull;
+	}
+	@Override
+	public CaseInsensitiveFieldsMap<String, String> getFieldMappings() {
+			
+		CaseInsensitiveFieldsMap<String,String> map = new CaseInsensitiveFieldsMap<String,String>();
+		map.put("DfltInteger","intDflt");
+		map.put("NotNullMediumInt","medIntNotNull");
+		map.put("DfltSigned","signedDflt");
+		map.put("DfltTinyInt","tinyIntDflt");
+		map.put("NotNullSmint","smintNotNull");
+		map.put("NotNullDec72","dec72NotNull");
+		map.put("DfltNumber72","num72Dflt");
+		map.put("NotNullTime","timeNotNull");
+		map.put("NotNullDate","dateNotNull");
+		map.put("NotNullTimestamp","tstampNotNull");
+		map.put("NotNullDateTime","dateTstampNotNull");
+		map.put("NotNullVarchar","varcharNotNull");
+		map.put("NotNullChar","charNotNull");
+		map.put("DfltBlob","blobCol");
+		map.put("DfltClob","clobCol");
+		map.put("NotNullBoolean","booleanNotNull");
+		map.put("NotNullBool","boolNotNull");
+		map.put("NotNullBit","bitNotNull");
+		map.put("DfltBigInt","bigIntDflt");
+		map.put("DfltInt8","int8Dflt");
+		map.put("NotNullIdentity","identityNotNull");
+		
+		return map;
 	}
 
 	

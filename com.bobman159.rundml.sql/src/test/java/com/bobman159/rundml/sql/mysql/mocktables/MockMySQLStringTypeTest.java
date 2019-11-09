@@ -1,8 +1,10 @@
 package com.bobman159.rundml.sql.mysql.mocktables;
 
-import com.bobman159.rundml.jdbc.select.ITableRow;
+import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.jdbc.mapping.CaseInsensitiveFieldsMap;
+import com.bobman159.rundml.jdbc.mapping.IFieldMap;
 
-public class MockMySQLStringTypeTest implements ITableRow {
+public class MockMySQLStringTypeTest implements IFieldMap {
 
 
 	private String 	DfltInteger;
@@ -81,6 +83,22 @@ public class MockMySQLStringTypeTest implements ITableRow {
 	}
 	public String getNotNullVarBinary() {
 		return NotNullVarBinary;
+	}
+	@Override
+	public CaseInsensitiveFieldsMap<String, String> getFieldMappings() {
+		
+		CaseInsensitiveFieldsMap<String,String> map = new CaseInsensitiveFieldsMap<String,String>();
+		map.put("NotNullMediumInt","medIntNotNull");
+		map.put("DfltIntUnsigned","unsignedDflt");
+		map.put("DfltTinyInt","tinyIntDflt");
+		map.put("NotNullTime","timeNotNull");
+		map.put("NotNullChar","charNotNull");
+		map.put("NotNullText","lobCharCol");
+		map.put("NotNullBoolean","booleanNotNull");
+		map.put("NotNullBit","bitNotNull");
+		map.put("NotNullBinary","binaryNotNull");
+		
+		return map;
 	}
 	
 	

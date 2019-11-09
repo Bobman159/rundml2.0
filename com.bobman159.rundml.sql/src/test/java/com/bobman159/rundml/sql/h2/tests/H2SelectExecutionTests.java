@@ -1,6 +1,5 @@
 package com.bobman159.rundml.sql.h2.tests;
 
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +10,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.tabledef.TableDefinition;
+import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
-import com.bobman159.rundml.jdbc.select.ITableRow;
 import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockPrimitivesTypeTest;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockStringTypeTest;
@@ -84,14 +83,9 @@ class H2SelectExecutionTests {
 	private static final String NOTNULLIDENTITY = "NotNullIdentity";
 	
 	private static final String RUNDML_SCHEMA = "rundml";
-	private static final String RUNDML_TABLE = "typetest";
-	
-	//DEBUG
-	private List<ITableRow> testRows;
+	private static final String RUNDML_TABLE = "typetest";	
+	private List<Object> testRows;
 
-	
-	private static TableDefinition tbDef;
-	
 	@BeforeAll
 	static void setUpBeforeClass() {
 		
@@ -119,40 +113,38 @@ class H2SelectExecutionTests {
 
 	/*
 	 *	*	All database column types
-	 *	*	Defaults for field names
+	 *	*	No alternate field names specified (IFieldMap not implemented)
 	 *	*	Should use class TypeTest.java 
 	 *
 	 */
 	@Test
 	void allColumnTypesObjectTest() {
 
-		tbDef = typeTestObjectsTableDef();
-		
 		logger.info("****** allColumnTypesObjectTest ******");
-		List<ITableRow> results = RunDMLSQLFactory.createH2SelectStatement(tbDef)				
+		List<Object> results = RunDMLSQLFactory.createH2SelectStatement()				
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
-				.selectExpression(tbDef.column(NOTNULLMEDINT))
-				.selectExpression(tbDef.column(DFLTSIGNED))
-				.selectExpression(tbDef.column(DFLTTINYINT))
-				.selectExpression(tbDef.column(NOTNULLSMINT))
-				.selectExpression(tbDef.column(NOTNULLDEC72))
-				.selectExpression(tbDef.column(DFLTNUM72))
-				.selectExpression(tbDef.column(NOTNULLTIME))
-				.selectExpression(tbDef.column(NOTNULLDATE))
-				.selectExpression(tbDef.column(NOTNULLTSTAMP))
-				.selectExpression(tbDef.column(NOTNULLDATETIME))
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.selectExpression(tbDef.column(NOTNULLCHAR))
-				.selectExpression(tbDef.column(DFLTBLOB))
-				.selectExpression(tbDef.column(DFLTCLOB))
-				.selectExpression(tbDef.column(NOTNULLBOOLEAN))
-				.selectExpression(tbDef.column(NOTNULLBOOL))
-				.selectExpression(tbDef.column(NOTNULLBIT))
-				.selectExpression(tbDef.column(DFLTBIGINT))
-				.selectExpression(tbDef.column(DFLTINT8))
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLMEDINT))
+				.selectExpression(Expression.column(DFLTSIGNED))
+				.selectExpression(Expression.column(DFLTTINYINT))
+				.selectExpression(Expression.column(NOTNULLSMINT))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(DFLTNUM72))
+				.selectExpression(Expression.column(NOTNULLTIME))
+				.selectExpression(Expression.column(NOTNULLDATE))
+				.selectExpression(Expression.column(NOTNULLTSTAMP))
+				.selectExpression(Expression.column(NOTNULLDATETIME))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(DFLTBLOB))
+				.selectExpression(Expression.column(DFLTCLOB))
+				.selectExpression(Expression.column(NOTNULLBOOLEAN))
+				.selectExpression(Expression.column(NOTNULLBOOL))
+				.selectExpression(Expression.column(NOTNULLBIT))
+				.selectExpression(Expression.column(DFLTBIGINT))
+				.selectExpression(Expression.column(DFLTINT8))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(h2Provider.getConnection());
+				.execute(h2Provider.getConnection(),TypeTest.class);
 		
 		Assertions.assertEquals(6, results.size());
 		
@@ -246,40 +238,40 @@ class H2SelectExecutionTests {
 	}
 	
 	/*
-	 *	*	Default for field names
-	 *	*	Should use 
+	 *	*	Use H2MockPrimitivesTypeTest 
+	 *	*	Implements IFieldMap and only some field names specified as alternates
 	 */
 	@Test
 	void allColumnTypesPrimitivesTest() {
 
 		logger.info("****** allColumnTypesPrimitivesTest ******");
-		tbDef = mockTypeTestPrimitivesTableDef();
-		List<ITableRow> results = new ArrayList<ITableRow>();
+
+		List<Object> results = new ArrayList<Object>();
 		
-		results = RunDMLSQLFactory.createH2SelectStatement(tbDef)
+		results = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
-				.selectExpression(tbDef.column(NOTNULLMEDINT))
-				.selectExpression(tbDef.column(DFLTSIGNED))
-				.selectExpression(tbDef.column(DFLTTINYINT))
-				.selectExpression(tbDef.column(NOTNULLSMINT))
-				.selectExpression(tbDef.column(NOTNULLDEC72))
-				.selectExpression(tbDef.column(DFLTNUM72))
-				.selectExpression(tbDef.column(NOTNULLTIME))
-				.selectExpression(tbDef.column(NOTNULLDATE))
-				.selectExpression(tbDef.column(NOTNULLTSTAMP))
-				.selectExpression(tbDef.column(NOTNULLDATETIME))
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.selectExpression(tbDef.column(NOTNULLCHAR))
-				.selectExpression(tbDef.column(DFLTBLOB))
-				.selectExpression(tbDef.column(DFLTCLOB))
-				.selectExpression(tbDef.column(NOTNULLBOOLEAN))
-				.selectExpression(tbDef.column(NOTNULLBOOL))
-				.selectExpression(tbDef.column(NOTNULLBIT))
-				.selectExpression(tbDef.column(DFLTBIGINT))
-				.selectExpression(tbDef.column(DFLTINT8))
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLMEDINT))
+				.selectExpression(Expression.column(DFLTSIGNED))
+				.selectExpression(Expression.column(DFLTTINYINT))
+				.selectExpression(Expression.column(NOTNULLSMINT))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(DFLTNUM72))
+				.selectExpression(Expression.column(NOTNULLTIME))
+				.selectExpression(Expression.column(NOTNULLDATE))
+				.selectExpression(Expression.column(NOTNULLTSTAMP))
+				.selectExpression(Expression.column(NOTNULLDATETIME))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(DFLTBLOB))
+				.selectExpression(Expression.column(DFLTCLOB))
+				.selectExpression(Expression.column(NOTNULLBOOLEAN))
+				.selectExpression(Expression.column(NOTNULLBOOL))
+				.selectExpression(Expression.column(NOTNULLBIT))
+				.selectExpression(Expression.column(DFLTBIGINT))
+				.selectExpression(Expression.column(DFLTINT8))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(h2Provider.getConnection());
+				.execute(h2Provider.getConnection(),H2MockPrimitivesTypeTest.class);
 
 		Assertions.assertEquals(6, results.size());
 		
@@ -316,41 +308,40 @@ class H2SelectExecutionTests {
 	}
 	
 	/*
-	 *	*	Specifies mapping class, some Field Names default and 
-	 *		others specified.
-	 *	*	Should use MockTypeTest2.java
+	 *	*	Uses H2MockStringTypeTest.
+	 *	*	Implements IFieldMap and all fields specified as alternates
 	 *
      */
 	@Test
 	void allColumnTypesStringTest() {
 		
 		logger.info("****** allColumnTypesStringTest ******");
-		tbDef = mockTypeTestStringTableDef();
 		
-		List<ITableRow> results = RunDMLSQLFactory.createH2SelectStatement(tbDef)
+		List<Object> results = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
-				.selectExpression(tbDef.column(NOTNULLMEDINT))
-				.selectExpression(tbDef.column(DFLTSIGNED))
-				.selectExpression(tbDef.column(DFLTTINYINT))
-				.selectExpression(tbDef.column(NOTNULLSMINT))
-				.selectExpression(tbDef.column(NOTNULLDEC72))
-				.selectExpression(tbDef.column(DFLTNUM72))
-				.selectExpression(tbDef.column(NOTNULLTIME))
-				.selectExpression(tbDef.column(NOTNULLDATE))
-				.selectExpression(tbDef.column(NOTNULLTSTAMP))
-				.selectExpression(tbDef.column(NOTNULLDATETIME))
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.selectExpression(tbDef.column(NOTNULLCHAR))
-				.selectExpression(tbDef.column(DFLTBLOB))
-				.selectExpression(tbDef.column(DFLTCLOB))
-				.selectExpression(tbDef.column(NOTNULLBOOLEAN))
-				.selectExpression(tbDef.column(NOTNULLBOOL))
-				.selectExpression(tbDef.column(NOTNULLBIT))
-				.selectExpression(tbDef.column(DFLTBIGINT))
-				.selectExpression(tbDef.column(DFLTINT8))
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLMEDINT))
+				.selectExpression(Expression.column(DFLTSIGNED))
+				.selectExpression(Expression.column(DFLTTINYINT))
+				.selectExpression(Expression.column(NOTNULLSMINT))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(DFLTNUM72))
+				.selectExpression(Expression.column(NOTNULLTIME))
+				.selectExpression(Expression.column(NOTNULLDATE))
+				.selectExpression(Expression.column(NOTNULLTSTAMP))
+				.selectExpression(Expression.column(NOTNULLDATETIME))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(DFLTBLOB))
+				.selectExpression(Expression.column(DFLTCLOB))
+				.selectExpression(Expression.column(NOTNULLBOOLEAN))
+				.selectExpression(Expression.column(NOTNULLBOOL))
+				.selectExpression(Expression.column(NOTNULLBIT))
+				.selectExpression(Expression.column(DFLTBIGINT))
+				.selectExpression(Expression.column(DFLTINT8))
+				.selectExpression(Expression.column(NOTNULLIDENTITY))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(h2Provider.getConnection());
+				.execute(h2Provider.getConnection(),H2MockStringTypeTest.class);
 		
 		Assertions.assertEquals(6, results.size());
 		
@@ -381,45 +372,45 @@ class H2SelectExecutionTests {
 		
 		Assertions.assertEquals("2147483653",test3.getBigIntDflt());
 		Assertions.assertEquals("2147483653",test3.getInt8Dflt()); 
+		Assertions.assertEquals("48",test3.getIdentityNotNull());
 		
 	}
 	
 	/*
-	 *	*	Specifies mapping class, some Field Names default and 
-	 *		others specified.
-	 *	*	Should use MockTypeTest3.java
+	 *	*	Uses H2MockStringTypeTest.
+	 *	*	Implements IFieldMap and all fields specified as alternates
 	 *
      */
 	@Test
 	void mappingClassAllFieldsTest() {
 		
 		logger.info("****** mappingClassAllFieldsTest ******");
-		tbDef = mockTypeTestStringTableDef();
+
 		
-		List<ITableRow> results = RunDMLSQLFactory.createH2SelectStatement(tbDef)
+		List<Object> results = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
-				.selectExpression(tbDef.column(NOTNULLMEDINT))
-				.selectExpression(tbDef.column(DFLTSIGNED))
-				.selectExpression(tbDef.column(DFLTTINYINT))
-				.selectExpression(tbDef.column(NOTNULLSMINT))
-				.selectExpression(tbDef.column(NOTNULLDEC72))
-				.selectExpression(tbDef.column(DFLTNUM72))
-				.selectExpression(tbDef.column(NOTNULLTIME))
-				.selectExpression(tbDef.column(NOTNULLDATE))
-				.selectExpression(tbDef.column(NOTNULLTSTAMP))
-				.selectExpression(tbDef.column(NOTNULLDATETIME))
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
-				.selectExpression(tbDef.column(NOTNULLCHAR))
-				.selectExpression(tbDef.column(DFLTBLOB))
-				.selectExpression(tbDef.column(DFLTCLOB))
-				.selectExpression(tbDef.column(NOTNULLBOOLEAN))
-				.selectExpression(tbDef.column(NOTNULLBOOL))
-				.selectExpression(tbDef.column(NOTNULLBIT))
-				.selectExpression(tbDef.column(DFLTBIGINT))
-				.selectExpression(tbDef.column(DFLTINT8))
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLMEDINT))
+				.selectExpression(Expression.column(DFLTSIGNED))
+				.selectExpression(Expression.column(DFLTTINYINT))
+				.selectExpression(Expression.column(NOTNULLSMINT))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(DFLTNUM72))
+				.selectExpression(Expression.column(NOTNULLTIME))
+				.selectExpression(Expression.column(NOTNULLDATE))
+				.selectExpression(Expression.column(NOTNULLTSTAMP))
+				.selectExpression(Expression.column(NOTNULLDATETIME))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(DFLTBLOB))
+				.selectExpression(Expression.column(DFLTCLOB))
+				.selectExpression(Expression.column(NOTNULLBOOLEAN))
+				.selectExpression(Expression.column(NOTNULLBOOL))
+				.selectExpression(Expression.column(NOTNULLBIT))
+				.selectExpression(Expression.column(DFLTBIGINT))
+				.selectExpression(Expression.column(DFLTINT8))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(h2Provider.getConnection());
+				.execute(h2Provider.getConnection(),H2MockStringTypeTest.class);
 		
 		Assertions.assertEquals(6, results.size());
 		
@@ -476,107 +467,5 @@ class H2SelectExecutionTests {
 	 *		*	ResultSet type Char,Varchar to class type int (expect an error?)
 	 *	
 	 */
-	
-	/*
-	 *	Creates a default TableMapper for the rundml.typetest table
-	 * 		*	No specified mapping for the table class fields
-	 */
-	private static TableDefinition typeTestObjectsTableDef() {
-		
-		TableDefinition tbDef = new TableDefinition("rundml","typetest",TypeTest.class);
-		tbDef.addColumn(DFLTINTEGER , Types.INTEGER);  
-		tbDef.addColumn(NOTNULLMEDINT,Types.INTEGER);
-		tbDef.addColumn(DFLTSIGNED, Types.INTEGER);
-		tbDef.addColumn(DFLTTINYINT, Types.TINYINT);
-		tbDef.addColumn(NOTNULLSMINT, Types.SMALLINT);
-		tbDef.addColumn(NOTNULLDEC72,Types.DECIMAL);	
-		tbDef.addColumn(DFLTNUM72,Types.DECIMAL);
-		tbDef.addColumn(NOTNULLTIME,Types.TIME);
-		tbDef.addColumn(NOTNULLDATE,Types.DATE);
-		tbDef.addColumn(NOTNULLTSTAMP,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLDATETIME,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLVARCHAR,Types.VARCHAR);
-		tbDef.addColumn(NOTNULLCHAR,Types.CHAR);
-		tbDef.addColumn(DFLTBLOB,Types.BLOB);
-		tbDef.addColumn(DFLTCLOB,Types.CLOB);
-		tbDef.addColumn(NOTNULLBOOLEAN,Types.BOOLEAN);
-		tbDef.addColumn(NOTNULLBOOL,Types.BOOLEAN);
-		tbDef.addColumn(NOTNULLBIT,Types.BIT);
-		tbDef.addColumn(DFLTBIGINT,Types.BIGINT);
-		tbDef.addColumn(DFLTINT8,Types.BIGINT);
-		tbDef.addColumn(NOTNULLIDENTITY,Types.ROWID);
-		
-		return tbDef;
-		
-	}
-	
-	/*
-	 *	Creates a default TableDefinition for the rundml.typetest table
-	 * 		*	Specifies some mapping for the table class fields
-	 * 
-	 */
-	private static TableDefinition mockTypeTestPrimitivesTableDef() {
-		
-		TableDefinition tbDef = new TableDefinition("rundml","typetest", 
-					H2MockPrimitivesTypeTest.class);
-		tbDef.addColumn(DFLTINTEGER , Types.INTEGER);  
-		tbDef.addMapColumn(NOTNULLMEDINT,Types.INTEGER,"medIntNotNull");
-		tbDef.addMapColumn(DFLTSIGNED, Types.INTEGER,"signedDflt");
-		tbDef.addMapColumn(DFLTTINYINT, Types.TINYINT,"tinyIntDflt");
-		tbDef.addColumn(NOTNULLSMINT, Types.SMALLINT);
-		tbDef.addColumn(NOTNULLDEC72,Types.DECIMAL);	
-		tbDef.addMapColumn(DFLTNUM72,Types.DECIMAL,"num72Dflt");
-		tbDef.addMapColumn(NOTNULLTIME,Types.TIME,"timeNotNull");
-		tbDef.addColumn(NOTNULLDATE,Types.DATE);
-		tbDef.addColumn(NOTNULLTSTAMP,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLDATETIME,Types.TIMESTAMP);
-		tbDef.addColumn(NOTNULLVARCHAR,Types.VARCHAR);
-		tbDef.addMapColumn(NOTNULLCHAR,Types.CHAR,"charNotNull");
-		tbDef.addColumn(DFLTBLOB,Types.BLOB);
-		tbDef.addMapColumn(DFLTCLOB,Types.CLOB,"lobCharCol");
-		tbDef.addMapColumn(NOTNULLBOOLEAN,Types.BOOLEAN,"booleanNotNull");
-		tbDef.addColumn(NOTNULLBOOL,Types.BOOLEAN);
-		tbDef.addMapColumn(NOTNULLBIT,Types.BIT,"bitNotNull");
-		tbDef.addColumn(DFLTBIGINT,Types.BIGINT);
-		tbDef.addMapColumn(DFLTINT8,Types.BIGINT,"dflt8Col");
-		tbDef.addColumn(NOTNULLIDENTITY,Types.ROWID);
-		
-		return tbDef;
-	}
-	
-	/*
-	 *	Creates a default TableDefinition for the rundml.typetest table
-	 * 		*	Specifies a mapping class name
-	 * 		*	Specifies mapping for all the table class fields
-	 * 
-	 */
-	private static TableDefinition mockTypeTestStringTableDef() {
-		
-		TableDefinition tbDef = new TableDefinition("rundml","typetest", 
-					H2MockStringTypeTest.class);
-		tbDef.addMapColumn(DFLTINTEGER , Types.INTEGER,"intDflt");  
-		tbDef.addMapColumn(NOTNULLMEDINT,Types.INTEGER,"medIntNotNull");
-		tbDef.addMapColumn(DFLTSIGNED, Types.INTEGER,"signedDflt");
-		tbDef.addMapColumn(DFLTTINYINT, Types.TINYINT,"tinyIntDflt");
-		tbDef.addMapColumn(NOTNULLSMINT, Types.SMALLINT,"smintNotNull");
-		tbDef.addMapColumn(NOTNULLDEC72,Types.DECIMAL,"dec72NotNull");	
-		tbDef.addMapColumn(DFLTNUM72,Types.DECIMAL,"num72Dflt");
-		tbDef.addMapColumn(NOTNULLTIME,Types.TIME,"timeNotNull");
-		tbDef.addMapColumn(NOTNULLDATE,Types.DATE,"dateNotNull");
-		tbDef.addMapColumn(NOTNULLTSTAMP,Types.TIMESTAMP,"tstampNotNull");
-		tbDef.addMapColumn(NOTNULLDATETIME,Types.TIMESTAMP,"dateTstampNotNull");
-		tbDef.addMapColumn(NOTNULLVARCHAR,Types.VARCHAR,"varcharNotNull");
-		tbDef.addMapColumn(NOTNULLCHAR,Types.CHAR,"charNotNull");
-		tbDef.addMapColumn(DFLTBLOB,Types.BLOB,"blobCol");
-		tbDef.addMapColumn(DFLTCLOB,Types.CLOB,"clobCol");
-		tbDef.addMapColumn(NOTNULLBOOLEAN,Types.BOOLEAN,"booleanNotNull");
-		tbDef.addMapColumn(NOTNULLBOOL,Types.BOOLEAN,"boolNotNull");
-		tbDef.addMapColumn(NOTNULLBIT,Types.BIT,"bitNotNull");
-		tbDef.addMapColumn(DFLTBIGINT,Types.BIGINT,"bigIntDflt");
-		tbDef.addMapColumn(DFLTINT8,Types.BIGINT,"int8Dflt");
-		tbDef.addMapColumn(NOTNULLIDENTITY,Types.ROWID,"identityNotNull");
-		
-		return tbDef;
-	}
 
 }

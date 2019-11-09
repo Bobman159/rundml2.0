@@ -1,4 +1,4 @@
-package com.bobman159.rundml.jdbc.execution;
+package com.bobman159.rundml.jdbc.select.execution;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -9,54 +9,28 @@ import java.text.MessageFormat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.bobman159.rundml.core.exprtypes.Column;
-import com.bobman159.rundml.core.tabledef.TableDefinition;
 import com.bobman159.rundml.core.util.RunDMLUtils;
+import com.bobman159.rundml.jdbc.mapping.CaseInsensitiveFieldsMap;
+import com.bobman159.rundml.jdbc.mapping.IFieldMap;
 
 /**
- * Map columns from JDBC <code>ResultSet</code> object to a java object defined
- * in the <code>TableDefinition</code>
+ * Map columns from JDBC <code>ResultSet</code> object to a java object specfied 
+ * for the execution.
  *
  */
 class ResultSetMapper {
 
-	private TableDefinition tbDef;
-	private Class mapClass;
+	private Class<?> tableRowClass;
 	private Field[] mapFields;
-	private static final String ITABLE_ROW = "com.bobman159.rundml.jdbc.select.ITableRow";
 	private static Logger logger = LogManager.getLogger(ResultSetMapper.class.getName());
 	
-	public ResultSetMapper(TableDefinition tbDef) {
-		this.tbDef = tbDef;
-		mapClass = tbDef.getMapClass();
-		mapFields = mapClass.getDeclaredFields();
+	public ResultSetMapper(Class<?> tableRowClass) {
+		this.tableRowClass = tableRowClass;		
+		mapFields = tableRowClass.getDeclaredFields();
 	}
 	
 	/**
-	 * Check if the mapping class specified in Table Definition implements 
-	 * the ITable
-	 * ITa
-	 * @return
-	 */
-	public boolean isITableRow() {
-		boolean valid = false;
-		
-		Class clazz = mapClass;
-		java.lang.reflect.Type[] interfaces = clazz.getGenericInterfaces();
-		for(java.lang.reflect.Type iType: interfaces) {
-			if (iType.getTypeName().equals(ITABLE_ROW)) {
-				valid = true;
-				break;
-			}
-		}
-
-		
-		return valid;
-	}
-	
-	/**
-	 * Map the results of the SELECT to the mapping class defined 
-	 * in the TableDefinition.
+	 * Map the results of the SELECT to the mapping class 
 	 *
 	 * @param rs a jdbc <code>ResultSet</code>
 	 * @returns new instance of a mapped object
@@ -66,28 +40,27 @@ class ResultSetMapper {
 		Object row = new Object();
 		try {
 			
-			row = mapClass.newInstance();
+			row = tableRowClass.newInstance();
 			
 			/*
 			 * For now, use the "brute force" approach of checking if a 
 			 * column in the ResultSet "matches or maps" to a field in 
 			 * the mapping class.  NOTE: fieldName matches are case insensitive
-			 * 	IF resultSet.columnName == mapClass.fieldName AND
-			 * 	   resultSet.columnType == mapClass.fieldName.Type THEHN
 			 * 
-			 * 		set the mapClass.fieldName = resultSet.columnValue
-			 * 
-			 *   ELSE check the table definition, for a definition of the result 
-			 *   	set column name AND that an alternate field name in the 
-			 *   	map class is specified.  If a field with the alternate 
-			 *   	name is found, use it. Make sure the result set type and the alternate field name
-			 * 		type match.
-			 *  
-			 *  ELSE IF tableDefinition.columnName == resultSet.columnName AND
-			 *  		tableDefinition.columnName.has(alternateColumnName) AND
-			 *  		resultSet.columnType == mapClass.fieldName.Type
-			 *  	
-			 *  	set the mapClass.fieldName = resultSet.columnValue
+			 * FOR loop thru resultSetColumnNames 
+			 * 		set columnName = resultSetColumnName
+			 * 		IF there are IFieldMap entries THEN
+			 * 			IF there is columnNameKey in the HashMap THEN
+			 * 				set columnName = alternateFieldName 
+			 * 			ENDIF
+			 * 		ENDIF
+			 * 		mapField = search tableRowClass for field with name = columnName
+			 * 		IF mapField is NULL THEN
+			 * 			write error message no field found
+			 * 			throw NoSuchFieldException
+			 * 		ENDIF
+			 * 		map column to field
+			 * ENDFOR
 			 * 
 			 */
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -96,24 +69,28 @@ class ResultSetMapper {
 			for (int numbCol = 1;numbCol <= numberColumns;numbCol++) {
 					
 				String columnName = rsmd.getColumnName(numbCol);
-					
+				columnName = columnName.toLowerCase();
+				
 				/*
 				 * ASSUME: only one field in the Map class is defined
 				 * for each column in the result set.  
 				*/
 				//Check if an alternate field name is specified, if one is, use
 				//it to search the fields list in the mapping class.
-				Column col = tbDef.column(columnName);
-				String alternateMapField = col.getMappedField();
-				if (alternateMapField != null) {
-					columnName = alternateMapField;
+				if (IFieldMap.class.isAssignableFrom(tableRowClass)) {
+					IFieldMap obj = (IFieldMap) tableRowClass.cast(row);					
+					CaseInsensitiveFieldsMap<String,String> alternateMap = obj.getFieldMappings();
+					if (alternateMap != null &&
+						alternateMap.containsKey(columnName)) {
+						columnName = alternateMap.get(columnName);
+					}
 				}
 						
 				Field mapField = findMappedField(columnName);
 				//if no field was found in the class being mapped, throw an exception
 				if (mapField == null) {
 					logger.error(MessageFormat.format("Field {0} was not found in class {1}", 
-								columnName,tbDef.getMapClass()));
+								columnName,tableRowClass.getName()));
 					throw new NoSuchFieldException();
 				}
 				mapColumnToField(numbCol,rs,row,mapField);
@@ -130,7 +107,6 @@ class ResultSetMapper {
 		
 		return row;
 	}
-	
 	
 	/*
 	 * Searches mapFields for the matching fieldName in the map class.
@@ -247,6 +223,5 @@ class ResultSetMapper {
 			logger.error(iaex.getMessage(),iaex);			
 		}
 	}
-	
 
 }

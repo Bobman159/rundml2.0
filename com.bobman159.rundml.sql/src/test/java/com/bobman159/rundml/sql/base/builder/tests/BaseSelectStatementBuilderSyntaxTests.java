@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.exprtypes.ParmMarker;
 import com.bobman159.rundml.core.predicates.Predicate;
-import com.bobman159.rundml.core.tabledef.TableDefinition;
 import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
 
 class BaseSelectStatementBuilderSyntaxTests {
@@ -30,20 +29,9 @@ class BaseSelectStatementBuilderSyntaxTests {
 	private static final String SELECT_1000 = "select 100000,'Abcdefg',DFLTINTEGER ";
 	private static final String SELECT_NOTNULLCHAR = "select NOTNULLCHAR ";
 	private static final String NUMERIC_LITERAL = "0123456789";
-
-	private static TableDefinition tbDef;
 	
 	@BeforeAll
 	static void setUpBeforeClass() {
-		
-		tbDef = new TableDefinition(RUNDML_SCHEMA,RUNDML_TABLE);
-		tbDef.addColumn(DFLTINTEGER, Types.INTEGER);
-		tbDef.addColumn(NOTNULLDEC72, Types.DECIMAL);
-		tbDef.addColumn(NOTNULLDATE, Types.INTEGER);
-		tbDef.addColumn(NOTNULLCHAR, Types.CHAR);
-		tbDef.addColumn("dfltSigned", Types.INTEGER);
-		tbDef.addColumn("dfltTinyInt", Types.TINYINT);
-		tbDef.addColumn(NOTNULLVARCHAR, Types.VARCHAR);
 
 	}
 
@@ -66,7 +54,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectTest() {
 		
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.selectStar()
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
@@ -78,7 +66,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectStarTest() {
 		
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.selectStar()
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
@@ -94,11 +82,11 @@ class BaseSelectStatementBuilderSyntaxTests {
 		 * The expression type combinations (math, concat, etc) are tested by 
 		 * the com.bobman159.rundml.core.exprtypes.tests JUnits.
 		 */
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(10))
 				.selectExpression(Expression.string("This is a string"))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.selectExpression(new ParmMarker(Types.VARCHAR,"This is a string too"))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
@@ -111,8 +99,16 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatSelectTableDefinitionTest() {
 				
-		String stmtText =  RunDMLSQLFactory.createBaseSelectStatement(tbDef)
-				.select(tbDef)
+		String stmtText =  RunDMLSQLFactory.createBaseSelectStatement()
+				.select()
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(NOTNULLDATE))
+				.selectExpression(Expression.column(NOTNULLCHAR))
+				.selectExpression(Expression.column("DFLTSIGNED"))
+				.selectExpression(Expression.column("DFLTTINYINT"))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
+				.from("rundml", "typetest")
 				.getStatementText();
 
 		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLDATE," + 
@@ -123,18 +119,18 @@ class BaseSelectStatementBuilderSyntaxTests {
 	
 	@Test
 	void comptibleSelectAllTest() {
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select().all()
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
 		Assertions.assertEquals("select all DFLTINTEGER " + FROM_CLAUSE,stmtText);
 
-		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.all()
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -147,20 +143,20 @@ class BaseSelectStatementBuilderSyntaxTests {
 	void compatibleSelectDistinctAllTest() {
 		
 		//This test should return no rows  (possibly throw an exception?)
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.distinct().all()
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
 		Assertions.assertEquals("select distinct all DFLTINTEGER " +
 							FROM_CLAUSE,stmtText);
 
-		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.distinct().all()
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -173,25 +169,25 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectWhereTest() {
 		
-		Predicate pred = Predicate.where(tbDef.column(DFLTINTEGER))
+		Predicate pred = Predicate.where(Expression.column(DFLTINTEGER))
 				  .isGreater(100000)
-				  .and(tbDef.column(NOTNULLDEC72))
+				  .and(Expression.column(NOTNULLDEC72))
 				  .isGreaterOrEqual(12345.10)
-				  .or(tbDef.column(NOTNULLDATE))
+				  .or(Expression.column(NOTNULLDATE))
 				  .isEqual("2019-03-15")
-				  .or(tbDef.column(NOTNULLVARCHAR))
+				  .or(Expression.column(NOTNULLVARCHAR))
 				  .isGreaterOrEqual(ABCDEFG_LITERAL)
-				  .or(tbDef.column(NOTNULLVARCHAR))
+				  .or(Expression.column(NOTNULLVARCHAR))
 				  .isEqual(Expression.parm(Types.BIGINT, "This is a test"))
 				  .build();
 					  
 	
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 						.select()
-						.selectExpression(tbDef.column(DFLTINTEGER))
-						.selectExpression(tbDef.column(NOTNULLDEC72))
-						.selectExpression(tbDef.column(NOTNULLDATE))
-						.selectExpression(tbDef.column(NOTNULLVARCHAR))
+						.selectExpression(Expression.column(DFLTINTEGER))
+						.selectExpression(Expression.column(NOTNULLDEC72))
+						.selectExpression(Expression.column(NOTNULLDATE))
+						.selectExpression(Expression.column(NOTNULLVARCHAR))
 						.from(RUNDML_SCHEMA,RUNDML_TABLE)
 						.where(pred)
 						.getStatementText();
@@ -209,16 +205,16 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectGroupByTest() {
 		
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(Expression.number(100000),
 						 Expression.string(ABCDEFG_LITERAL),
 						 Expression.parm(Types.DECIMAL, 100000),
-						 tbDef.column(DFLTINTEGER))
+						 Expression.column(DFLTINTEGER))
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -230,11 +226,11 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectOrderByTest() {
 		
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2),Expression.orderBy(3))
 				.getStatementText();
@@ -243,26 +239,26 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2,3",stmtText);
 		
-		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),
 						 Expression.orderBy(2),
-						 Expression.orderBy(tbDef.column(DFLTINTEGER)))
+						 Expression.orderBy(Expression.column(DFLTINTEGER)))
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2,DFLTINTEGER",stmtText2);		
 		
-		String stmtText3 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText3 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(Expression.string(ABCDEFG_LITERAL)))
 				.getStatementText();
@@ -271,11 +267,11 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 'Abcdefg'",stmtText3);
 		
-		String stmtText4 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText4 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1).asc())
 				.getStatementText();
@@ -284,24 +280,24 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1 asc",stmtText4);
 		
-		String stmtText5 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText5 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(tbDef.column(DFLTINTEGER)).desc())
+				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)).desc())
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
 				     "order by DFLTINTEGER desc",stmtText5);
 
-		String stmtText6 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText6 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc())
 				.getStatementText();
@@ -310,11 +306,11 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2 desc",stmtText6);		
 
-		String stmtText7 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText7 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc().nullsLast())
 				.getStatementText();
@@ -323,14 +319,14 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by 1,2 desc nulls last",stmtText7);		
 
-		String stmtText8 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText8 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(tbDef.column(DFLTINTEGER)),
-						 Expression.orderBy(tbDef.column(NOTNULLVARCHAR)).desc()
+				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)),
+						 Expression.orderBy(Expression.column(NOTNULLVARCHAR)).desc()
 						 			.nullsFirst())
 				.getStatementText();
 
@@ -338,16 +334,16 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "order by DFLTINTEGER,NOTNULLVARCHAR desc nulls first",stmtText8);	
 
-		String stmtText9 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText9 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
-				.selectExpression(tbDef.column(NOTNULLDEC72))
-				.selectExpression(tbDef.column(NOTNULLVARCHAR))
+				.selectExpression(Expression.column(DFLTINTEGER))
+				.selectExpression(Expression.column(NOTNULLDEC72))
+				.selectExpression(Expression.column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(tbDef.column(NOTNULLVARCHAR)).desc()
+				.orderBy(Expression.orderBy(Expression.column(NOTNULLVARCHAR)).desc()
 								   .nullsLast(),
 						 Expression.orderBy(1).asc().nullsFirst(),
-						 Expression.orderBy(tbDef.column(NOTNULLDEC72)))
+						 Expression.orderBy(Expression.column(NOTNULLDEC72)))
 				.getStatementText();
 
 		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLVARCHAR " +
@@ -355,13 +351,13 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "order by NOTNULLVARCHAR desc nulls last,1 asc nulls first," +
 				     "NOTNULLDEC72",stmtText9);
 		
-		String stmtText10 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText10 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(100000))
 				.selectExpression(Expression.string(ABCDEFG_LITERAL))
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(tbDef.column(DFLTINTEGER)).asc()
+				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)).asc()
 								   .nullsFirst(),
 						 Expression.orderBy(2).desc().nullsLast(),
 						 Expression.orderBy(3).desc().nullsFirst(),
@@ -380,12 +376,12 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectHavingTest() {
 		
-		String stmtText = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
-				.selectExpression(tbDef.column(DFLTINTEGER))
+				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(tbDef.column(DFLTINTEGER))
-				.having(Predicate.having(tbDef.column(DFLTINTEGER)).isGreater(100000)
+				.groupBy(Expression.column(DFLTINTEGER))
+				.having(Predicate.having(Expression.column(DFLTINTEGER)).isGreater(100000)
 								 .build())
 				.getStatementText();
 
@@ -393,12 +389,12 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "group by DFLTINTEGER HAVING DFLTINTEGER > 100000",stmtText);
 
-		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
-				.selectExpression(tbDef.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(tbDef.column(NOTNULLCHAR))
-				.having(Predicate.having(tbDef.column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
+				.groupBy(Expression.column(NOTNULLCHAR))
+				.having(Predicate.having(Expression.column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
 								 .build())
 				.getStatementText();
 
@@ -406,15 +402,15 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     FROM_CLAUSE_SPACE +
 				     "group by NOTNULLCHAR HAVING NOTNULLCHAR > '0123456789'",stmtText2);
 
-		String stmtText3 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText3 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
-				.selectExpression(tbDef.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(tbDef.column(NOTNULLCHAR))
-				.having(Predicate.having(tbDef.column(NOTNULLCHAR))
+				.groupBy(Expression.column(NOTNULLCHAR))
+				.having(Predicate.having(Expression.column(NOTNULLCHAR))
 								 .isGreaterOrEqual(NUMERIC_LITERAL)
-								 .or(tbDef.column(NOTNULLCHAR)).isEqual("223456789")
-								 .and(tbDef.column(NOTNULLCHAR)).isLess("1123456789")
+								 .or(Expression.column(NOTNULLCHAR)).isEqual("223456789")
+								 .and(Expression.column(NOTNULLCHAR)).isLess("1123456789")
 								 .build())
 				.getStatementText();
 
@@ -424,9 +420,9 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "OR NOTNULLCHAR = '223456789' AND NOTNULLCHAR < " +
 				     "'1123456789'",stmtText3);
 
-		String stmtText4 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText4 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
-				.selectExpression(tbDef.column(NOTNULLCHAR))
+				.selectExpression(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(Expression.string("Abcdef"),
 						 Expression.string("Hiklmnop"))
@@ -441,7 +437,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "group by 'Abcdef','Hiklmnop' HAVING 'Abcdef' = 'Abcdef2' " +
 				     "OR 'Hijklmnop' > 'Hijklmno'",stmtText4);
 
-		String stmtText5 = RunDMLSQLFactory.createBaseSelectStatement(tbDef)
+		String stmtText5 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select()
 				.selectExpression(Expression.number(10))
 				.selectExpression(Expression.number(20))

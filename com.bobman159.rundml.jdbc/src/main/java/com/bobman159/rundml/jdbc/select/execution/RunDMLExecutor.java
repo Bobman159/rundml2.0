@@ -1,4 +1,4 @@
-package com.bobman159.rundml.jdbc.execution;
+package com.bobman159.rundml.jdbc.select.execution;
 
 import java.sql.Connection;
 import java.util.List;
@@ -7,8 +7,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.tabledef.TableDefinition;
-import com.bobman159.rundml.jdbc.select.ITableRow;
 
 /**
  * RunDML's execution service for executing SQL statements using JDBC.
@@ -44,18 +42,18 @@ public class RunDMLExecutor  {
 	 * Execute an SQL SELECT statement using JDBC.
 	 * @param conn JDBC connection for the database to execute on
 	 * @param model the SQL SELECT definition
-	 * @param tbDef the table definition for mapping
+	 * @param tableRow the SQL SELECT result row class
 	 * 
 	 * @return a <code>List</code> of SELECT rows
 	 */
 	@SuppressWarnings("unchecked")
-	public Future<List<ITableRow>> executeSelect(Connection conn,
+	public Future<List<Object>> executeSelect(Connection conn,
 												 SQLStatementModel model,
-												 TableDefinition tbDef) {
+												 Class<?> tableRow) {
 		
-		Future<List<ITableRow>> futureTask;
+		Future<List<Object>> futureTask;
 		
-		SelectCallable exec = new SelectCallable(conn,model,tbDef);
+		SelectCallable exec = new SelectCallable(conn,model,tableRow);
 		futureTask = service.submit(exec);
 		return futureTask;
 	}
