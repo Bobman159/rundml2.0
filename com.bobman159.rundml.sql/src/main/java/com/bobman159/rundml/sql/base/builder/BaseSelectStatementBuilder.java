@@ -16,7 +16,7 @@ import com.bobman159.rundml.core.model.SQLStatementSerializer;
 import com.bobman159.rundml.core.predicates.Predicate;
 import com.bobman159.rundml.core.sql.OrderByExpression;
 import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
-import com.bobman159.rundml.core.util.RunDMLUtils;
+import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
 import com.bobman159.rundml.sql.ISQLSelect;
 import com.bobman159.rundml.sql.ISQLStatement;
@@ -40,25 +40,81 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	protected SQLStatementModel model = new SQLStatementModel();	
 
 	/**
-	 *  Specify a SELECT * to select all columns in a table for the SELECT statement 
-	 *  @return an instance of this builder
-	 */
-	public B selectStar() {
-		model.addClause(SQLClause.SELECT);
-		model.addClause(SQLClause.SELECTSTAR);
-		return self();
-	}
-
-	/**
-	 * Specify the start of a SELECT statement
+	 * Specify an SQL SELECT statement start.  This method should be used when creating a "SELECT ALL" 
+	 * or "SELECT DISTINCT" SQL statement.
 	 * @return an instance of this builder
 	 */
 	public B select() {
+		
 		model.addClause(SQLClause.SELECT);
+		return self();
+		
+	}
+	/**
+	 * Specify an SQL SELECT statement and use the fields in 
+	 * the a table row class as the column names in the SQL statement (this is the default)
+	 * expected behavior.  If the class name specified implements the IFieldMap 
+	 * interface, the field map is used to map any non default field names and 
+	 * the column name in the IFieldMap is used in the SELECT.
+	 * 
+	 * @param clazz class name to use for the select list
+	 * @return an instance of this builder
+	 */
+	public B select(Class<?> clazz) {
+		model.addClause(SQLClause.SELECT);
+		model.addExpressionList(SQLClause.SELECTEXPR,CoreUtils.createColumnsFromClass(clazz));
 		return self();
 	}
 	
-	public B selectList(Object...x) {
+	/**
+	 * A convenience method to specify the start of an SQL SELECT statement
+	 * where a list of String values "ABC","DEF" is treated as the list of
+	 * column names in the SELECT list.  For example select("Col01","Col02") 
+	 * will generate "SELECT COL01,COL02" as an SQL statement.  If a column name
+	 * should be used in an SQL expression i.e. "COL01" + 10 or "COL02 || 'def'
+	 * the select(IExpression... expr) method should be used with the <code>Expression</code>
+	 * method should be used.
+	 * 
+	 * @param columns one or more column names as string values
+	 * @return an instance of this builder
+	 */
+	public B select(String... columns) {
+		
+		model.addClause(SQLClause.SELECT);
+		model.addExpressionList(SQLClause.SELECTEXPR, CoreUtils.createColumnsFromStrings(columns));
+		
+		return self();
+	}
+	
+	/**
+	 * Specify the start of a SELECT statement that will use SQL expressions in the
+	 * select list.  SQL expressions like "NUMBCOL + 10" and "CHARCOL || 'string'" 
+	 * should use this method to build those expressions.
+	 * 
+	 * <pre>
+	 * {@code
+		List<Object> rows2 = RunDMLSQLFactory.createBaseSelectStatement()
+											 .select(Expression.number(10),Expression.string("This is a string"),
+											 		 Expression.column("DFLTINTEGER"),
+											 		 Expression.parm(Types.VARCHAR,"This is a string too"),
+											 		 Expression.column("DFLTINTEGER").add(10),
+													 Expression.number(10).subtract(Expression.number(5)))						
+											 .from("rundml","tableName");
+	 * }
+	 * </pre>
+	 * @param exprs one or more <code>IExpression</code> to be selected
+	 * @return an instance of this builder
+	 */
+	public B select(IExpression... exprs) {
+		
+		model.addClause(SQLClause.SELECT);
+		model.addExpressionList(SQLClause.SELECTEXPR, exprs);
+		
+		return self();
+	}
+	
+	public B selectExpression(IExpression expr) {
+		model.addExpressionList(SQLClause.SELECTEXPR, expr);
 		return self();
 	}
 	
@@ -80,16 +136,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 		return self();
 	}
 	
-	/**
-	 * Add an expression to be selected for the SELECT statement
-	 * @see com.bobman159.rundml.core.exprtypes.IExpression
-	 * @param expr an <code>IExpression</code> to be selected
-	 * @return an instance of this builder
-	 */
-	public B selectExpression(IExpression expr) {
-		model.addExpressionList(SQLClause.SELECTEXPR, expr);
-		return self();
-	}
+
 
 	/**
 	 * Specify the table for the SELECT statement
@@ -98,7 +145,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	 * @return an instance of this builder
 	 */
 	public B from(String schema, String tbName) {
-		model.addClause(SQLClause.FROM,RunDMLUtils.qualifiedTbName(schema, tbName));
+		model.addClause(SQLClause.FROM,CoreUtils.qualifiedTbName(schema, tbName));
 		return self();
 	}
 	

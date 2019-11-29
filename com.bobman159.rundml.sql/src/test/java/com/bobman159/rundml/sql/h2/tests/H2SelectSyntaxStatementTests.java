@@ -15,6 +15,9 @@ import com.bobman159.rundml.core.exprtypes.ParmMarker;
 import com.bobman159.rundml.core.predicates.Predicate;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
+import com.bobman159.rundml.sql.h2.mocktables.H2MockPrimitivesTypeTest;
+import com.bobman159.rundml.sql.h2.mocktables.H2MockStringTypeTest;
+import com.bobman159.rundml.sql.h2.mocktables.TypeTest;
 
 /* 
  *	*	Unless noted otherwise, the SQL syntax generated and checked 
@@ -35,8 +38,8 @@ class H2SelectSyntaxStatementTests {
 	private static final String NOTNULLDEC72 = "notNullDec72";
 	private static final String RUNDML_SCHEMA = "rundml";
 	private static final String RUNDML_TABLE = "typetest";
-	private static final String SELECT_1000 = "select 100000,'Abcdefg',DFLTINTEGER ";
-	private static final String SELECT_NOTNULLCHAR = "select NOTNULLCHAR ";
+	private static final String SELECT_1000 = "select 100000,'Abcdefg',dfltInteger ";
+	private static final String SELECT_NOTNULLCHAR = "select notNullChar ";
 	private static final String NUMERIC_LITERAL = "0123456789";
 
 	@BeforeAll
@@ -60,26 +63,18 @@ class H2SelectSyntaxStatementTests {
 	}
 	
 	@Test
-	void h2SelectStarTest() {
+	void h2SelectClassNoIFieldMapTest() {
 		
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
-				  .selectStar()
+				  .select(TypeTest.class)
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
 				  .getStatementText();
 	
-		Assertions.assertEquals("select * from rundml.typetest",stmtText);		
-
-	}
-	
-	@Test
-	void mySQLSelectProviderTest() {
-		
-		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
-				  .selectStar()
-				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
-				  .getStatementText();
-	
-		Assertions.assertEquals("select * from rundml.typetest",stmtText);		
+		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," 	+ 
+								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," 		+ 
+								"NotNullDateTime,NotNullVarchar,NotNullChar,DfltBlob,DfltClob,NotNullBoolean," + 
+								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity from rundml.typetest",
+								stmtText);		
 
 	}
 	
@@ -97,8 +92,8 @@ class H2SelectSyntaxStatementTests {
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
 				  .getStatementText();
 		
-		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLDATE," + 
-						    "NOTNULLCHAR,DFLTSIGNED,DFLTTINYINT,NOTNULLVARCHAR "	   + 
+		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullDate," + 
+						    "notNullChar,dfltSigned,dfltTinyInt,notNullVarchar "	   + 
 							FROM_CLAUSE,stmtText);		
 	}
 	
@@ -118,7 +113,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select 10,'This is a string',DFLTINTEGER," +
+		Assertions.assertEquals("select 10,'This is a string',dfltInteger," +
 							"? from rundml.typetest",stmtText);
 
 	}
@@ -133,7 +128,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select top 5 DFLTINTEGER " +
+		Assertions.assertEquals("select top 5 dfltInteger " +
 							FROM_CLAUSE,stmtText);
 		
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
@@ -143,7 +138,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select top '0123456789' NOTNULLVARCHAR " +
+		Assertions.assertEquals("select top '0123456789' notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
 		
 	}
@@ -158,7 +153,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select top 5 distinct DFLTINTEGER " +
+		Assertions.assertEquals("select top 5 distinct dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
@@ -168,7 +163,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select top '0123456789' distinct NOTNULLVARCHAR " +
+		Assertions.assertEquals("select top '0123456789' distinct notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
 
 	}
@@ -183,7 +178,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select top 5 all DFLTINTEGER " +
+		Assertions.assertEquals("select top 5 all dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
@@ -193,7 +188,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select top '5' all NOTNULLVARCHAR " +
+		Assertions.assertEquals("select top '5' all notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
 
 	}
@@ -210,7 +205,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select distinct all DFLTINTEGER " +
+		Assertions.assertEquals("select distinct all dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
@@ -220,7 +215,7 @@ class H2SelectSyntaxStatementTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select distinct all NOTNULLVARCHAR " +
+		Assertions.assertEquals("select distinct all notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
 
 	}
@@ -249,13 +244,14 @@ class H2SelectSyntaxStatementTests {
 								.from(RUNDML_SCHEMA,RUNDML_TABLE)
 								.where(pred)
 								.getStatementText();
-		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLDATE," +
-						     "NOTNULLVARCHAR from rundml.typetest " + 
-						     "WHERE DFLTINTEGER > 100000 " + 
-						     "AND NOTNULLDEC72 >= 12345.1 " +
-						     "OR NOTNULLDATE = '2019-03-15' " + 
-						     "OR NOTNULLVARCHAR >= 'Abcdefg' " +
-						     "OR NOTNULLVARCHAR = ?",stmtText);
+		
+		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullDate," +
+						     "notNullVarchar from rundml.typetest " + 
+						     "WHERE dfltInteger > 100000 " + 
+						     "AND notNullDec72 >= 12345.1 " +
+						     "OR notNullDate = '2019-03-15' " + 
+						     "OR notNullVarchar >= 'Abcdefg' " +
+						     "OR notNullVarchar = ?",stmtText);
 
 	}
 	
@@ -276,7 +272,7 @@ class H2SelectSyntaxStatementTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "group by 100000,'Abcdefg',?,DFLTINTEGER",stmtText);
+				     "group by 100000,'Abcdefg',?,dfltInteger",stmtText);
 
 	}
 	
@@ -309,7 +305,7 @@ class H2SelectSyntaxStatementTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "order by 1,2,DFLTINTEGER",stmtText2);		
+				     "order by 1,2,dfltInteger",stmtText2);		
 		
 		String stmtText3 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
@@ -348,7 +344,7 @@ class H2SelectSyntaxStatementTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "order by DFLTINTEGER desc",stmtText5);
+				     "order by dfltInteger desc",stmtText5);
 
 		String stmtText6 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
@@ -389,7 +385,7 @@ class H2SelectSyntaxStatementTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "order by DFLTINTEGER,NOTNULLVARCHAR desc nulls first",stmtText8);	
+				     "order by dfltInteger,notNullVarchar desc nulls first",stmtText8);	
 
 		String stmtText9 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
@@ -403,10 +399,10 @@ class H2SelectSyntaxStatementTests {
 						 Expression.orderBy(Expression.column(NOTNULLDEC72)))
 				.getStatementText();
 
-		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLVARCHAR " +
+		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullVarchar " +
 				     FROM_CLAUSE_SPACE +
-				     "order by NOTNULLVARCHAR desc nulls last,1 asc nulls first," +
-				     "NOTNULLDEC72",stmtText9);
+				     "order by notNullVarchar desc nulls last,1 asc nulls first," +
+				     "notNullDec72",stmtText9);
 		
 		String stmtText10 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
@@ -424,7 +420,7 @@ class H2SelectSyntaxStatementTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "order by DFLTINTEGER asc nulls first,2 desc nulls last," +
+				     "order by dfltInteger asc nulls first,2 desc nulls last," +
 				     "3 desc nulls first,? asc nulls last",stmtText10);
 
 	}
@@ -441,9 +437,9 @@ class H2SelectSyntaxStatementTests {
 								 .build())
 				.getStatementText();
 
-		Assertions.assertEquals("select DFLTINTEGER " +
+		Assertions.assertEquals("select dfltInteger " +
 				     FROM_CLAUSE_SPACE +
-				     "group by DFLTINTEGER HAVING DFLTINTEGER > 100000",stmtText);
+				     "group by dfltInteger HAVING dfltInteger > 100000",stmtText);
 
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
@@ -456,7 +452,7 @@ class H2SelectSyntaxStatementTests {
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
-				     "group by NOTNULLCHAR HAVING NOTNULLCHAR > '0123456789'",stmtText2);
+				     "group by notNullChar HAVING notNullChar > '0123456789'",stmtText2);
 
 		String stmtText3 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
@@ -472,8 +468,8 @@ class H2SelectSyntaxStatementTests {
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
-				     "group by NOTNULLCHAR HAVING NOTNULLCHAR >= '0123456789' " +
-				     "OR NOTNULLCHAR = '223456789' AND NOTNULLCHAR < " +
+				     "group by notNullChar HAVING notNullChar >= '0123456789' " +
+				     "OR notNullChar = '223456789' AND notNullChar < " +
 				     "'1123456789'",stmtText3);
 
 		String stmtText4 = RunDMLSQLFactory.createH2SelectStatement()
@@ -522,12 +518,16 @@ class H2SelectSyntaxStatementTests {
 	void h2SelectLimitTest() {
 
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
-				.selectStar()
+				.select(H2MockPrimitivesTypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(Expression.number(5))
 				.getStatementText();
 
-		Assertions.assertEquals("select * " + FROM_CLAUSE_SPACE + "limit 5",stmtText);
+		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," + 
+								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," + 
+								"NotNullDateTime,NotNullVarchar,NotNullChar,DfltBlob,DfltClob,NotNullBoolean," + 
+								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity " + FROM_CLAUSE_SPACE + 
+								"limit 5",stmtText);
 		
 	}
 	
@@ -535,36 +535,17 @@ class H2SelectSyntaxStatementTests {
 	void h2SelectLimitOffsetTest() {
 
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
-				.selectStar()
+				.select(H2MockStringTypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(Expression.number(5)).offset(Expression.number(1))
 				.getStatementText();
 
-		Assertions.assertEquals("select * " + FROM_CLAUSE_SPACE + "limit 5 offset 1",stmtText);
+		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," + 
+								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," + 
+								"NotNullDateTime,NotNullVarchar,NotNullChar,DfltBlob,DfltClob,NotNullBoolean," + 
+								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity " + FROM_CLAUSE_SPACE + 
+								"limit 5 offset 1",stmtText);
 
 	}
-	
-	
-	@Test
-	void h2SelectLimitSampleSizeTest() {
-		/* SELECT * FROM RUNDML.TYPETEST
-			LIMIT 5 sample_size 3;
-		*/
-
-		//Sample size is not implemented at this time
-	}
-	
-	
-	@Test
-	void h2SelectLimitOffsetSampleSizeTest() {
-//		SELECT * 
-//		FROM RUNDML.TYPETEST
-//		LIMIT 5 OFFSET 1 sample_size 3;
-
-		//Sample size is not implemented at this time
-
-	}
-
-
 	
 }

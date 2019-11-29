@@ -11,6 +11,10 @@ import com.bobman159.rundml.sql.mysql.MySQLSelectStatementBuilder;
  */
 public class RunDMLSQLFactory {
 	
+	private RunDMLSQLFactory() {
+		//Make Sonar Lint happy
+	}
+	
 	/**
 	 * Create a basic SELECT statement builder for execution on different DBMS platforms.
 	 * @see com.bobman159.rundml.sql.base.builder.BaseSelectStatementBuilder
@@ -36,7 +40,5 @@ public class RunDMLSQLFactory {
 	public static H2SelectStatementBuilder createH2SelectStatement() {
 		return new H2SelectStatementBuilder();
 	}
-	
-	
-	//TODO: Add factory methods for H2 SELECT statement builders.
+
 }

@@ -7,8 +7,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
-import com.bobman159.rundml.jdbc.mapping.CaseInsensitiveFieldsMap;
-import com.bobman159.rundml.jdbc.mapping.IFieldMap;
+import com.bobman159.rundml.core.mapping.FieldMap;
+import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.mapping.IFieldMap;
 
 /**
  * Mock object for testing RunDML mapping SELECT results to 
@@ -103,24 +104,23 @@ public class H2MockPrimitivesTypeTest implements IFieldMap {
 	public long getNotNullIdentity() {
 		return NotNullIdentity;
 	}
-	
-	@Override
-	public CaseInsensitiveFieldsMap<String, String> getFieldMappings() {
-		
-		CaseInsensitiveFieldsMap<String,String> map = new CaseInsensitiveFieldsMap<String,String>();
-		map.put("NotNullMediumInt","medIntNotNull");
-		map.put("DfltSigned","signedDflt");
-		map.put("DfltTinyInt","tinyIntDflt");
-		map.put("DfltNumber72","num72Dflt");
-		map.put("NotNullTime","timeNotNull");
-		map.put("NotNullChar","charNotNull");
-		map.put("DfltClob","lobCharCol");
-		map.put("NotNullBoolean","booleanNotNull");
-		map.put("NotNullBit","bitNotNull");
-		map.put("DfltInt8","dflt8Col");
-		return map;
-	}
-	
 
+	@Override
+	public FieldMapDefinitionList getFieldMappings(FieldMapDefinitionList fieldList) {
+
+		fieldList.addDefinition("NotNullMediumInt","medIntNotNull");
+		fieldList.addDefinition("DfltSigned","signedDflt");
+		fieldList.addDefinition("DfltTinyInt","tinyIntDflt");
+		fieldList.addDefinition("DfltNumber72","num72Dflt");
+		fieldList.addDefinition("NotNullTime","timeNotNull");
+		fieldList.addDefinition("NotNullChar","charNotNull");
+		fieldList.addDefinition("DfltClob","lobCharCol");
+		fieldList.addDefinition("NotNullBoolean","booleanNotNull");
+		fieldList.addDefinition("NotNullBit","bitNotNull");
+		fieldList.addDefinition("DfltInt8","dflt8Col");
+
+		return fieldList;
+
+	}
 	
 }

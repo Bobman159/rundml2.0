@@ -4,14 +4,14 @@ import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.bobman159.rundml.core.util.RunDMLUtils;
-import com.bobman159.rundml.jdbc.mapping.CaseInsensitiveFieldsMap;
-import com.bobman159.rundml.jdbc.mapping.IFieldMap;
+import com.bobman159.rundml.core.mapping.FieldMap;
+import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
+import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
+import com.bobman159.rundml.core.util.CoreUtils;
 
 /**
  * Map columns from JDBC <code>ResultSet</code> object to a java object specfied 
@@ -21,12 +21,10 @@ import com.bobman159.rundml.jdbc.mapping.IFieldMap;
 class ResultSetMapper {
 
 	private Class<?> tableRowClass;
-	private Field[] mapFields;
 	private static Logger logger = LogManager.getLogger(ResultSetMapper.class.getName());
 	
 	public ResultSetMapper(Class<?> tableRowClass) {
 		this.tableRowClass = tableRowClass;		
-		mapFields = tableRowClass.getDeclaredFields();
 	}
 	
 	/**
@@ -42,27 +40,6 @@ class ResultSetMapper {
 			
 			row = tableRowClass.newInstance();
 			
-			/*
-			 * For now, use the "brute force" approach of checking if a 
-			 * column in the ResultSet "matches or maps" to a field in 
-			 * the mapping class.  NOTE: fieldName matches are case insensitive
-			 * 
-			 * FOR loop thru resultSetColumnNames 
-			 * 		set columnName = resultSetColumnName
-			 * 		IF there are IFieldMap entries THEN
-			 * 			IF there is columnNameKey in the HashMap THEN
-			 * 				set columnName = alternateFieldName 
-			 * 			ENDIF
-			 * 		ENDIF
-			 * 		mapField = search tableRowClass for field with name = columnName
-			 * 		IF mapField is NULL THEN
-			 * 			write error message no field found
-			 * 			throw NoSuchFieldException
-			 * 		ENDIF
-			 * 		map column to field
-			 * ENDFOR
-			 * 
-			 */
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int numberColumns = rsmd.getColumnCount();
 
@@ -70,29 +47,18 @@ class ResultSetMapper {
 					
 				String columnName = rsmd.getColumnName(numbCol);
 				columnName = columnName.toLowerCase();
+
+				//Does a FieldMap already exist for this tableRowClass name?
+				FieldMap fieldMap = FieldMap.findFieldMap(tableRowClass);
+				if (fieldMap == null) {
+					//No field map found, create the field map which will automatically map the class fields
+					//to table names.					
+					fieldMap = FieldMap.createFieldMap(tableRowClass);
+				}
 				
-				/*
-				 * ASSUME: only one field in the Map class is defined
-				 * for each column in the result set.  
-				*/
-				//Check if an alternate field name is specified, if one is, use
-				//it to search the fields list in the mapping class.
-				if (IFieldMap.class.isAssignableFrom(tableRowClass)) {
-					IFieldMap obj = (IFieldMap) tableRowClass.cast(row);					
-					CaseInsensitiveFieldsMap<String,String> alternateMap = obj.getFieldMappings();
-					if (alternateMap != null &&
-						alternateMap.containsKey(columnName)) {
-						columnName = alternateMap.get(columnName);
-					}
-				}
-						
-				Field mapField = findMappedField(columnName);
-				//if no field was found in the class being mapped, throw an exception
-				if (mapField == null) {
-					logger.error(MessageFormat.format("Field {0} was not found in class {1}", 
-								columnName,tableRowClass.getName()));
-					throw new NoSuchFieldException();
-				}
+				//Search the FieldMap definitions for an entry matching the Result Set column name.
+				IFieldMapDefinition fieldDef = fieldMap.getFieldDefinitions().findMapDefinitionByColumn(columnName);
+				Field mapField = CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
 				mapColumnToField(numbCol,rs,row,mapField);
 
 			}	
@@ -101,33 +67,12 @@ class ResultSetMapper {
 			logger.error(ex.getMessage(), ex);
 		} catch (SQLException sqlex) {
 			logger.error(sqlex.getMessage(),sqlex);
-		} catch (NoSuchFieldException nsfex) {			
-			logger.error(nsfex.getMessage(), nsfex);
-		}
-		
-		return row;
-	}
-	
-	/*
-	 * Searches mapFields for the matching fieldName in the map class.
-	 * The search is case insensitive and returns the first match that 
-	 * it finds.
-	 * 
-	 * returns - the Field definition, null if no match found
-	 */
-	private Field findMappedField(String colName) {
-		
-		Field mapField = null;
-		
-		for (int ix = 0; ix < mapFields.length;ix++) {
-			if (mapFields[ix].getName().equalsIgnoreCase(colName)) {
-				mapField = mapFields[ix];
-				break;
-			}
+		} catch (NoTableRowClassFieldException ntrcfe) {
+			logger.error(ntrcfe.getMessage(),ntrcfe);
 		}
 
-		return mapField;
 		
+		return row;
 	}
 	
 	/*
@@ -173,7 +118,6 @@ class ResultSetMapper {
 					targetField.set(targetObj,rs.getByte(index));
 					break;
 				case "byte[]":
-					byte[] result = rs.getBytes(index);
 					targetField.set(targetObj,rs.getBytes(index));
 					break;
 				case "short":
@@ -210,7 +154,7 @@ class ResultSetMapper {
 					targetField.set(targetObj,rs.getLong(index));
 					break;						
 				default:
-					logger.warn(RunDMLUtils.formatMessage(
+					logger.warn(CoreUtils.formatMessage(
 					"Column {0} has result set type {1} that is not currently mapped by "
 					+ "RunDML for field type {2} .  Object type mapping will be attempted", 
 					rsmd.getColumnName(index),rsmd.getColumnTypeName(index),targetType));
@@ -223,5 +167,6 @@ class ResultSetMapper {
 			logger.error(iaex.getMessage(),iaex);			
 		}
 	}
+	
 
 }

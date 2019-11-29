@@ -59,7 +59,7 @@ class OrderByExpressionTest {
 						   	.addExpression(Expression.orderBy(
 						   					Expression.column(DFLTINTEGER)))
 							.serialize();			
-		Assertions.assertEquals("order by 1,2,DFLTINTEGER",stmtText2);		
+		Assertions.assertEquals("order by 1,2,dfltInteger",stmtText2);		
 		
 		
 		String stmtText3 = new OrderByClause()
@@ -77,7 +77,7 @@ class OrderByExpressionTest {
 				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER))
 				.desc())
 				.serialize();
-		Assertions.assertEquals("order by DFLTINTEGER desc",stmtText5);
+		Assertions.assertEquals("order by dfltInteger desc",stmtText5);
 
 		
 		String stmtText6 = new OrderByClause()
@@ -99,7 +99,7 @@ class OrderByExpressionTest {
 				.addExpression(Expression.orderBy(Expression.column(NOTNULLVARCHAR))
 				.desc().nullsFirst())
 				.serialize();
-		Assertions.assertEquals("order by DFLTINTEGER,NOTNULLVARCHAR desc nulls first",
+		Assertions.assertEquals("order by dfltInteger,notNullVarchar desc nulls first",
 							stmtText8);	
 
 		
@@ -109,8 +109,8 @@ class OrderByExpressionTest {
 				.addExpression(Expression.orderBy(1).asc().nullsFirst())
 				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER)))
 				.serialize();
-		Assertions.assertEquals("order by NOTNULLVARCHAR desc nulls last,1 asc nulls first," +
-				     		"DFLTINTEGER",stmtText9);
+		Assertions.assertEquals("order by notNullVarchar desc nulls last,1 asc nulls first," +
+				     		"dfltInteger",stmtText9);
 		
 		
 		String stmtText10 = new OrderByClause()
@@ -119,7 +119,7 @@ class OrderByExpressionTest {
 				.addExpression(Expression.orderBy(2).desc().nullsLast())
 				.addExpression(Expression.orderBy(3).desc().nullsFirst())
 				.serialize();
-		Assertions.assertEquals("order by DFLTINTEGER asc nulls first," + 
+		Assertions.assertEquals("order by dfltInteger asc nulls first," + 
 						    "2 desc nulls last,3 desc nulls first",stmtText10);
 
 	}

@@ -19,7 +19,7 @@ class PredicateWhereTest {
 	private static final String ORTENPLUS10LETEN = " OR 10 + 10 <= 10";
 	private static final String WHERECONCATABCDEF = "WHERE 'abc' || 'def' <= 'abcdef'";
 	private static final String WHERETENPLUS10LETEN = "WHERE 10 + 10 <= 10";
-	private static final String WHERECOLTESTLETEN = "WHERE COLTEST <= 10";
+	private static final String WHERECOLTESTLETEN = "WHERE coltest <= 10";
 	private static final String ABCDEF = "abcdef";
 	private static final String COLTEST = "coltest";
 	
@@ -95,7 +95,7 @@ class PredicateWhereTest {
 									  .and(colTest).isLessOrEqual(10)
 									  .build().serialize();
 		Assertions.assertEquals(WHERECOLTESTLETEN +
-							" AND COLTEST <= 10",predResult3);
+							" AND coltest <= 10",predResult3);
 		
 		String predResult4 = Predicate.where(Expression.parm(Types.BIGINT, 10))
 									  .isLessOrEqual(10)
@@ -141,7 +141,7 @@ class PredicateWhereTest {
 						  			  .or(colTest).isLessOrEqual(10)
 						  			  .build().serialize();
 		Assertions.assertEquals(WHERECOLTESTLETEN +
-				" OR COLTEST <= 10",predResult3);
+				" OR coltest <= 10",predResult3);
 
 		String predResult4 = Predicate.where(Expression.parm(Types.BIGINT, 10))
 						  			  .isLessOrEqual(10)
@@ -194,9 +194,9 @@ class PredicateWhereTest {
 				  .and(colTest).isLess(10)
 				  .build().serialize();
 		Assertions.assertEquals(WHERECOLTESTLETEN +
-				" AND COLTEST <= 10" +
-				" OR COLTEST <= 10"  +
-				" AND COLTEST < 10",predResult3);
+				" AND coltest <= 10" +
+				" OR coltest <= 10"  +
+				" AND coltest < 10",predResult3);
 
 		String predResult4 = Predicate.where(Expression.parm(Types.BIGINT, 10))
 						  .isLessOrEqual(10)

@@ -43,12 +43,12 @@ class ExprStringTest {
 		Column rhs = new Column("unit_of_measure");
 		
 		String expr2 = lhs.concat(rhs).serialize();
-		Assertions.assertEquals("INGREDIENT || UNIT_OF_MEASURE",expr2);
+		Assertions.assertEquals("ingredient || unit_of_measure",expr2);
 		
 		String expr3 = Expression.string("Ingred: ").concat(lhs)				
 								 .concat(Expression.string("UnitMeasure: "))
 								 .concat(rhs).serialize();
-		Assertions.assertEquals("\'Ingred: \' || INGREDIENT || \'UnitMeasure: \' || UNIT_OF_MEASURE",expr3);
+		Assertions.assertEquals("\'Ingred: \' || ingredient || \'UnitMeasure: \' || unit_of_measure",expr3);
 
 	}
 

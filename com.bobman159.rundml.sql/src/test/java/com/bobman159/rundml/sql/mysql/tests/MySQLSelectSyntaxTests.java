@@ -1,6 +1,5 @@
 package com.bobman159.rundml.sql.mysql.tests;
 
-import java.sql.Connection;
 import java.sql.Types;
 
 import org.junit.jupiter.api.AfterAll;
@@ -13,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.exprtypes.ParmMarker;
 import com.bobman159.rundml.core.predicates.Predicate;
-import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
+import com.bobman159.rundml.sql.mysql.mocktables.MockMySQLPrimitivesTypeTest;
 
 class MySQLSelectSyntaxTests {
 	
@@ -28,8 +27,8 @@ class MySQLSelectSyntaxTests {
 	private static final String NOTNULLDEC72 = "notNullDec72";
 	private static final String RUNDML_SCHEMA = "rundml";
 	private static final String RUNDML_TABLE = "typetest";
-	private static final String SELECT_1000 = "select 100000,'Abcdefg',DFLTINTEGER ";
-	private static final String SELECT_NOTNULLCHAR = "select NOTNULLCHAR ";
+	private static final String SELECT_1000 = "select 100000,'Abcdefg',dfltInteger ";
+	private static final String SELECT_NOTNULLCHAR = "select notNullChar ";
 	private static final String NUMERIC_LITERAL = "0123456789";
 	
 	@BeforeAll
@@ -65,9 +64,9 @@ class MySQLSelectSyntaxTests {
 				.getStatementText();
 				
 
-		Assertions.assertEquals("select DFLTINTEGER " +
+		Assertions.assertEquals("select dfltInteger " +
 				     FROM_CLAUSE_SPACE +
-				     "group by DFLTINTEGER HAVING DFLTINTEGER > 100000",stmtText);
+				     "group by dfltInteger HAVING dfltInteger > 100000",stmtText);
 
 		String stmtText2 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
@@ -80,7 +79,7 @@ class MySQLSelectSyntaxTests {
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
-				     "group by NOTNULLCHAR HAVING NOTNULLCHAR > '0123456789'",stmtText2);
+				     "group by notNullChar HAVING notNullChar > '0123456789'",stmtText2);
 
 		String stmtText3 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
@@ -96,8 +95,8 @@ class MySQLSelectSyntaxTests {
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
-				     "group by NOTNULLCHAR HAVING NOTNULLCHAR >= '0123456789' " +
-				     "OR NOTNULLCHAR = '223456789' AND NOTNULLCHAR < " +
+				     "group by notNullChar HAVING notNullChar >= '0123456789' " +
+				     "OR notNullChar = '223456789' AND notNullChar < " +
 				     "'1123456789'",stmtText3);
 
 		String stmtText4 = RunDMLSQLFactory.createMySQLSelectStatement()
@@ -147,12 +146,12 @@ class MySQLSelectSyntaxTests {
 		
 
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
-				.selectStar()
+				.select("dfltInteger")
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(Expression.number(5)).offset(Expression.number(1))
 				.getStatementText();
 
-		Assertions.assertEquals("select * " + FROM_CLAUSE_SPACE + "limit 5 offset 1",stmtText);
+		Assertions.assertEquals("select dfltInteger " + FROM_CLAUSE_SPACE + "limit 5 offset 1",stmtText);
 
 	}
 
@@ -174,7 +173,7 @@ class MySQLSelectSyntaxTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "group by 1,'Abcdefg',?,DFLTINTEGER",stmtText);
+				     "group by 1,'Abcdefg',?,dfltInteger",stmtText);
 
 	}
 
@@ -182,12 +181,16 @@ class MySQLSelectSyntaxTests {
 	void mySQLLimitTest() {
 		
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
-				.selectStar()
+				.select(MockMySQLPrimitivesTypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(Expression.number(5))
 				.getStatementText();
 
-		Assertions.assertEquals("select * " + FROM_CLAUSE_SPACE + "limit 5",stmtText);
+		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltIntUnsigned,DfltTinyInt,NotNullSmint," + 
+								"NotNullDec72,NotNullTime,NotNullDate,NotNullTimestamp,NotNullDateTime,NotNullVarchar," + 
+								"NotNullChar,NotNullBlob,NotNullText,NotNullBoolean,NotNullBit,NotNullBigInt," + 
+								"NotNullBinary,NotNullVarBinary "	+ 
+								"" + FROM_CLAUSE_SPACE + "limit 5",stmtText);
 
 	}
 
@@ -220,7 +223,7 @@ class MySQLSelectSyntaxTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "order by 1,2,DFLTINTEGER",stmtText2);		
+				     "order by 1,2,dfltInteger",stmtText2);		
 		
 		String stmtText3 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
@@ -259,7 +262,7 @@ class MySQLSelectSyntaxTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "order by DFLTINTEGER desc",stmtText5);
+				     "order by dfltInteger desc",stmtText5);
 
 		String stmtText6 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
@@ -301,7 +304,7 @@ class MySQLSelectSyntaxTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "order by DFLTINTEGER,NOTNULLVARCHAR desc",stmtText8);	
+				     "order by dfltInteger,notNullVarchar desc",stmtText8);	
 
 		String stmtText9 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
@@ -314,10 +317,10 @@ class MySQLSelectSyntaxTests {
 						 Expression.orderBy(Expression.column(NOTNULLDEC72)))
 				.getStatementText();
 
-		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLVARCHAR " +
+		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullVarchar " +
 				     FROM_CLAUSE_SPACE +
-				     "order by NOTNULLVARCHAR desc,1 asc," +
-				     "NOTNULLDEC72",stmtText9);
+				     "order by notNullVarchar desc,1 asc," +
+				     "notNullDec72",stmtText9);
 		
 		String stmtText10 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
@@ -333,7 +336,7 @@ class MySQLSelectSyntaxTests {
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
-				     "order by DFLTINTEGER asc,2 desc," +
+				     "order by dfltInteger asc,2 desc," +
 				     "3 desc,? asc",stmtText10);
 
 	}
@@ -363,25 +366,26 @@ class MySQLSelectSyntaxTests {
 						.where(pred)
 						.getStatementText();
 		
-		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLDATE," +
-				     "NOTNULLVARCHAR from rundml.typetest " + 
-				     "WHERE DFLTINTEGER > 100000 " + 
-				     "AND NOTNULLDEC72 >= 12345.1 " +
-				     "OR NOTNULLDATE = '2019-03-15' " + 
-				     "OR NOTNULLVARCHAR >= 'Abcdefg' " +
-				     "OR NOTNULLVARCHAR = ?",stmtText);
+		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullDate," +
+				     "notNullVarchar from rundml.typetest " + 
+				     "WHERE dfltInteger > 100000 " + 
+				     "AND notNullDec72 >= 12345.1 " +
+				     "OR notNullDate = '2019-03-15' " + 
+				     "OR notNullVarchar >= 'Abcdefg' " +
+				     "OR notNullVarchar = ?",stmtText);
 
 	}
 
 
 	@Test
-	void mySQLSelectStarTest() {
+	void mySQLSelectExpressionTest() {
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
-				  .selectStar()
+				  .select()
+				  .selectExpression(Expression.number(10).add(10))
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
 				  .getStatementText();
 	
-		Assertions.assertEquals("select * from rundml.typetest",stmtText);		
+		Assertions.assertEquals("select 10 + 10 from rundml.typetest",stmtText);		
 
 	}
 	
@@ -389,11 +393,11 @@ class MySQLSelectSyntaxTests {
 	void mySQLSelectProviderTest() {
 		
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
-				  .selectStar()
+				  .select(Expression.column("dfltInteger"),Expression.column("notNullChar"))
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
 				  .getStatementText();
 	
-		Assertions.assertEquals("select * from rundml.typetest",stmtText);		
+		Assertions.assertEquals("select dfltInteger,notNullChar from rundml.typetest",stmtText);		
 
 	}
 
@@ -413,8 +417,8 @@ class MySQLSelectSyntaxTests {
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
 				  .getStatementText();
 		
-		Assertions.assertEquals("select DFLTINTEGER,NOTNULLDEC72,NOTNULLDATE," + 
-						    "NOTNULLCHAR,DFLTTEXT,DFLTBLOB,NOTNULLVARCHAR "	   + 
+		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullDate," + 
+						    "notNullChar,dfltText,dfltBlob,notNullVarchar "	   + 
 							FROM_CLAUSE,stmtText);
 
 	}
@@ -430,7 +434,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select all DFLTINTEGER " +
+		Assertions.assertEquals("select all dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 	}
@@ -445,7 +449,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 
-		Assertions.assertEquals("select distinct DFLTINTEGER " +
+		Assertions.assertEquals("select distinct dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 	}
@@ -462,7 +466,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select distinct all DFLTINTEGER " +
+		Assertions.assertEquals("select distinct all dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 		String stmtText2 = RunDMLSQLFactory.createMySQLSelectStatement()
@@ -472,7 +476,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select distinct all NOTNULLVARCHAR " +
+		Assertions.assertEquals("select distinct all notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
 		
 	}
@@ -489,7 +493,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select sql_small_result DFLTINTEGER " +
+		Assertions.assertEquals("select sql_small_result dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 //		INVALID 	
@@ -500,7 +504,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select NOTNULLVARCHAR sql_small_result " +
+		Assertions.assertEquals("select notNullVarchar sql_small_result " +
 							FROM_CLAUSE,stmtText2);
 
 	}
@@ -516,7 +520,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select sql_big_result DFLTINTEGER " +
+		Assertions.assertEquals("select sql_big_result dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 //		INVALID
@@ -527,7 +531,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select NOTNULLVARCHAR sql_big_result " +
+		Assertions.assertEquals("select notNullVarchar sql_big_result " +
 							FROM_CLAUSE,stmtText2);
 
 	}
@@ -543,7 +547,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select sql_buffer_result DFLTINTEGER " +
+		Assertions.assertEquals("select sql_buffer_result dfltInteger " +
 							FROM_CLAUSE,stmtText);
 
 //		VALID? - Executed ok in rundml db
@@ -554,7 +558,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select NOTNULLVARCHAR sql_buffer_result " +
+		Assertions.assertEquals("select notNullVarchar sql_buffer_result " +
 							FROM_CLAUSE,stmtText2);
 
 	}
@@ -571,7 +575,7 @@ class MySQLSelectSyntaxTests {
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
-		Assertions.assertEquals("select 10,'This is a string',DFLTINTEGER," +
+		Assertions.assertEquals("select 10,'This is a string',dfltInteger," +
 							"? from rundml.typetest",stmtText);
 
 	}

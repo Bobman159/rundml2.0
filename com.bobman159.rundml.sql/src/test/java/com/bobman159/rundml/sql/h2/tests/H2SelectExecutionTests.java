@@ -10,7 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.Expression;
@@ -22,8 +21,6 @@ import com.bobman159.rundml.sql.h2.mocktables.H2MockStringTypeTest;
 import com.bobman159.rundml.sql.h2.mocktables.TypeTest;
 
 class H2SelectExecutionTests {
-
-	//TODO: Implement Select Execution for H2 Database
 	/*
 	 * #1 	A class that implements ITableRow interface will be used to 
 	 * 		contain the data from the SELECT statement results. By default
@@ -84,7 +81,6 @@ class H2SelectExecutionTests {
 	
 	private static final String RUNDML_SCHEMA = "rundml";
 	private static final String RUNDML_TABLE = "typetest";	
-	private List<Object> testRows;
 
 	@BeforeAll
 	static void setUpBeforeClass() {

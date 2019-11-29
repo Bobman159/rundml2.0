@@ -1,8 +1,7 @@
 package com.bobman159.rundml.sql.h2.mocktables;
 
-import com.bobman159.rundml.core.expressions.Expression;
-import com.bobman159.rundml.jdbc.mapping.CaseInsensitiveFieldsMap;
-import com.bobman159.rundml.jdbc.mapping.IFieldMap;
+import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.mapping.IFieldMap;
 
 public class H2MockStringTypeTest implements IFieldMap {
 	
@@ -91,35 +90,34 @@ public class H2MockStringTypeTest implements IFieldMap {
 	public String getIdentityNotNull() {
 		return identityNotNull;
 	}
-	@Override
-	public CaseInsensitiveFieldsMap<String, String> getFieldMappings() {
-			
-		CaseInsensitiveFieldsMap<String,String> map = new CaseInsensitiveFieldsMap<String,String>();
-		map.put("DfltInteger","intDflt");
-		map.put("NotNullMediumInt","medIntNotNull");
-		map.put("DfltSigned","signedDflt");
-		map.put("DfltTinyInt","tinyIntDflt");
-		map.put("NotNullSmint","smintNotNull");
-		map.put("NotNullDec72","dec72NotNull");
-		map.put("DfltNumber72","num72Dflt");
-		map.put("NotNullTime","timeNotNull");
-		map.put("NotNullDate","dateNotNull");
-		map.put("NotNullTimestamp","tstampNotNull");
-		map.put("NotNullDateTime","dateTstampNotNull");
-		map.put("NotNullVarchar","varcharNotNull");
-		map.put("NotNullChar","charNotNull");
-		map.put("DfltBlob","blobCol");
-		map.put("DfltClob","clobCol");
-		map.put("NotNullBoolean","booleanNotNull");
-		map.put("NotNullBool","boolNotNull");
-		map.put("NotNullBit","bitNotNull");
-		map.put("DfltBigInt","bigIntDflt");
-		map.put("DfltInt8","int8Dflt");
-		map.put("NotNullIdentity","identityNotNull");
-		
-		return map;
-	}
-
 	
+	@Override
+	public FieldMapDefinitionList getFieldMappings(FieldMapDefinitionList fieldList) {
+		
+		fieldList.addDefinition("DfltInteger","intDflt");
+		fieldList.addDefinition("NotNullMediumInt","medIntNotNull");
+		fieldList.addDefinition("DfltSigned","signedDflt");
+		fieldList.addDefinition("DfltTinyInt","tinyIntDflt");
+		fieldList.addDefinition("NotNullSmint","smintNotNull");
+		fieldList.addDefinition("NotNullDec72","dec72NotNull");
+		fieldList.addDefinition("DfltNumber72","num72Dflt");
+		fieldList.addDefinition("NotNullTime","timeNotNull");
+		fieldList.addDefinition("NotNullDate","dateNotNull");
+		fieldList.addDefinition("NotNullTimestamp","tstampNotNull");
+		fieldList.addDefinition("NotNullDateTime","dateTstampNotNull");
+		fieldList.addDefinition("NotNullVarchar","varcharNotNull");
+		fieldList.addDefinition("NotNullChar","charNotNull");
+		fieldList.addDefinition("DfltBlob","blobCol");
+		fieldList.addDefinition("DfltClob","clobCol");
+		fieldList.addDefinition("NotNullBoolean","booleanNotNull");
+		fieldList.addDefinition("NotNullBool","boolNotNull");
+		fieldList.addDefinition("NotNullBit","bitNotNull");
+		fieldList.addDefinition("DfltBigInt","bigIntDflt");
+		fieldList.addDefinition("DfltInt8","int8Dflt");
+		fieldList.addDefinition("NotNullIdentity","identityNotNull");
+		
+		return fieldList;
+
+	}
 	
 }

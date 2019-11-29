@@ -40,21 +40,21 @@ class PredicateHavingTest {
 
 		String stmtText = Predicate.having(Expression.column(DFLTINTEGER)).isGreater(100000)
 								 .build().serialize();
-		Assertions.assertEquals("HAVING DFLTINTEGER > 100000",stmtText);
+		Assertions.assertEquals("HAVING dfltInteger > 100000",stmtText);
 
 		String stmtText2 = Predicate.having(Expression.column(NOTNULLVARCHAR))
 				 .isGreater("0123456789")
 				 .build().serialize();
-		Assertions.assertEquals("HAVING NOTNULLVARCHAR > '0123456789'",stmtText2);
+		Assertions.assertEquals("HAVING notNullVarchar > '0123456789'",stmtText2);
 
 		String stmtText3 = Predicate.having(Expression.column(NOTNULLVARCHAR))
 				 .isGreaterOrEqual("0123456789")
 				 .or(Expression.column(NOTNULLVARCHAR)).isEqual("223456789")
 				 .and(Expression.column(NOTNULLVARCHAR)).isLess("1123456789")
 				 .build().serialize();
-		Assertions.assertEquals("HAVING NOTNULLVARCHAR >= '0123456789' " + 
-				 			"OR NOTNULLVARCHAR = '223456789' " + 
-				 			"AND NOTNULLVARCHAR < '1123456789'",stmtText3);
+		Assertions.assertEquals("HAVING notNullVarchar >= '0123456789' " + 
+				 			"OR notNullVarchar = '223456789' " + 
+				 			"AND notNullVarchar < '1123456789'",stmtText3);
 
 		String stmtText4 = Predicate.having("Abcdef").isEqual("Abcdef2")
 				 .or("Hijklmnop").isGreater("Hijklmno")

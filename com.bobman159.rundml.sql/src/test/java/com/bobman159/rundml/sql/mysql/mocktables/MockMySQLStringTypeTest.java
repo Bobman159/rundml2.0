@@ -1,8 +1,7 @@
 package com.bobman159.rundml.sql.mysql.mocktables;
 
-import com.bobman159.rundml.core.expressions.Expression;
-import com.bobman159.rundml.jdbc.mapping.CaseInsensitiveFieldsMap;
-import com.bobman159.rundml.jdbc.mapping.IFieldMap;
+import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.mapping.IFieldMap;
 
 public class MockMySQLStringTypeTest implements IFieldMap {
 
@@ -84,23 +83,21 @@ public class MockMySQLStringTypeTest implements IFieldMap {
 	public String getNotNullVarBinary() {
 		return NotNullVarBinary;
 	}
+	
 	@Override
-	public CaseInsensitiveFieldsMap<String, String> getFieldMappings() {
+	public FieldMapDefinitionList getFieldMappings(FieldMapDefinitionList fieldList) {
 		
-		CaseInsensitiveFieldsMap<String,String> map = new CaseInsensitiveFieldsMap<String,String>();
-		map.put("NotNullMediumInt","medIntNotNull");
-		map.put("DfltIntUnsigned","unsignedDflt");
-		map.put("DfltTinyInt","tinyIntDflt");
-		map.put("NotNullTime","timeNotNull");
-		map.put("NotNullChar","charNotNull");
-		map.put("NotNullText","lobCharCol");
-		map.put("NotNullBoolean","booleanNotNull");
-		map.put("NotNullBit","bitNotNull");
-		map.put("NotNullBinary","binaryNotNull");
+		fieldList.addDefinition("NotNullMediumInt","medIntNotNull");
+		fieldList.addDefinition("DfltIntUnsigned","unsignedDflt");
+		fieldList.addDefinition("DfltTinyInt","tinyIntDflt");
+		fieldList.addDefinition("NotNullTime","timeNotNull");
+		fieldList.addDefinition("NotNullChar","charNotNull");
+		fieldList.addDefinition("NotNullText","lobCharCol");
+		fieldList.addDefinition("NotNullBoolean","booleanNotNull");
+		fieldList.addDefinition("NotNullBit","bitNotNull");
+		fieldList.addDefinition("NotNullBinary","binaryNotNull");
 		
-		return map;
+		return fieldList;
 	}
-	
-	
 	
 }
