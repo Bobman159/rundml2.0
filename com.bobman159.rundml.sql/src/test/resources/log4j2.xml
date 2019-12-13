@@ -10,8 +10,8 @@
 		</File>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.apache.log4j2.xml" level="info" />
-		<Root level="info">
+		<Logger name="org.apache.log4j2.xml" level="debug" />
+		<Root level="debug">
 			<AppenderRef ref="STDOUT" />
 			<AppenderRef ref="rundml_test_log" />
 		</Root>

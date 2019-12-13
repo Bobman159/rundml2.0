@@ -3,6 +3,8 @@ package com.bobman159.rundml.core.util;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
 
+import com.bobman159.rundml.core.exceptions.RunDMLExceptionListener;
+import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.exprtypes.Column;
 import com.bobman159.rundml.core.exprtypes.IExpression;
@@ -21,6 +23,15 @@ public class CoreUtils {
 
 	private CoreUtils() {
 		//To make Sonar Lint happy
+	}
+	
+	/**
+	 * Perform initialization and setup for RunDML
+	 */
+	public static void initRunDML() {
+
+		RunDMLExceptionListeners.getInstance().addListener(new RunDMLExceptionListener());
+		
 	}
 	
 	/**
@@ -58,8 +69,6 @@ public class CoreUtils {
 		try {
 			classField = tableRowClass.getDeclaredField(fieldName);
 		} catch (NoSuchFieldException | SecurityException ex) {
-			//TODO: log this exception
-			ex.printStackTrace();
 			throw new NoTableRowClassFieldException(tableRowClass,fieldName);
 		}
 		
@@ -104,8 +113,8 @@ public class CoreUtils {
 		Column col = null;
 		for (Object fieldDef : fieldDefs) {
 			if (fieldDef instanceof IFieldMapDefinition) {
-				IFieldMapDefinition x = (IFieldMapDefinition) fieldDef;
-				col = Expression.column(x.getColumnName());
+				IFieldMapDefinition wkFieldDef = (IFieldMapDefinition) fieldDef;
+				col = Expression.column(wkFieldDef.getColumnName());
 			}
 				
 			exprs[index] = col;

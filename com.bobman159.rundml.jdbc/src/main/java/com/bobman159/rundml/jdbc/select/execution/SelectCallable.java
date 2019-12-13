@@ -11,6 +11,8 @@ import java.util.concurrent.Callable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.bobman159.rundml.core.exceptions.RunDMLException;
+import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
 
@@ -34,7 +36,6 @@ class SelectCallable implements Callable<List<Object>> {
 	private List<Object> results;
 	private ResultSetMapper mapper;
 	
-
 	private static Logger logger = LogManager.getLogger(SelectCallable.class.getName());
 	
 	/**
@@ -53,32 +54,44 @@ class SelectCallable implements Callable<List<Object>> {
 	 * @see java.util.concurrent.Callable#call() 
 	 */
 	@Override
-	public List<Object> call() throws SQLException {
+	public List<Object> call() throws SQLException,RunDMLException {
 		
 		logger.info("Execute SELECT statement");
 		String stmtText = SQLStatementSerializer.serializeSelect(model);
+		
 		try (PreparedStatement ps = conn.prepareStatement(stmtText)) {
 			//TODO: Figure out how to bind parameters....
-			try (ResultSet rs = ps.executeQuery()) {
-				mapQueryResults(rs);
-			}
-		} catch (SQLException ex) {
-			logger.error(ex.getMessage(), ex);
-		}	
+			createQueryResults(ps);
+		} catch (RunDMLException rdex) {
+			RunDMLExceptionListeners.getInstance().notifyListeners(rdex);			
+			//At this point, I know createQueryResults got an exception, so throw
+			//the RunDMLException so that the Executor knows the thread failed.
+			throw rdex;		
+		} finally {
+			conn.close();
+		}
 
 		return results;
 	}
 
-	private void mapQueryResults(ResultSet rs) {
+	/*
+	 * Executes the SQL query and maps the results from the query into the table row class
+	 */
+	private void createQueryResults(PreparedStatement ps) throws RunDMLException {
 
-		try {
-		while (rs.next()) {
-			Object mappedRow = mapper.mapResultRow(rs);
-//			results.add((ITableRow) mappedRow);
-			results.add((Object) mappedRow);
-		}
-		} catch (SQLException ex) {
-			logger.error(ex.getMessage(),ex);
+		try (ResultSet rs = ps.executeQuery()) {
+			while (rs.next()) {
+				Object mappedRow = mapper.mapResultRow(rs);
+				results.add((Object) mappedRow);
+			}
+		} catch (SQLException sqlex) {			
+			RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException sqlex) {
+				RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+			}
 		}
 
 	}

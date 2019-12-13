@@ -4,10 +4,13 @@ import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.bobman159.rundml.core.exceptions.RunDMLException;
+import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.mapping.FieldMap;
 import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
@@ -33,11 +36,12 @@ class ResultSetMapper {
 	 * @param rs a jdbc <code>ResultSet</code>
 	 * @returns new instance of a mapped object
 	 */
-	public Object mapResultRow(ResultSet rs) {
+	public Object mapResultRow(ResultSet rs) throws RunDMLException
+	{
 		
 		Object row = new Object();
 		try {
-			
+			logger.debug("Table row class new instance: " + tableRowClass.getName());
 			row = tableRowClass.newInstance();
 			
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -46,7 +50,6 @@ class ResultSetMapper {
 			for (int numbCol = 1;numbCol <= numberColumns;numbCol++) {
 					
 				String columnName = rsmd.getColumnName(numbCol);
-				columnName = columnName.toLowerCase();
 
 				//Does a FieldMap already exist for this tableRowClass name?
 				FieldMap fieldMap = FieldMap.findFieldMap(tableRowClass);
@@ -59,18 +62,17 @@ class ResultSetMapper {
 				//Search the FieldMap definitions for an entry matching the Result Set column name.
 				IFieldMapDefinition fieldDef = fieldMap.getFieldDefinitions().findMapDefinitionByColumn(columnName);
 				Field mapField = CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
+				logger.debug(MessageFormat.format("Mapping column {0} to field {1}",
+						 columnName,mapField.getName()));
 				mapColumnToField(numbCol,rs,row,mapField);
-
-			}	
-
-		} catch (InstantiationException | IllegalAccessException ex) {
-			logger.error(ex.getMessage(), ex);
+			}
 		} catch (SQLException sqlex) {
-			logger.error(sqlex.getMessage(),sqlex);
+			throw RunDMLException.createRunDMLException(sqlex,RunDMLException.SQL_ERROR,null);
+		} catch (InstantiationException | IllegalAccessException rfex) {
+			throw RunDMLException.createRunDMLException(rfex,RunDMLException.TABLE_ROW_CLASS_REFLECTION,tableRowClass.getName());
 		} catch (NoTableRowClassFieldException ntrcfe) {
-			logger.error(ntrcfe.getMessage(),ntrcfe);
+			throw RunDMLException.createRunDMLException(ntrcfe,RunDMLException.TABLE_ROW_CLASS_REFLECTION,tableRowClass.getName());
 		}
-
 		
 		return row;
 	}
@@ -106,6 +108,7 @@ class ResultSetMapper {
 			 */
 			targetField.setAccessible(true);
 			ResultSetMetaData rsmd = rs.getMetaData();
+
 
 			String targetType = targetField.getGenericType().getTypeName();
 			switch(targetType) {
@@ -162,9 +165,9 @@ class ResultSetMapper {
 
 
 		} catch (SQLException sqlex) {
-			logger.error(sqlex.getMessage(),sqlex);
+			RunDMLExceptionListeners.getInstance().notifyListeners(sqlex);
 		} catch (IllegalAccessException iaex) {
-			logger.error(iaex.getMessage(),iaex);			
+			RunDMLExceptionListeners.getInstance().notifyListeners(iaex);
 		}
 	}
 	

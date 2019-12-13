@@ -1,11 +1,15 @@
 package com.bobman159.rundml.jdbc.select.execution;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 
 /**
@@ -46,16 +50,40 @@ public class RunDMLExecutor  {
 	 * 
 	 * @return a <code>List</code> of SELECT rows
 	 */
-	@SuppressWarnings("unchecked")
-	public Future<List<Object>> executeSelect(Connection conn,
+	public List<Object> executeSelect(Connection conn,
 												 SQLStatementModel model,
 												 Class<?> tableRow) {
 		
 		Future<List<Object>> futureTask;
-		
+		List<Object> results = new ArrayList<>();
 		SelectCallable exec = new SelectCallable(conn,model,tableRow);
-		futureTask = service.submit(exec);
-		return futureTask;
+		futureTask = service.submit(exec);		
+		
+		/*
+		 * For now this seems to work well in that it executes the SELECT
+		 * in another thread. There may be issues with performance using this mechanism
+		 * but since I don't anticipate retrieving large numbers of rows, I will
+		 * leave it this way for now.  If performance issues DO crop up then
+		 * this method of invocation may need to be revised.
+		 */
+		
+		try {
+			results = futureTask.get();
+		} catch (CancellationException | ExecutionException | InterruptedException ex) {
+			Thread.currentThread().interrupt();
+			RunDMLExceptionListeners.getInstance().notifyListeners(ex);
+			shutdown();
+		}
+		
+		return results;
+
 	}
+
+	/**
+	 * @see java.util.concurrent.ExecutorService#shutdown()
+	 */
+	public void shutdown() {
+		service.shutdown();
+	}	
 	
 }

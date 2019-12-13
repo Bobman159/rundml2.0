@@ -3,9 +3,6 @@ package com.bobman159.rundml.sql.base.builder;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,6 +36,10 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	private Logger logger = LogManager.getLogger(BaseSelectStatementBuilder.class);
 	protected SQLStatementModel model = new SQLStatementModel();	
 
+	public BaseSelectStatementBuilder() {
+		CoreUtils.initRunDML();
+	}
+	
 	/**
 	 * Specify an SQL SELECT statement start.  This method should be used when creating a "SELECT ALL" 
 	 * or "SELECT DISTINCT" SQL statement.
@@ -209,22 +210,14 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	@Override
 	public List<Object> execute(Connection conn,Class clazz) {
 		List<Object> results = new ArrayList<>();
-		Future <List<Object>> task;
 		
 		/*
 		 * For now this seems to work well in that it executes the SELECT
 		 * in another thread. Since I don't expect to be using this for 
 		 * results > 5000 rows.  I will leave it this way for now.
 		 */
-		task = RunDMLExecutor.getInstance().executeSelect(conn, model,clazz);			
-		
-		try {
-			results = task.get();
-		} catch (CancellationException | ExecutionException | InterruptedException ex) {
-			logger.error(ex.getMessage(), ex);
-			Thread.currentThread().interrupt();
-		}
-			
+		results = RunDMLExecutor.getInstance().executeSelect(conn, model,clazz);			
+					
 		return results;
 
 	}

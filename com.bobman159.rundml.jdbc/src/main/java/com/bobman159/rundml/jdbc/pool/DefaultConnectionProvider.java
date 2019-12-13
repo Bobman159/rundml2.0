@@ -52,8 +52,8 @@ public class DefaultConnectionProvider implements IConnectionProvider {
 			logConnectionTrace(dbgOut);
 		}
 		catch (SQLException sqlex) {
-         logger.error(sqlex.getMessage(), sqlex);
-		   javax.swing.JOptionPane.showMessageDialog(null, 
+			logger.error(sqlex.getMessage(), sqlex);
+			javax.swing.JOptionPane.showMessageDialog(null, 
                 	" Connection to database failed ! See log for errors.", "Failed Connection!",
     						javax.swing.JOptionPane.ERROR_MESSAGE);
                 System.exit(0);

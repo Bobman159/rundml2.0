@@ -20,7 +20,8 @@ public class PoolFactory {
 	private static Logger logger = LogManager.getLogger(PoolFactory.class);
 	
 	//TODO: Add makeH2Connection method to define single H2 Connection?
-	//TODO: Add makeMySQLConnection method to define single MySQL Connection?
+	//TODO: Add makeMySQLConnection method to define single MySQL Connection?\
+	//TODO: Refactor the make*Connection method names to be create*Connection
 
 	/**
 	 * Define a connection pool using the specified information for configuration. 

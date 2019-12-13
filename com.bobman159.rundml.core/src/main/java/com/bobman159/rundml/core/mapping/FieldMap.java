@@ -2,6 +2,8 @@ package com.bobman159.rundml.core.mapping;
 
 import java.lang.reflect.Field;
 
+import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
+import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.util.CoreUtils;
 
 /**
@@ -78,12 +80,12 @@ public class FieldMap {
 			try {
 				tableRow = tableRowClass.newInstance();
 			} catch (InstantiationException | IllegalAccessException e) {
-				// TODO add logging for exception
-				e.printStackTrace();
+				RunDMLExceptionListeners.getInstance().notifyListeners(e);
 			}				
 			IFieldMap fieldMapClass = (IFieldMap) tableRowClass.cast(tableRow);			
 			fieldOverrides = fieldMapClass.getFieldMappings(fieldOverrides);
 			tableRow = null;			//Mark the class instance for GC
+			validateFieldNamesDefined(fieldOverrides,tableRowClass);
 		}
 		
 		/*	#2 - Get the list of fields in the class 
@@ -128,8 +130,32 @@ public class FieldMap {
 				if (wkFieldDef != null) {
 					fieldsDef.addDefinition(wkFieldDef);
 				} else {
+					/*  This is NOT foolproof, if the field name entered in a map
+					 *	definition doesn't match a defined field in the class 
+					 *	I
+					 * 
+					 */
 					fieldsDef.addDefinition(classField.getName(), classField.getName());
 				}
+			}
+		}
+	}
+	
+	/*
+	 * Checks that the field name entered for a FieldMapDefinition entry is defined
+	 * in the table row class	 
+	 * 
+	 * @param fieldOverrides list of overrides for a table row class
+	 */
+	private void validateFieldNamesDefined(FieldMapDefinitionList fieldOverrides,Class<?> tableRowClass) {
+		
+		Object[] fieldOverrideArray = fieldOverrides.getFieldDefinitions().toArray();
+		for (int index = 0; index < fieldOverrideArray.length; index++) {
+			IFieldMapDefinition fieldDef = (IFieldMapDefinition) fieldOverrideArray[index];
+			try {
+				CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
+			} catch (NoTableRowClassFieldException ntrcfex) {
+				RunDMLExceptionListeners.getInstance().notifyListeners(ntrcfex);
 			}
 		}
 	}
