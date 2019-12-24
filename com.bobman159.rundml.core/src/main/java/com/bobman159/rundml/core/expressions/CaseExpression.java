@@ -13,7 +13,8 @@ import com.bobman159.rundml.core.exprtypes.IStringOperations;
 /**
  * Implements a CASE expression WHEN expression THEN expression ... 
  * clause.  Math and String operations are supported for the CASE but type 
- * checking is done by the DBMS and not by rundml2.0.
+ * checking is done by the DBMS and not by rundml2.0.  Condition operations 
+ * IE COLNOTNULLCHAR = 'Abc' are NOT currently supported use
  *
  */
 
@@ -23,6 +24,10 @@ public class CaseExpression implements IExpression, IMathOperations, IStringOper
 	private LinkedList<CaseWhenThenCondition> whenConds;
 	private IExpression whenCondition;		//holds when IExpressionType for the then() method
 	private IExpression elseCondition = null;
+	
+	//TODO: Consider supporting Conditions (CASE COLNOTNULL CHAR = 'Abc')
+	//Support for CASE, WHEN, THEN and ELSE as well as String, Math.  Think this may be
+	//a YAGNI (You aint gonna need it)
 	
 	/**
 	 * Creates a CASE expression clause
@@ -83,6 +88,7 @@ public class CaseExpression implements IExpression, IMathOperations, IStringOper
 		expr.append(" case ").append(caseExpr.serialize());
 		whenConds.forEach(when -> expr.append(when.serialize()));
 		if (elseCondition != null) {
+			expr.append(" else ");
 			expr.append(elseCondition.serialize());
 		}
 		expr.append(" end ");

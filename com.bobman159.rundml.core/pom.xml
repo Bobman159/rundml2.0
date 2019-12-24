@@ -4,7 +4,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.8.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -32,33 +32,31 @@
 				</execution>
 			</executions>
 		</plugin>
-		<!--  
+
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 	        <artifactId>maven-javadoc-plugin</artifactId>
 	        <version>3.1.0</version>
 		</plugin>
-		-->            
     </plugins>
   </build>
   <parent>
+  
   	<version>2.0.1-SNAPSHOT</version>
   	<relativePath>../com.bobman159.rundml.parent</relativePath>
   	<groupId>io.github.bobman159</groupId>
   	<artifactId>rundml-parent</artifactId>
   </parent>
+  
     <dependencies>
   	<dependency>
   		<groupId>org.junit.jupiter</groupId>
-  		<artifactId>junit-jupiter-api</artifactId>
-  		<version>5.4.1</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.junit.jupiter</groupId>
   		<artifactId>junit-jupiter-engine</artifactId>
-  		<version>5.4.1</version>
-  	</dependency>
-  </dependencies>
+  		<version>${parent.jupiter.version}</version>
+  		<scope>test</scope>
+  	</dependency>  
+    </dependencies>
+    
     <groupId>io.github.bobman159</groupId>
     <artifactId>rundml-core</artifactId>
 </project>

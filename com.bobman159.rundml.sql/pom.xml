@@ -62,7 +62,19 @@
   		<groupId>io.github.bobman159</groupId>
   		<artifactId>rundml-jdbc</artifactId>
   		<version>${rundml.version}</version>
+<!--   		
+  		<classifier>tests</classifier>
+  		<type>test-jar</type>
+-->  		
   	</dependency>
+  	     <dependency>
+        <groupId>io.github.bobman159</groupId>
+        <artifactId>rundml-jdbc</artifactId>
+        <version>${rundml.version}</version>
+        <classifier>tests</classifier>
+        <type>test-jar</type>
+        <scope>test</scope>
+    </dependency>
   	  	<dependency>
   		<groupId>org.junit.jupiter</groupId>
   		<artifactId>junit-jupiter-engine</artifactId>

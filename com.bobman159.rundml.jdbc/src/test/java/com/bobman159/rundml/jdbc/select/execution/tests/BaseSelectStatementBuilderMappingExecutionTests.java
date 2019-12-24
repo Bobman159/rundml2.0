@@ -1,4 +1,4 @@
-package com.bobman159.rundml.sql.h2.tests;
+package com.bobman159.rundml.jdbc.select.execution.tests;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,36 +13,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.model.SQLStatementModel;
+import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
-import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
+import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
+import com.bobman159.rundml.jdbc.sqlmodel.factory.SQLModelTestFactory;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockPrimitivesTypeTest;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockStringTypeTest;
 import com.bobman159.rundml.sql.h2.mocktables.TypeTest;
 
-class H2SelectExecutionTests {
-	/*
-	 * #1 	A class that implements ITableRow interface will be used to 
-	 * 		contain the data from the SELECT statement results. By default
-	 *		the class name will be the same name as the table.
-	 * 		#1.a	Alternatively, the TableDefintion constructor can define 
-	 * 				the ITableRow implementing class that will be used to 
-	 * 				contain the rows from the SELECT result
-	 *  #2	By default the implementor of ITableRow will contain fields with 
-	 *  	the same names as the column names defined in the TableDefinition.
-	 *  	#2.a	Alternatively, the TableDefinition addColumn method can 
-	 *  			be used to specify a string value for the field name of the
-	 *  			ITableRow implementor class that will contain the value 
-	 *  			from the results.
-	 *  	#2.b	setXXXX() methods will need to be defined so that runDML 
-	 *  			can call the setXXXX() method to set the value of the field.
-	 *  			XXXX will equal the name of the field as define in either 
-	 *  			#2 or #2.a
-	 *  #3	While processing the ResultSet for the select, the ITableRow 
-	 *  	implementor getXXXX() methods will be called via java.lang.reflect
-	 *  	to set the value of the field(s) present in the ResultSet.
-	 */
+public class BaseSelectStatementBuilderMappingExecutionTests {
 
+	private static SQLStatementModel selectModel;
 	private static DefaultConnectionProvider h2Provider;
 	/**
 	 * H2 User Id, change this value if you want to use a different user Id
@@ -55,32 +39,9 @@ class H2SelectExecutionTests {
 	private static final String H2PASSWORD = "Tgbn6929";
 		
 	private static final String NUMBER_CONNECTIONS = "5";
-	private static Logger logger = LogManager.getLogger(H2SelectExecutionTests.class.getName());
+	private static Logger logger = LogManager.getLogger(BaseSelectStatementBuilderMappingExecutionTests.class.getName());
 	
-	private static final String DFLTINTEGER = "DfltInteger";
-	private static final String NOTNULLMEDINT = "NotNullMediumInt";
-	private static final String DFLTSIGNED = "DfltSigned";
-	private static final String DFLTTINYINT = "DfltTinyInt";
-	private static final String NOTNULLSMINT = "NotNullSmint";
-	private static final String NOTNULLDEC72 = "NotNullDec72";	
-	private static final String DFLTNUM72 = "DfltNumber72";
-	private static final String NOTNULLTIME = "NotNullTime";
-	private static final String NOTNULLDATE = "NotNullDate";
-	private static final String NOTNULLTSTAMP = "NotNullTimestamp";
-	private static final String NOTNULLDATETIME = "NotNullDateTime";
-	private static final String NOTNULLVARCHAR = "NotNullVarchar";
-	private static final String NOTNULLCHAR = "NotNullChar";
-	private static final String DFLTBLOB = "DfltBlob";
-	private static final String DFLTCLOB = "DfltClob";
-	private static final String NOTNULLBOOLEAN = "NotNullBoolean";
-	private static final String NOTNULLBOOL = "NotNullBool";
-	private static final String NOTNULLBIT = "NotNullBit";
-	private static final String DFLTBIGINT = "DfltBigInt";
-	private static final String DFLTINT8 = "DfltInt8";
-	private static final String NOTNULLIDENTITY = "NotNullIdentity";
-	
-	private static final String RUNDML_SCHEMA = "rundml";
-	private static final String RUNDML_TABLE = "typetest";	
+
 
 	@BeforeAll
 	static void setUpBeforeClass() {
@@ -90,6 +51,9 @@ class H2SelectExecutionTests {
 		logger.info("dbPath: " + dbPath);
 		h2Provider = PoolFactory.makeH2DataSource(dbPath, H2USER, H2PASSWORD, 
 				NUMBER_CONNECTIONS);
+		
+		CoreUtils.initRunDML();
+		selectModel = SQLModelTestFactory.getInstance().createH2SelectTypeTestModel();
 	}
 
 	@AfterAll
@@ -117,31 +81,9 @@ class H2SelectExecutionTests {
 	void allColumnTypesObjectTest() {
 
 		logger.info("****** allColumnTypesObjectTest ******");
-		List<Object> results = RunDMLSQLFactory.createH2SelectStatement()				
-				.select()
-				.selectExpression(Expression.column(DFLTINTEGER))
-				.selectExpression(Expression.column(NOTNULLMEDINT))
-				.selectExpression(Expression.column(DFLTSIGNED))
-				.selectExpression(Expression.column(DFLTTINYINT))
-				.selectExpression(Expression.column(NOTNULLSMINT))
-				.selectExpression(Expression.column(NOTNULLDEC72))
-				.selectExpression(Expression.column(DFLTNUM72))
-				.selectExpression(Expression.column(NOTNULLTIME))
-				.selectExpression(Expression.column(NOTNULLDATE))
-				.selectExpression(Expression.column(NOTNULLTSTAMP))
-				.selectExpression(Expression.column(NOTNULLDATETIME))
-				.selectExpression(Expression.column(NOTNULLVARCHAR))
-				.selectExpression(Expression.column(NOTNULLCHAR))
-				.selectExpression(Expression.column(DFLTBLOB))
-				.selectExpression(Expression.column(DFLTCLOB))
-				.selectExpression(Expression.column(NOTNULLBOOLEAN))
-				.selectExpression(Expression.column(NOTNULLBOOL))
-				.selectExpression(Expression.column(NOTNULLBIT))
-				.selectExpression(Expression.column(DFLTBIGINT))
-				.selectExpression(Expression.column(DFLTINT8))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(h2Provider.getConnection(),TypeTest.class);
 		
+		List<Object> results = RunDMLExecutor.getInstance()
+											 .executeSelect(h2Provider.getConnection(), selectModel, TypeTest.class);		
 		Assertions.assertEquals(6, results.size());
 		
 		TypeTest test = (TypeTest) results.get(0);
@@ -243,32 +185,9 @@ class H2SelectExecutionTests {
 		logger.info("****** allColumnTypesPrimitivesTest ******");
 
 		List<Object> results = new ArrayList<Object>();
-		
-		results = RunDMLSQLFactory.createH2SelectStatement()
-				.select()
-				.selectExpression(Expression.column(DFLTINTEGER))
-				.selectExpression(Expression.column(NOTNULLMEDINT))
-				.selectExpression(Expression.column(DFLTSIGNED))
-				.selectExpression(Expression.column(DFLTTINYINT))
-				.selectExpression(Expression.column(NOTNULLSMINT))
-				.selectExpression(Expression.column(NOTNULLDEC72))
-				.selectExpression(Expression.column(DFLTNUM72))
-				.selectExpression(Expression.column(NOTNULLTIME))
-				.selectExpression(Expression.column(NOTNULLDATE))
-				.selectExpression(Expression.column(NOTNULLTSTAMP))
-				.selectExpression(Expression.column(NOTNULLDATETIME))
-				.selectExpression(Expression.column(NOTNULLVARCHAR))
-				.selectExpression(Expression.column(NOTNULLCHAR))
-				.selectExpression(Expression.column(DFLTBLOB))
-				.selectExpression(Expression.column(DFLTCLOB))
-				.selectExpression(Expression.column(NOTNULLBOOLEAN))
-				.selectExpression(Expression.column(NOTNULLBOOL))
-				.selectExpression(Expression.column(NOTNULLBIT))
-				.selectExpression(Expression.column(DFLTBIGINT))
-				.selectExpression(Expression.column(DFLTINT8))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(h2Provider.getConnection(),H2MockPrimitivesTypeTest.class);
 
+		results = RunDMLExecutor.getInstance()
+								.executeSelect(h2Provider.getConnection(), selectModel, H2MockPrimitivesTypeTest.class);		
 		Assertions.assertEquals(6, results.size());
 		
 		H2MockPrimitivesTypeTest test1 = (H2MockPrimitivesTypeTest) results.get(1);
@@ -313,32 +232,10 @@ class H2SelectExecutionTests {
 		
 		logger.info("****** allColumnTypesStringTest ******");
 		
-		List<Object> results = RunDMLSQLFactory.createH2SelectStatement()
-				.select()
-				.selectExpression(Expression.column(DFLTINTEGER))
-				.selectExpression(Expression.column(NOTNULLMEDINT))
-				.selectExpression(Expression.column(DFLTSIGNED))
-				.selectExpression(Expression.column(DFLTTINYINT))
-				.selectExpression(Expression.column(NOTNULLSMINT))
-				.selectExpression(Expression.column(NOTNULLDEC72))
-				.selectExpression(Expression.column(DFLTNUM72))
-				.selectExpression(Expression.column(NOTNULLTIME))
-				.selectExpression(Expression.column(NOTNULLDATE))
-				.selectExpression(Expression.column(NOTNULLTSTAMP))
-				.selectExpression(Expression.column(NOTNULLDATETIME))
-				.selectExpression(Expression.column(NOTNULLVARCHAR))
-				.selectExpression(Expression.column(NOTNULLCHAR))
-				.selectExpression(Expression.column(DFLTBLOB))
-				.selectExpression(Expression.column(DFLTCLOB))
-				.selectExpression(Expression.column(NOTNULLBOOLEAN))
-				.selectExpression(Expression.column(NOTNULLBOOL))
-				.selectExpression(Expression.column(NOTNULLBIT))
-				.selectExpression(Expression.column(DFLTBIGINT))
-				.selectExpression(Expression.column(DFLTINT8))
-				.selectExpression(Expression.column(NOTNULLIDENTITY))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(h2Provider.getConnection(),H2MockStringTypeTest.class);
-		
+		selectModel.addExpressionList(SQLClause.SELECTEXPR, Expression.column("NotNullIdentity"));
+		List<Object> results = RunDMLExecutor.getInstance()
+											 .executeSelect(h2Provider.getConnection(), selectModel,
+													 		H2MockStringTypeTest.class);		
 		Assertions.assertEquals(6, results.size());
 		
 		H2MockStringTypeTest test3 = (H2MockStringTypeTest) results.get(3);
@@ -381,33 +278,10 @@ class H2SelectExecutionTests {
 	void mappingClassAllFieldsTest() {
 		
 		logger.info("****** mappingClassAllFieldsTest ******");
-
 		
-		List<Object> results = RunDMLSQLFactory.createH2SelectStatement()
-				.select()
-				.selectExpression(Expression.column(DFLTINTEGER))
-				.selectExpression(Expression.column(NOTNULLMEDINT))
-				.selectExpression(Expression.column(DFLTSIGNED))
-				.selectExpression(Expression.column(DFLTTINYINT))
-				.selectExpression(Expression.column(NOTNULLSMINT))
-				.selectExpression(Expression.column(NOTNULLDEC72))
-				.selectExpression(Expression.column(DFLTNUM72))
-				.selectExpression(Expression.column(NOTNULLTIME))
-				.selectExpression(Expression.column(NOTNULLDATE))
-				.selectExpression(Expression.column(NOTNULLTSTAMP))
-				.selectExpression(Expression.column(NOTNULLDATETIME))
-				.selectExpression(Expression.column(NOTNULLVARCHAR))
-				.selectExpression(Expression.column(NOTNULLCHAR))
-				.selectExpression(Expression.column(DFLTBLOB))
-				.selectExpression(Expression.column(DFLTCLOB))
-				.selectExpression(Expression.column(NOTNULLBOOLEAN))
-				.selectExpression(Expression.column(NOTNULLBOOL))
-				.selectExpression(Expression.column(NOTNULLBIT))
-				.selectExpression(Expression.column(DFLTBIGINT))
-				.selectExpression(Expression.column(DFLTINT8))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(h2Provider.getConnection(),H2MockStringTypeTest.class);
-		
+		List<Object> results = RunDMLExecutor.getInstance()
+											 .executeSelect(h2Provider.getConnection(), selectModel, 
+													 		H2MockStringTypeTest.class);
 		Assertions.assertEquals(6, results.size());
 		
 		H2MockStringTypeTest test2 = (H2MockStringTypeTest) results.get(2);
@@ -463,5 +337,4 @@ class H2SelectExecutionTests {
 	 *		*	ResultSet type Char,Varchar to class type int (expect an error?)
 	 *	
 	 */
-
 }

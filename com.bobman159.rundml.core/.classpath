@@ -29,5 +29,12 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Eclipse IDE/2019-03_RCP/eclipse/plugins/org.junit.platform.runner_1.4.0.v20190212-2109.jar" sourcepath="C:/Eclipse IDE/2019-03_RCP/eclipse/plugins/org.junit.platform.runner_1.4.0.v20190212-2109.jar">
+		<accessrules>
+			<accessrule kind="accessible" pattern="org/junit/platform/runner/*"/>
+			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

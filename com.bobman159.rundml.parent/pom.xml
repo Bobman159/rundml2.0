@@ -8,7 +8,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rundml.ver>2.0.1-SNAPSHOT</rundml.ver>
-  	</properties>
+		<parent.jupiter.version>5.5.2</parent.jupiter.version>
+	</properties>
 	<modules>
 		<module>../com.bobman159.rundml.core</module>
 		<module>../com.bobman159.rundml.jdbc</module>

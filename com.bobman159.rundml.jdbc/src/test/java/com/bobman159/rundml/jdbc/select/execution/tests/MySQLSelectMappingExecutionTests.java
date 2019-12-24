@@ -1,4 +1,4 @@
-package com.bobman159.rundml.sql.mysql.tests;
+package com.bobman159.rundml.jdbc.select.execution.tests;
 
 import java.util.List;
 
@@ -11,40 +11,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.model.SQLStatementModel;
+import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
-import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
+import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
+import com.bobman159.rundml.jdbc.sqlmodel.factory.SQLModelTestFactory;
 import com.bobman159.rundml.sql.mysql.mocktables.MockMySQLPrimitivesTypeTest;
 import com.bobman159.rundml.sql.mysql.mocktables.MockMySQLStringTypeTest;
 import com.bobman159.rundml.sql.mysql.mocktables.MySQLTypeTest;
 
 
-class MySQLSelectExecutionTests {
+class MySQLSelectMappingExecutionTests {
 
-	private static Logger logger = LogManager.getLogger(MySQLSelectExecutionTests.class.getName());
+	private static Logger logger = LogManager.getLogger(MySQLSelectMappingExecutionTests.class.getName());
 	private static DefaultConnectionProvider mySQLProvider;
-	
-	
-	private static final String DFLTINTEGER = "DfltInteger";
-	private static final String NOTNULLMEDINT = "NotNullMediumInt";
-	private static final String DFLTINTUNSIGNED = "DfltIntUnsigned";
-	private static final String DFLTTINYINT = "DfltTinyInt";
-	private static final String NOTNULLSMINT = "NotNullSmint";
-	private static final String NOTNULLDEC72 = "NotNullDec72";	
-	private static final String NOTNULLTIME = "NotNullTime";
-	private static final String NOTNULLDATE = "NotNullDate";
-	private static final String NOTNULLTSTAMP = "NotNullTimestamp";
-	private static final String NOTNULLDATETIME = "NotNullDateTime";
-	private static final String NOTNULLVARCHAR = "NotNullVarchar";
-	private static final String NOTNULLCHAR = "NotNullChar";
-	private static final String NOTNULLBLOB = "NotNullBlob";
-	private static final String NOTNULLTEXT = "NotNullText";
-	private static final String NOTNULLBOOLEAN = "NotNullBoolean";
-	private static final String NOTNULLBIT = "NotNullBit";
-	private static final String NOTNULLBIGINT = "NotNullBigInt";
-	private static final String NOTNULLBINARY = "NotNullBinary";
-	private static final String NOTNULLVARBINARY = "NotNullVarBinary";
 
 	/**
 	 * The MySQL database to be used for testing, this should be the database 
@@ -60,17 +41,19 @@ class MySQLSelectExecutionTests {
 	private static final String MYSQLUSER = "RunDmlUser";
 	private static final String MYSQL_PASSWORD = "Tgbn6929";
 	private static final String NUMBER_CONNECTIONS = "5";
-	
-	private static final String RUNDML_SCHEMA = "rundml";
-	private static final String RUNDML_TABLE = "typetest";
+		
+	private static SQLStatementModel selectModel;
 	
 	@BeforeAll
 	static void setUpBeforeClass() {
-		String dir = System.getProperty("user.dir");
-		String dbPath = dir + "\\H2Database\\" + "RundmlTest";
-		logger.info("dbPath: " + dbPath);
+//		String dir = System.getProperty("user.dir");
+//		String dbPath = dir + "\\H2Database\\" + "RundmlTest";
+//		logger.info("dbPath: " + dbPath);
 		mySQLProvider = PoolFactory.makeMySQLDataSource(MYSQL_DB_URL, MYSQLUSER, 
 				MYSQL_PASSWORD, NUMBER_CONNECTIONS);
+		
+		CoreUtils.initRunDML();
+		selectModel = SQLModelTestFactory.getInstance().createMySQLSelectTypeTestModel();
 
 	}
 
@@ -80,6 +63,9 @@ class MySQLSelectExecutionTests {
 
 	@BeforeEach
 	void setUp()  {
+		
+		
+
 	}
 
 	@AfterEach
@@ -91,30 +77,9 @@ class MySQLSelectExecutionTests {
 		
 		logger.info("****** allColumnTypesObjectTest ******");
 		
-		List<Object> results = RunDMLSQLFactory.createMySQLSelectStatement()				
-				.select()
-				.selectExpression(Expression.column(DFLTINTEGER))
-				.selectExpression(Expression.column(NOTNULLMEDINT))
-				.selectExpression(Expression.column(DFLTINTUNSIGNED))
-				.selectExpression(Expression.column(DFLTTINYINT))
-				.selectExpression(Expression.column(NOTNULLSMINT))
-				.selectExpression(Expression.column(NOTNULLDEC72))
-				.selectExpression(Expression.column(NOTNULLTIME))
-				.selectExpression(Expression.column(NOTNULLDATE))
-				.selectExpression(Expression.column(NOTNULLTSTAMP))
-				.selectExpression(Expression.column(NOTNULLDATETIME))
-				.selectExpression(Expression.column(NOTNULLVARCHAR))
-				.selectExpression(Expression.column(NOTNULLCHAR))
-				.selectExpression(Expression.column(NOTNULLBLOB))
-				.selectExpression(Expression.column(NOTNULLTEXT))
-				.selectExpression(Expression.column(NOTNULLBOOLEAN))
-				.selectExpression(Expression.column(NOTNULLBIT))
-				.selectExpression(Expression.column(NOTNULLBIGINT))
-				.selectExpression(Expression.column(NOTNULLBINARY))
-				.selectExpression(Expression.column(NOTNULLVARBINARY))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(mySQLProvider.getConnection(),MySQLTypeTest.class);
-		
+		List<Object> results = RunDMLExecutor.getInstance()
+				 							 .executeSelect(mySQLProvider.getConnection(), selectModel, 
+				 									 		MySQLTypeTest.class);		
 		Assertions.assertEquals(6, results.size());
 		
 		MySQLTypeTest test = (MySQLTypeTest) results.get(0);
@@ -208,30 +173,10 @@ class MySQLSelectExecutionTests {
 	void allColumnTypesPrimitivesTest() {
 
 		logger.info("****** allColumnTypesPrimitivesTest ******");
-		List<Object> results = RunDMLSQLFactory.createMySQLSelectStatement()
-				.select()
-				.selectExpression(Expression.column(DFLTINTEGER))
-				.selectExpression(Expression.column(NOTNULLMEDINT))
-				.selectExpression(Expression.column(DFLTINTUNSIGNED))
-				.selectExpression(Expression.column(DFLTTINYINT))
-				.selectExpression(Expression.column(NOTNULLSMINT))
-				.selectExpression(Expression.column(NOTNULLDEC72))
-				.selectExpression(Expression.column(NOTNULLTIME))
-				.selectExpression(Expression.column(NOTNULLDATE))
-				.selectExpression(Expression.column(NOTNULLTSTAMP))
-				.selectExpression(Expression.column(NOTNULLDATETIME))
-				.selectExpression(Expression.column(NOTNULLVARCHAR))
-				.selectExpression(Expression.column(NOTNULLCHAR))
-				.selectExpression(Expression.column(NOTNULLBLOB))
-				.selectExpression(Expression.column(NOTNULLTEXT))
-				.selectExpression(Expression.column(NOTNULLBOOLEAN))
-				.selectExpression(Expression.column(NOTNULLBIT))
-				.selectExpression(Expression.column(NOTNULLBIGINT))
-				.selectExpression(Expression.column(NOTNULLBINARY))
-				.selectExpression(Expression.column(NOTNULLVARBINARY))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(mySQLProvider.getConnection(),MockMySQLPrimitivesTypeTest.class);
 		
+		List<Object> results = RunDMLExecutor.getInstance()
+				 							 .executeSelect(mySQLProvider.getConnection(), selectModel, 
+				 									 		MockMySQLPrimitivesTypeTest.class);		
 		Assertions.assertEquals(6, results.size());
 		
 		MockMySQLPrimitivesTypeTest test3 = (MockMySQLPrimitivesTypeTest) results.get(3);
@@ -269,30 +214,9 @@ class MySQLSelectExecutionTests {
 	void allColumnTypesStringsTest() {
 
 		logger.info("****** allColumnTypesStringsTest ******");
-		List<Object> results = RunDMLSQLFactory.createMySQLSelectStatement()
-				.select()
-				.selectExpression(Expression.column(DFLTINTEGER))
-				.selectExpression(Expression.column(NOTNULLMEDINT))
-				.selectExpression(Expression.column(DFLTINTUNSIGNED))
-				.selectExpression(Expression.column(DFLTTINYINT))
-				.selectExpression(Expression.column(NOTNULLSMINT))
-				.selectExpression(Expression.column(NOTNULLDEC72))
-				.selectExpression(Expression.column(NOTNULLTIME))
-				.selectExpression(Expression.column(NOTNULLDATE))
-				.selectExpression(Expression.column(NOTNULLTSTAMP))
-				.selectExpression(Expression.column(NOTNULLDATETIME))
-				.selectExpression(Expression.column(NOTNULLVARCHAR))
-				.selectExpression(Expression.column(NOTNULLCHAR))
-				.selectExpression(Expression.column(NOTNULLBLOB))
-				.selectExpression(Expression.column(NOTNULLTEXT))
-				.selectExpression(Expression.column(NOTNULLBOOLEAN))
-				.selectExpression(Expression.column(NOTNULLBIT))
-				.selectExpression(Expression.column(NOTNULLBIGINT))
-				.selectExpression(Expression.column(NOTNULLBINARY))
-				.selectExpression(Expression.column(NOTNULLVARBINARY))
-				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.execute(mySQLProvider.getConnection(),MockMySQLStringTypeTest.class);
-		
+		List<Object> results = 	RunDMLExecutor.getInstance()
+				 							  .executeSelect(mySQLProvider.getConnection(), selectModel, 
+				 									  		 MockMySQLStringTypeTest.class);	
 		Assertions.assertEquals(6, results.size());
 		
 		MockMySQLStringTypeTest test2 = (MockMySQLStringTypeTest) results.get(2);

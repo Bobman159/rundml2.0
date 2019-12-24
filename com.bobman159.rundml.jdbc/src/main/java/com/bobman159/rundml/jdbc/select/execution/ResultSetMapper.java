@@ -36,12 +36,11 @@ class ResultSetMapper {
 	 * @param rs a jdbc <code>ResultSet</code>
 	 * @returns new instance of a mapped object
 	 */
-	public Object mapResultRow(ResultSet rs) throws RunDMLException
-	{
+	public Object mapResultRow(ResultSet rs) {
 		
 		Object row = new Object();
 		try {
-			logger.debug("Table row class new instance: " + tableRowClass.getName());
+			logger.debug(MessageFormat.format("Table row class new instance {0}: ",tableRowClass.getName()));
 			row = tableRowClass.newInstance();
 			
 			ResultSetMetaData rsmd = rs.getMetaData();

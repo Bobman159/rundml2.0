@@ -1,4 +1,4 @@
-package com.bobman159.rundml.jdbc.tests.datasource;
+package com.bobman159.rundml.jdbc.pool.tests;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
