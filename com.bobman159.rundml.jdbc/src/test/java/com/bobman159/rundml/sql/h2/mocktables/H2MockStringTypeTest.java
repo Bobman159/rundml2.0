@@ -26,6 +26,8 @@ public class H2MockStringTypeTest implements IFieldMap {
 	private String	bigIntDflt;
 	private String	int8Dflt;
 	private String	identityNotNull;
+	private String	binaryNotNull;
+	private String	varBinaryDflt;
 	
 	public String getIntDflt() {
 		return intDflt;
@@ -90,6 +92,12 @@ public class H2MockStringTypeTest implements IFieldMap {
 	public String getIdentityNotNull() {
 		return identityNotNull;
 	}
+	public String getBinaryNotNull() {
+		return binaryNotNull;
+	}
+	public String getVarBinaryDflt() {
+		return varBinaryDflt;
+	}
 	
 	@Override
 	public FieldMapDefinitionList getFieldMappings(FieldMapDefinitionList fieldList) {
@@ -115,6 +123,8 @@ public class H2MockStringTypeTest implements IFieldMap {
 		fieldList.addDefinition("DfltBigInt","bigIntDflt");
 		fieldList.addDefinition("DfltInt8","int8Dflt");
 		fieldList.addDefinition("NotNullIdentity","identityNotNull");
+		fieldList.addDefinition("NotNullBinary","binaryNotNull");
+		fieldList.addDefinition("DfltVarBinary","varBinaryDflt");
 		
 		return fieldList;
 

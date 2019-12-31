@@ -1,5 +1,9 @@
-package com.bobman159.rundml.jdbc.select.execution.tests;
+package com.bobman159.rundml.jdbc.select.execution;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +16,24 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.model.SQLStatementSerializer;
+import com.bobman159.rundml.core.sql.SQLClauses;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
-import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
-import com.bobman159.rundml.jdbc.sqlmodel.factory.SQLModelTestFactory;
+import com.bobman159.rundml.jdbc.utils.tests.SQLModelTestFactory;
+import com.bobman159.rundml.sql.h2.mocktables.H2IllegalAccessExceptionMock;
+import com.bobman159.rundml.sql.h2.mocktables.H2InstantiationExceptionMock;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockPrimitivesTypeTest;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockStringTypeTest;
+import com.bobman159.rundml.sql.h2.mocktables.H2NoClassFieldExceptionMock;
 import com.bobman159.rundml.sql.h2.mocktables.TypeTest;
 
-public class BaseSelectStatementBuilderMappingExecutionTests {
+public class ResultSetMapperExecutionTests {
 
 	private static SQLStatementModel selectModel;
 	private static DefaultConnectionProvider h2Provider;
@@ -39,7 +48,7 @@ public class BaseSelectStatementBuilderMappingExecutionTests {
 	private static final String H2PASSWORD = "Tgbn6929";
 		
 	private static final String NUMBER_CONNECTIONS = "5";
-	private static Logger logger = LogManager.getLogger(BaseSelectStatementBuilderMappingExecutionTests.class.getName());
+	private static Logger logger = LogManager.getLogger(ResultSetMapperExecutionTests.class.getName());
 	
 
 
@@ -232,7 +241,7 @@ public class BaseSelectStatementBuilderMappingExecutionTests {
 		
 		logger.info("****** allColumnTypesStringTest ******");
 		
-		selectModel.addExpressionList(SQLClause.SELECTEXPR, Expression.column("NotNullIdentity"));
+		selectModel.addExpressionList(SQLClauses.SQLClause.SELECTEXPR, Expression.column("NotNullIdentity"));
 		List<Object> results = RunDMLExecutor.getInstance()
 											 .executeSelect(h2Provider.getConnection(), selectModel,
 													 		H2MockStringTypeTest.class);		
@@ -265,7 +274,10 @@ public class BaseSelectStatementBuilderMappingExecutionTests {
 		
 		Assertions.assertEquals("2147483653",test3.getBigIntDflt());
 		Assertions.assertEquals("2147483653",test3.getInt8Dflt()); 
-		Assertions.assertEquals("48",test3.getIdentityNotNull());
+		Assertions.assertEquals("3",test3.getIdentityNotNull());
+		
+		Assertions.assertEquals("000186a3",test3.getBinaryNotNull());
+		Assertions.assertEquals("000186a3",test3.getVarBinaryDflt()); 
 		
 	}
 	
@@ -314,12 +326,171 @@ public class BaseSelectStatementBuilderMappingExecutionTests {
 		
 	}
 	
+	@Test
+	void resultSetMapperExceptionsTest() {
+		
+		final String ERROR_MSG = "RunDML encountered a SQL Exception error during execution";
+		final String ILLEGAL_ACCESS_ERROR = "RunDML encountered a Table Row Class Reflection "  +
+			"error in class com.bobman159.rundml.sql.h2.mocktables." + 
+			"H2InstantiationExceptionMock";
+		final int[] dfltSignedValues = new int[] {100000,100001,100002,100003,100004};
+		
+		logger.info("****** resultSetMapperExceptionsTest ******");
+		logger.info("****** mapResultRow method exceptions: ******");
+		
+		/* SQLException Error - The result set is already closed (by createResultSet) */
+		SQLStatementModel sqlExModel = SQLModelTestFactory.getInstance().createH2SelectTypeTestModel();
+		String stmtSQLEx = SQLStatementSerializer.serializeSelect(sqlExModel);
+		ResultSet rsSqlEx = null;
+		Connection conn = h2Provider.getConnection();
+		try (PreparedStatement ps = conn.prepareStatement(stmtSQLEx)) {
+			rsSqlEx = ps.executeQuery(); 
+			ResultSetMapper mapper = new ResultSetMapper(TypeTest.class);
+			//This will force an SQLException because the ResultSet is closed
+			rsSqlEx.close();	
+			mapper.mapResultRow(rsSqlEx);
+		} catch (SQLException sqlex) {	
+			logger.error("Exception creating result set",sqlex);
+		} catch (RunDMLException e) {
+			Assertions.assertEquals(RunDMLException.SQL_ERROR, 
+									e.getExecutionPhase());
+			Assertions.assertEquals(ERROR_MSG, e.getRunDMLMessage());
+			logger.error("Exception",e);
+		} catch (NoTableRowClassFieldException ntrcfex) {
+			logger.error("No Table Row Class Field Exception: ",ntrcfex);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException sqlex) {
+				RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+			}
+		}
+		
+		/* IllegalAccesException - Use private class constructor */
+		SQLStatementModel instExModel = SQLModelTestFactory.getInstance().createH2SelectTypeTestModel();
+		String stmtInstEx = SQLStatementSerializer.serializeSelect(instExModel);
+		ResultSet rsInstEx = null;
+		Connection connInstEx = h2Provider.getConnection();
+		try (PreparedStatement ps = connInstEx.prepareStatement(stmtInstEx)) {
+			rsInstEx = ps.executeQuery(); 
+			ResultSetMapper mapper = new ResultSetMapper(H2InstantiationExceptionMock.class);
+			while (rsInstEx.next()) {
+				mapper.mapResultRow(rsInstEx);
+			}
+		} catch (SQLException sqlex) {	
+			logger.error("Exception creating result set",sqlex);
+		} catch (NoTableRowClassFieldException ntrcfex) {
+			logger.error("No Table Row Class Field Exception: ",ntrcfex);	
+		} catch (RunDMLException e) {
+			Assertions.assertEquals(RunDMLException.TABLE_ROW_CLASS_REFLECTION, 
+									e.getExecutionPhase());
+			Assertions.assertEquals(ILLEGAL_ACCESS_ERROR, e.getRunDMLMessage());
+			logger.error("Exception",e);
+		} finally {
+			try {
+				connInstEx.close();
+			} catch (SQLException sqlex) {
+				RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+			}
+		}		
+		
+		/* NoTableRowClassFieldException -  */
+		SQLStatementModel noFieldExModel = SQLModelTestFactory.getInstance().createH2SelectTypeTestModel();
+		String stmtNoFieldEx = SQLStatementSerializer.serializeSelect(noFieldExModel);
+		ResultSet rsNoFieldEx = null;
+		Connection connNoFieldEx = h2Provider.getConnection();
+		try (PreparedStatement ps = connNoFieldEx.prepareStatement(stmtNoFieldEx)) {
+			rsNoFieldEx = ps.executeQuery(); 
+			ResultSetMapper mapper = new ResultSetMapper(H2NoClassFieldExceptionMock.class);
+			while (rsNoFieldEx.next()) {
+				mapper.mapResultRow(rsNoFieldEx);
+			}
+		} catch (SQLException sqlex) {	
+			logger.error("Exception creating result set",sqlex);
+		} catch (NoTableRowClassFieldException ntrcfex) {
+			logger.error("No Table Row Class Field Exception: ",ntrcfex);	
+		} catch (RunDMLException e) {
+			Assertions.assertEquals(RunDMLException.TABLE_ROW_CLASS_REFLECTION, 
+									e.getExecutionPhase());
+			Assertions.assertEquals(ILLEGAL_ACCESS_ERROR, e.getRunDMLMessage());
+			logger.error("Exception",e);
+		} finally {
+			try {
+				connInstEx.close();
+			} catch (SQLException sqlex) {
+				RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+			}
+		}		
+
+		
+		logger.info("****** mapColumnToField method exceptions: ******");
+		/* IllegalAccesException - Use final on class field */
+		SQLStatementModel illAccExModel = SQLModelTestFactory.getInstance().createH2SelectTypeTestModel();
+		String stmtIllAccEx = SQLStatementSerializer.serializeSelect(illAccExModel);
+		ResultSet rsIllAccEx = null;
+		Connection connIllAccEx = h2Provider.getConnection();
+		try (PreparedStatement ps = connIllAccEx.prepareStatement(stmtIllAccEx)) {
+			rsIllAccEx = ps.executeQuery(); 
+			ResultSetMapper mapper = new ResultSetMapper(H2IllegalAccessExceptionMock.class);
+			int ix = 0;
+			while (rsIllAccEx.next()) {
+				H2IllegalAccessExceptionMock mock = (H2IllegalAccessExceptionMock) mapper.mapResultRow(rsIllAccEx);
+				Assertions.assertEquals(-1, mock.getDfltInteger());
+				if (ix < dfltSignedValues.length) {
+					Assertions.assertEquals(dfltSignedValues[ix],mock.getDfltSigned());
+				}
+				ix++;
+			}
+			
+		} catch (SQLException sqlex) {	
+			logger.error("Exception creating result set",sqlex);
+		} catch (NoTableRowClassFieldException ntrcfex) {
+			logger.error("No Table Row Class Field Exception: ",ntrcfex);	
+		} catch (RunDMLException e) {
+			Assertions.assertEquals(RunDMLException.TABLE_ROW_CLASS_REFLECTION, 
+									e.getExecutionPhase());
+			Assertions.assertEquals(ILLEGAL_ACCESS_ERROR, e.getRunDMLMessage());
+			logger.error("Exception",e);
+		} finally {
+			try {
+				connIllAccEx.close();
+			} catch (SQLException sqlex) {
+				RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+			}
+		}
+	}
+	
+	@Test
+	void tableRowClassGetNameTest() {
+				
+		logger.info("****** tableRowClassGetNameTest ******");
+		
+		SQLStatementModel trcModel = SQLModelTestFactory.getInstance().createH2SelectTypeTestModel();
+		String stmtTrc = SQLStatementSerializer.serializeSelect(trcModel);
+		ResultSet rsTrc = null;
+		Connection conn = h2Provider.getConnection();
+		try (PreparedStatement ps = conn.prepareStatement(stmtTrc)) {
+			rsTrc = ps.executeQuery(); 
+			ResultSetMapper mapper = new ResultSetMapper(TypeTest.class);
+			String trcClassName = mapper.getTableRowClassName();
+			Assertions.assertEquals("com.bobman159.rundml.sql.h2.mocktables.TypeTest",trcClassName); 
+		} catch (SQLException sqlex) {	
+			logger.error("Exception creating result set",sqlex);
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException sqlex) {
+				RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+			}
+		}
+	}
+	
 	/*
 	 * 	Remaining Tests:
 	 * 
 	 *	*	All database types for parameter markers
 	 *
-	 *	*	Expressions in SELECT list (string, numeric)
+	 *	*	Expressions in SELECT list (string, numeric) - need to support AS for mapping?
 	 *	
 	 *	*	Exception thrown by SelectCallable.call() during fetch
 	 *

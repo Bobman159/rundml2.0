@@ -73,7 +73,8 @@ class H2SelectSyntaxStatementTests {
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," 	+ 
 								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," 		+ 
 								"NotNullDateTime,NotNullVarchar,NotNullChar,DfltBlob,DfltClob,NotNullBoolean," + 
-								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity from rundml.typetest",
+								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity,NotNullBinary,DfltVarBinary " +
+								"from rundml.typetest",
 								stmtText);		
 
 	}
@@ -526,7 +527,8 @@ class H2SelectSyntaxStatementTests {
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," + 
 								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," + 
 								"NotNullDateTime,NotNullVarchar,NotNullChar,DfltBlob,DfltClob,NotNullBoolean," + 
-								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity " + FROM_CLAUSE_SPACE + 
+								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity,NotNullBinary,DfltVarBinary " 
+								+ FROM_CLAUSE_SPACE + 
 								"limit 5",stmtText);
 		
 	}
@@ -543,8 +545,8 @@ class H2SelectSyntaxStatementTests {
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," + 
 								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," + 
 								"NotNullDateTime,NotNullVarchar,NotNullChar,DfltBlob,DfltClob,NotNullBoolean," + 
-								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity " + FROM_CLAUSE_SPACE + 
-								"limit 5 offset 1",stmtText);
+								"NotNullBool,NotNullBit,DfltBigInt,DfltInt8,NotNullIdentity,NotNullBinary,DfltVarBinary " + 
+								FROM_CLAUSE_SPACE + "limit 5 offset 1",stmtText);
 
 	}
 	

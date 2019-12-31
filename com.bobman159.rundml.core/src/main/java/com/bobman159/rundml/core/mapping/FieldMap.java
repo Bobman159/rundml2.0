@@ -29,7 +29,7 @@ public class FieldMap {
 	 * ASSUME: 1 field map uses 1 table row class which represents 1 table in a database
 	 * 
 	 */
-	private FieldMap(Class<?> tableRowClass) {
+	private FieldMap(Class<?> tableRowClass) throws NoTableRowClassFieldException {
 		fieldsDef = new FieldMapDefinitionList();
 		loadMap(tableRowClass);
 	}
@@ -48,7 +48,7 @@ public class FieldMap {
 	 * @param tableRowClass the table row class to create a field map 
 	 * @return the field map created
 	 */
-	public static FieldMap createFieldMap(Class<?> tableRowClass) {
+	public static FieldMap createFieldMap(Class<?> tableRowClass) throws NoTableRowClassFieldException {
 		FieldMap map = new FieldMap(tableRowClass);
 		FieldMapManager.getInstance().putFieldMapping(tableRowClass, map);
 		return map;
@@ -71,7 +71,7 @@ public class FieldMap {
 	 * 			getFieldMappings method is used to obtain the list of column name(s)
 	 * 			for the specified table row class field.  Again case is ignored 
 	 */
-	private void loadMap(Class<?> tableRowClass) {
+	private void loadMap(Class<?> tableRowClass) throws NoTableRowClassFieldException {
 		
 		Object tableRow = null;
 		FieldMapDefinitionList fieldOverrides = new FieldMapDefinitionList();
@@ -147,15 +147,15 @@ public class FieldMap {
 	 * 
 	 * @param fieldOverrides list of overrides for a table row class
 	 */
-	private void validateFieldNamesDefined(FieldMapDefinitionList fieldOverrides,Class<?> tableRowClass) {
+	private void validateFieldNamesDefined(FieldMapDefinitionList fieldOverrides,Class<?> tableRowClass) 
+				 throws NoTableRowClassFieldException {
 		
 		Object[] fieldOverrideArray = fieldOverrides.getFieldDefinitions().toArray();
 		for (int index = 0; index < fieldOverrideArray.length; index++) {
 			IFieldMapDefinition fieldDef = (IFieldMapDefinition) fieldOverrideArray[index];
-			try {
-				CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
-			} catch (NoTableRowClassFieldException ntrcfex) {
-				RunDMLExceptionListeners.getInstance().notifyListeners(ntrcfex);
+			Field classField = CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
+			if (classField == null) {
+				throw new NoTableRowClassFieldException(tableRowClass, fieldDef.getClassFieldName());
 			}
 		}
 	}

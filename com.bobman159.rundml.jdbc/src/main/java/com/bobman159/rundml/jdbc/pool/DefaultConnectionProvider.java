@@ -53,10 +53,10 @@ public class DefaultConnectionProvider implements IConnectionProvider {
 		}
 		catch (SQLException sqlex) {
 			logger.error(sqlex.getMessage(), sqlex);
-			javax.swing.JOptionPane.showMessageDialog(null, 
-                	" Connection to database failed ! See log for errors.", "Failed Connection!",
-    						javax.swing.JOptionPane.ERROR_MESSAGE);
-                System.exit(0);
+//			javax.swing.JOptionPane.showMessageDialog(null, 
+//                	" Connection to database failed ! See log for errors.", "Failed Connection!",
+//    						javax.swing.JOptionPane.ERROR_MESSAGE);
+//                System.exit(0);
 		}
 		
 		return conn;

@@ -36,7 +36,7 @@ class ResultSetMapper {
 	 * @param rs a jdbc <code>ResultSet</code>
 	 * @returns new instance of a mapped object
 	 */
-	public Object mapResultRow(ResultSet rs) {
+	public Object mapResultRow(ResultSet rs) throws RunDMLException, NoTableRowClassFieldException {
 		
 		Object row = new Object();
 		try {
@@ -60,20 +60,31 @@ class ResultSetMapper {
 				
 				//Search the FieldMap definitions for an entry matching the Result Set column name.
 				IFieldMapDefinition fieldDef = fieldMap.getFieldDefinitions().findMapDefinitionByColumn(columnName);
-				Field mapField = CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
-				logger.debug(MessageFormat.format("Mapping column {0} to field {1}",
-						 columnName,mapField.getName()));
-				mapColumnToField(numbCol,rs,row,mapField);
+				if (fieldDef != null) {					
+					Field mapField = CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
+					logger.debug(MessageFormat.format("Mapping column {0} to field {1}",
+							 columnName,mapField.getName()));
+					mapColumnToField(numbCol,rs,row,mapField);
+				} else {
+					logger.warn(MessageFormat.format("No mapping found for result set column {0} in class {1}", 
+								 columnName, tableRowClass.getName()));
+				}
 			}
 		} catch (SQLException sqlex) {
 			throw RunDMLException.createRunDMLException(sqlex,RunDMLException.SQL_ERROR,null);
 		} catch (InstantiationException | IllegalAccessException rfex) {
 			throw RunDMLException.createRunDMLException(rfex,RunDMLException.TABLE_ROW_CLASS_REFLECTION,tableRowClass.getName());
-		} catch (NoTableRowClassFieldException ntrcfe) {
-			throw RunDMLException.createRunDMLException(ntrcfe,RunDMLException.TABLE_ROW_CLASS_REFLECTION,tableRowClass.getName());
 		}
 		
 		return row;
+	}
+	
+	/**
+	 * Returns the name of the class being used as the table row class by this mapping instance.
+	 * @return the table row class name as a string.
+	 */
+	public String getTableRowClassName() {
+		return tableRowClass.getName();
 	}
 	
 	/*
@@ -108,7 +119,6 @@ class ResultSetMapper {
 			targetField.setAccessible(true);
 			ResultSetMetaData rsmd = rs.getMetaData();
 
-
 			String targetType = targetField.getGenericType().getTypeName();
 			switch(targetType) {
 				case "int":
@@ -140,6 +150,7 @@ class ResultSetMapper {
 					break;
 				case "java.lang.String":
 					targetField.set(targetObj,rs.getString(index));
+					String val = rs.getString(index);
 					break;
 				case "java.sql.Blob":
 					targetField.set(targetObj,rs.getBlob(index));
@@ -166,6 +177,10 @@ class ResultSetMapper {
 		} catch (SQLException sqlex) {
 			RunDMLExceptionListeners.getInstance().notifyListeners(sqlex);
 		} catch (IllegalAccessException iaex) {
+			/*	Don't propagate this Exception up to the caller, this allows 
+			 *	for at least partial results (all rows, some columns) assuming 
+			 *	not every field in the table row class is defined incorrectly
+			 */
 			RunDMLExceptionListeners.getInstance().notifyListeners(iaex);
 		}
 	}

@@ -39,6 +39,8 @@ public class H2MockPrimitivesTypeTest implements IFieldMap {
 	private long	DfltBigInt;
 	private long	dflt8Col;
 	private long	NotNullIdentity;
+	private byte	NotNullBinary;
+	private byte[]  varBinaryDflt;
 	
 	
 	public int getDfltInteger() {
@@ -104,6 +106,12 @@ public class H2MockPrimitivesTypeTest implements IFieldMap {
 	public long getNotNullIdentity() {
 		return NotNullIdentity;
 	}
+	public byte getNotNullBinary() {
+		return NotNullBinary;
+	}
+	public byte[] getDfltVarBinary() {
+		return varBinaryDflt;
+	}
 
 	@Override
 	public FieldMapDefinitionList getFieldMappings(FieldMapDefinitionList fieldList) {
@@ -118,6 +126,7 @@ public class H2MockPrimitivesTypeTest implements IFieldMap {
 		fieldList.addDefinition("NotNullBoolean","booleanNotNull");
 		fieldList.addDefinition("NotNullBit","bitNotNull");
 		fieldList.addDefinition("DfltInt8","dflt8Col");
+		fieldList.addDefinition("DfltVarBinary","varBinaryDflt");
 
 		return fieldList;
 

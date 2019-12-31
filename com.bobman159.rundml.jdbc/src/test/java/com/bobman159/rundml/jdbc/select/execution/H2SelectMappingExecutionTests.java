@@ -1,4 +1,4 @@
-package com.bobman159.rundml.jdbc.select.execution.tests;
+package com.bobman159.rundml.jdbc.select.execution;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.Expression;
@@ -18,8 +19,7 @@ import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
-import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
-import com.bobman159.rundml.jdbc.sqlmodel.factory.SQLModelTestFactory;
+import com.bobman159.rundml.jdbc.utils.tests.SQLModelTestFactory;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockPrimitivesTypeTest;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockStringTypeTest;
 import com.bobman159.rundml.sql.h2.mocktables.TypeTest;
@@ -134,6 +134,8 @@ class H2SelectMappingExecutionTests {
 		
 		Assertions.assertEquals(2147483650L,test.getDfltBigInt().longValue());
 		Assertions.assertEquals(2147483650L,test.getDfltInt8().longValue()); 
+		Assertions.assertEquals((byte)100000,test.getNotNullBinary()); 
+		Assertions.assertEquals(null,test.getDfltVarBinary()); 
 		
 		TypeTest test4 = (TypeTest) results.get(4);
 		Assertions.assertEquals(100004,test4.getDfltInteger());
@@ -154,15 +156,17 @@ class H2SelectMappingExecutionTests {
 		Assertions.assertEquals("4123456789",test4.getNotNullChar());
 		
 		Assertions.assertEquals("Abcdefk",test4.getNotNullVarchar());
-		Assertions.assertNotNull(test.getDfltBlob());
-		Assertions.assertNotNull(test.getDfltClob());
+		Assertions.assertNotNull(test4.getDfltBlob());
+		Assertions.assertNotNull(test4.getDfltClob());
 		
 		Assertions.assertEquals(true,test4.getNotNullBoolean());		 
 		Assertions.assertEquals(true, test4.getNotNullBool());
 		Assertions.assertEquals(false, test4.getNotNullBit());
 		
 		Assertions.assertEquals(2147483654L,test4.getDfltBigInt().longValue());
-		Assertions.assertEquals(2147483654L,test4.getDfltInt8().longValue()); 
+		Assertions.assertEquals(2147483654L,test4.getDfltInt8().longValue());
+		Assertions.assertEquals((byte)100000,test.getNotNullBinary()); 
+		Assertions.assertEquals(null,test.getDfltVarBinary()); 
 	
 		TypeTest test5 = (TypeTest) results.get(5);
 		Assertions.assertEquals(0, test5.getDfltInteger());
@@ -192,6 +196,9 @@ class H2SelectMappingExecutionTests {
 		
 		Assertions.assertEquals(0,test5.getDfltBigInt());
 		Assertions.assertEquals(0, test5.getDfltInt8()); 
+		
+		Assertions.assertEquals((byte)100005,test5.getNotNullBinary()); 
+		Assertions.assertEquals(null,test5.getDfltVarBinary()); 
 	}
 	
 	/*
@@ -202,7 +209,7 @@ class H2SelectMappingExecutionTests {
 	void allColumnTypesPrimitivesTest() {
 
 		logger.info("****** allColumnTypesPrimitivesTest ******");
-
+		byte[] varBinaryValue = new byte[] {0,1,-122,-95};
 		List<Object> results = new ArrayList<Object>();
 		
 		results = RunDMLExecutor.getInstance()
@@ -238,6 +245,8 @@ class H2SelectMappingExecutionTests {
 		Assertions.assertEquals(2147483651L,test1.getDfltBigInt());
 		Assertions.assertEquals(2147483651L,test1.getDflt8Col()); 
 
+		Assertions.assertEquals((byte)100001,test1.getNotNullBinary()); 
+		Assertions.assertArrayEquals(varBinaryValue,test1.getDfltVarBinary()); 
 
 	}
 	
@@ -284,7 +293,10 @@ class H2SelectMappingExecutionTests {
 		
 		Assertions.assertEquals("2147483653",test3.getBigIntDflt());
 		Assertions.assertEquals("2147483653",test3.getInt8Dflt()); 
-		Assertions.assertEquals("48",test3.getIdentityNotNull());
+		Assertions.assertEquals("3",test3.getIdentityNotNull());
+		
+		Assertions.assertEquals("000186a3",test3.getBinaryNotNull());
+		Assertions.assertEquals("000186a3",test3.getVarBinaryDflt()); 
 		
 	}
 	
@@ -332,6 +344,9 @@ class H2SelectMappingExecutionTests {
 		
 		Assertions.assertEquals("2147483652",test2.getBigIntDflt());
 		Assertions.assertEquals("2147483652",test2.getInt8Dflt()); 
+		
+		Assertions.assertEquals("000186a2",test2.getBinaryNotNull()); 
+		Assertions.assertEquals("000186a2",test2.getVarBinaryDflt()); 
 		
 	}
 	

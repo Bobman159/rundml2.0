@@ -1,4 +1,4 @@
-package com.bobman159.rundml.jdbc.select.execution.tests;
+package com.bobman159.rundml.jdbc.select.execution;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
 import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
-import com.bobman159.rundml.jdbc.sqlmodel.factory.SQLModelTestFactory;
+import com.bobman159.rundml.jdbc.utils.tests.SQLModelTestFactory;
 import com.bobman159.rundml.sql.mysql.mocktables.MockMySQLPrimitivesTypeTest;
 import com.bobman159.rundml.sql.mysql.mocktables.MockMySQLStringTypeTest;
 import com.bobman159.rundml.sql.mysql.mocktables.MySQLTypeTest;

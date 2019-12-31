@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
+import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
 
@@ -84,8 +85,11 @@ class SelectCallable implements Callable<List<Object>> {
 				Object mappedRow = mapper.mapResultRow(rs);
 				results.add((Object) mappedRow);
 			}
+		
 		} catch (SQLException sqlex) {			
-			RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+			throw RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+		} catch (NoTableRowClassFieldException ntrcfex) {
+			throw RunDMLException.createRunDMLException(ntrcfex, RunDMLException.TABLE_ROW_CLASS_REFLECTION, mapper.getTableRowClassName() );
 		} finally {
 			try {
 				conn.close();

@@ -175,5 +175,38 @@ class DatasourceTest {
 		}
 
 	}
+	
+	@Test
+	void testMysqlProviderException() {
+
+		final String POOL_SIZE = "3";
+		final int POOL_INIT_SIZE = 4;
+
+		logger.debug("Start testMysqlProviderException");
+		// Only test the IConnectionPool interface methods since HikariCp should handle
+		// the Connection pool details.
+		DefaultConnectionProvider mysqlProviderException = PoolFactory.makeMySQLDataSource("//localhost:3306/rundml", 
+				MYSQL_USER, MYSQL_PASSWORD, POOL_SIZE);
+		Assertions.assertNotNull(mysqlProviderException);
+
+		// Turn tracing on
+		mysqlProviderException.setPoolConnectionTrace(true);
+
+		// Get Some Connections
+		logger.debug("Test getConnection()");
+		// Test # getConnection() > initial PoolSize
+		Connection[] conns = new Connection[POOL_INIT_SIZE];
+		for (int count = 0; count < POOL_INIT_SIZE; count++) {
+			conns[count] = mysqlProviderException.getConnection();
+			if (count < POOL_INIT_SIZE - 1) {
+				Assertions.assertNotNull(conns[count]);
+			} else if (count == POOL_INIT_SIZE - 1) {
+				Assertions.assertNull(conns[count]);
+			}
+		}
+
+		// Test Close Pool - pool already closed
+		mysqlProviderException.closePool();
+	}
 
 }

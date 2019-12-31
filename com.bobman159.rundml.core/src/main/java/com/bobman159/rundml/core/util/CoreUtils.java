@@ -3,6 +3,9 @@ package com.bobman159.rundml.core.util;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListener;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.expressions.Expression;
@@ -20,6 +23,8 @@ import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldExceptio
  *
  */
 public class CoreUtils {
+	
+	private static Logger logger = LogManager.getLogger(CoreUtils.class.getName());
 
 	private CoreUtils() {
 		//To make Sonar Lint happy
@@ -60,16 +65,15 @@ public class CoreUtils {
 	 * @see java.lang.Class#getField(String)
 	 * @param tableRowClass table row class name
 	 * @param fieldName field name to find in the table row class
-	 * @return the <code>Field</code> entry for the field name
-	 * @throws NoTableRowClassFieldException if no class field matches fieldName
+	 * @return the <code>Field</code> entry for the field name, null if no matching field found
 	 */
-	public static Field getClassField(Class<?> tableRowClass,String fieldName) throws NoTableRowClassFieldException {
+	public static Field getClassField(Class<?> tableRowClass,String fieldName) {
 		Field classField = null;
 		
 		try {
 			classField = tableRowClass.getDeclaredField(fieldName);
 		} catch (NoSuchFieldException | SecurityException ex) {
-			throw new NoTableRowClassFieldException(tableRowClass,fieldName);
+			//Do nothing, callers will handle this method returning null
 		}
 		
 		return classField;
@@ -105,7 +109,11 @@ public class CoreUtils {
 		
 		FieldMap fieldMap = FieldMap.findFieldMap(tableRowClass);
 		if (fieldMap == null) {
-			fieldMap = FieldMap.createFieldMap(tableRowClass);
+			try {
+				fieldMap = FieldMap.createFieldMap(tableRowClass);
+			} catch (NoTableRowClassFieldException e) {
+				logger.error(e.getMessage(), e);
+			}
 		}
 		FieldMapDefinitionList defsList = fieldMap.getFieldDefinitions();
 		Object[] fieldDefs = defsList.getFieldDefinitions().toArray();

@@ -30,6 +30,11 @@ public class TypeTest {
 	private Long		DfltBigInt;
 	private Long		DfltInt8;
 	private Long		NotNullIdentity;
+	private Byte		NotNullBinary;
+	/*	VARBINARY does not map to Byte[], so this causes an unsupported type in the mapping.
+	 * 	byte[] mapping is tested using the H2MockPrimativesTypeTest class
+	 */
+	private Byte[]		DfltVarBinary;
 	
 	public Integer getDfltInteger() {
 		return DfltInteger;
@@ -96,5 +101,12 @@ public class TypeTest {
 	public Long getNotNullIdentity() {
 		return NotNullIdentity;
 	}
+	public Byte getNotNullBinary() {
+		return NotNullBinary;
+	}
+	public Byte[] getDfltVarBinary() {
+		return DfltVarBinary;
+	}
+	
 
 }

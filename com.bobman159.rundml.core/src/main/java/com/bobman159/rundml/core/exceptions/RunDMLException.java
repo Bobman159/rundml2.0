@@ -4,7 +4,7 @@ package com.bobman159.rundml.core.exceptions;
  * A wrapper class for RunDML exceptions that are encountered during SQL Building or execution.
  *
  */
-public class RunDMLException extends RuntimeException {
+public class RunDMLException extends Exception {
 
 	/**
 	 * 
@@ -17,9 +17,9 @@ public class RunDMLException extends RuntimeException {
 	/**
 	 * A generic SQL Exception error
 	 */
-	public static final int	SQL_ERROR = 1000;
+	public static final int	SQL_ERROR = 1001;
 	
-	private int errorCode;			//Code indicating the type of error
+	private int execPhase;			//Code indicating when error occurred
 	private Object[] args;			//Argument(s) if any for the error
 	
 	/**
@@ -36,7 +36,7 @@ public class RunDMLException extends RuntimeException {
 	
 	private RunDMLException(int execPhase,Object[] args,Throwable reason) {
 		super(reason);
-		this.errorCode = execPhase;
+		this.execPhase = execPhase;
 		this.args = args;
 	}
 	
@@ -48,14 +48,22 @@ public class RunDMLException extends RuntimeException {
 		StringBuilder errorMessage = new StringBuilder();;
 		errorMessage.append("RunDML encountered a ");
 		
-		if (errorCode == TABLE_ROW_CLASS_REFLECTION) {
+		if (execPhase == TABLE_ROW_CLASS_REFLECTION) {
 			errorMessage.append("Table Row Class Reflection error");
 			errorMessage.append(" in class " + args[0]);
-		} else if (errorCode == SQL_ERROR) {
+		} else if (execPhase == SQL_ERROR) {
 			errorMessage.append("SQL Exception error during execution");
 		}
 		
 		return errorMessage.toString();
+	}
+	
+	/**
+	 * Return the execution phase code when the exception occurred
+	 * @return the execution phase code
+	 */
+	public int getExecutionPhase() {
+		return execPhase;
 	}
 	
 

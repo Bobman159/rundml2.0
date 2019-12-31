@@ -80,10 +80,11 @@ public class PoolFactory {
 			if (userId != null) {
 				dbProps.put("dataSource.user", userId);
 			}
+			
 			if (password != null) {
 				dbProps.put("dataSource.password", password);
-
 			}
+			
 			dbProps.put("maximumPoolSize", numberConnections);
 			HikariConfig config = new HikariConfig(dbProps);
 			HikariDataSource ds = new HikariDataSource(config);

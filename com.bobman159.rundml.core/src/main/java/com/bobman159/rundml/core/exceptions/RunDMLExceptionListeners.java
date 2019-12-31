@@ -60,16 +60,6 @@ public class RunDMLExceptionListeners {
 	 * Notifies <code>ExceptionListener</code> currently on the listener chain.
 	 * @param ex the exception thrown to notify listeners
 	 */
-	public void notifyListeners(RuntimeException ex) {
-		for (ExceptionListener exListener :listeners) {
-			exListener.exceptionThrown(ex);
-		}
-	}
-	
-	/**
-	 * Notifies <code>ExceptionListener</code> currently on the listener chain.
-	 * @param ex the exception thrown to notify listeners
-	 */
 	public void notifyListeners(SQLException ex) {
 		for (ExceptionListener exListener :listeners) {
 			exListener.exceptionThrown(ex);

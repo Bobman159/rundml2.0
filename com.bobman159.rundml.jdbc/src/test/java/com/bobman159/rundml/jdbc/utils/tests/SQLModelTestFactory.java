@@ -1,4 +1,4 @@
-package com.bobman159.rundml.jdbc.sqlmodel.factory;
+package com.bobman159.rundml.jdbc.utils.tests;
 
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
@@ -41,6 +41,7 @@ public class SQLModelTestFactory {
 	private static final String NOTNULLIDENTITY = "NotNullIdentity";
 	private static final String NOTNULLBINARY = "NotNullBinary";	//MySQL rundml.typetest
 	private static final String NOTNULLVARBINARY = "NotNullVarBinary";	//MySQL rundml.typetest
+	private static final String DFLTVARBINARY = "DfltVarBinary";
 	
 	private static final String RUNDML_SCHEMA = "rundml";
 	private static final String TYPETEST_TABLE = "typetest";
@@ -57,8 +58,8 @@ public class SQLModelTestFactory {
 	}
 	
 	/**
-	 * Creates a basic SELECT statement model for the rundml.TypeTest, only 
-	 * column names are used for the SELECT expression list.
+	 * Creates a basic SELECT statement model for the rundml.TypeTest in the H2 database.
+	 * Only column names are used for the SELECT expression list.
 	 * @return a SELECT statement SQL model
 	 */
 	public SQLStatementModel createH2SelectTypeTestModel() {
@@ -86,52 +87,20 @@ public class SQLModelTestFactory {
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(NOTNULLBIT));
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(DFLTBIGINT));
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(DFLTINT8));
+		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(NOTNULLBINARY));
+		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(DFLTVARBINARY));
 		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName(RUNDML_SCHEMA, TYPETEST_TABLE));
 
 		return model;
 	}
 	
+	/**
+	 * Creates a basic SELECT statement model for the rundml.TypeTest in the MySQL database.
+	 * Only column names are used for the SELECT expression list.
+	 * @return a SELECT statement SQL model
+	 */
 	public SQLStatementModel createMySQLSelectTypeTestModel() {
-		
-//		private static final String DFLTINTEGER = "DfltInteger";
-//		private static final String NOTNULLMEDINT = "NotNullMediumInt";
-//		private static final String DFLTINTUNSIGNED = "DfltIntUnsigned";	//MySQL 
-//		private static final String DFLTTINYINT = "DfltTinyInt";
-//		private static final String NOTNULLSMINT = "NotNullSmint";
-//		private static final String NOTNULLDEC72 = "NotNullDec72";	
-//		private static final String NOTNULLTIME = "NotNullTime";
-//		private static final String NOTNULLDATE = "NotNullDate";
-//		private static final String NOTNULLTSTAMP = "NotNullTimestamp";
-//		private static final String NOTNULLDATETIME = "NotNullDateTime";
-//		private static final String NOTNULLVARCHAR = "NotNullVarchar";
-//		private static final String NOTNULLCHAR = "NotNullChar";		
-//		private static final String NOTNULLBLOB = "NotNullBlob";		//MySQL rundml.typetest
-//		private static final String NOTNULLTEXT = "NotNullText";		//MySQL rundml.typetest
-//		private static final String NOTNULLBOOLEAN = "NotNullBoolean";
-//		private static final String NOTNULLBIT = "NotNullBit";
-//		private static final String NOTNULLBIGINT = "NotNullBigInt";	//MySQL rundml.typetest
-//		private static final String NOTNULLBINARY = "NotNullBinary";	//MySQL rundml.typetest
-//		private static final String NOTNULLVARBINARY = "NotNullVarBinary";	//MySQL rundml.typetest
-//		DfltInteger
-//		NotNullMediumInt
-//		DfltIntUnsigned
-//		DfltTinyInt
-//		NotNullSmint
-//		NotNullDec72
-//		NotNullTime
-//		NotNullDate
-//		NotNullTimestamp
-//		NotNullDateTime
-//		NotNullVarchar
-//		NotNullChar
-//		NotNullBlob
-//		NotNullText
-//		NotNullBit
-//		NotNullBoolean
-//		NotNullBigInt
-//		NotNullBinary
-//		NotNullVarBinary
-		
+				
 		SQLStatementModel model = new SQLStatementModel();
 		model.addClause(SQLClause.SELECT);
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(DFLTINTEGER));
@@ -153,6 +122,21 @@ public class SQLModelTestFactory {
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(NOTNULLBIGINT));
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(NOTNULLBINARY));
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column(NOTNULLVARBINARY));
+		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName(RUNDML_SCHEMA, TYPETEST_TABLE));
+
+		return model;
+	}
+	
+	/**
+	 * Creates a basic SELECT statement model for the rundml.TypeTest table., 
+	 * An undefined column name is used for the SELECT expression list.
+	 * @return a SELECT statement SQL model
+	 */
+	public SQLStatementModel createUndefinedColumnSelectModel() {
+		
+		SQLStatementModel model = new SQLStatementModel();
+		model.addClause(SQLClause.SELECT);
+		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column("Col01"));
 		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName(RUNDML_SCHEMA, TYPETEST_TABLE));
 
 		return model;

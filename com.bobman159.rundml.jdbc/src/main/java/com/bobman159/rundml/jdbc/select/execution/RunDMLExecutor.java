@@ -8,9 +8,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.model.SQLStatementModel;
+
+
 
 /**
  * RunDML's execution service for executing SQL statements using JDBC.
@@ -28,8 +34,9 @@ public class RunDMLExecutor  {
 	 * could be used.  For now this should work.
 	 * 
 	 */
-	private ExecutorService service = Executors.newSingleThreadExecutor();
+	private ExecutorService service = null;
 	private static RunDMLExecutor self;
+	private static Logger logger = LogManager.getLogger(RunDMLExecutor.class.getName());
 
 	/**
 	 * Obtain an instance of this executor.
@@ -57,6 +64,10 @@ public class RunDMLExecutor  {
 		Future<List<Object>> futureTask;
 		List<Object> results = new ArrayList<>();
 		SelectCallable exec = new SelectCallable(conn,model,tableRow);
+		if (service == null || service.isShutdown()) {
+			initService();			
+		}
+		
 		futureTask = service.submit(exec);		
 		
 		/*
@@ -70,7 +81,7 @@ public class RunDMLExecutor  {
 		try {
 			results = futureTask.get();
 		} catch (CancellationException | ExecutionException | InterruptedException ex) {
-			Thread.currentThread().interrupt();
+//			Thread.currentThread().interrupt();
 			RunDMLExceptionListeners.getInstance().notifyListeners(ex);
 			shutdown();
 		}
@@ -84,6 +95,20 @@ public class RunDMLExecutor  {
 	 */
 	public void shutdown() {
 		service.shutdown();
-	}	
+		try {
+			service.awaitTermination(30, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			logger.error(e.getMessage(),e);
+		}
+		service = null;
+	}
+	
+	private RunDMLExecutor() {
+		initService();
+	}
+	
+	private void initService() {
+		service = Executors.newSingleThreadExecutor();
+	}
 	
 }
