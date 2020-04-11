@@ -18,6 +18,10 @@ public class RunDMLException extends Exception {
 	 * A generic SQL Exception error
 	 */
 	public static final int	SQL_ERROR = 1001;
+	/**
+	 * Indicates SQL Building Error
+	 */
+	public static final int	SQL_MODEL_BUILD = 1002;
 	
 	private int execPhase;			//Code indicating when error occurred
 	private Object[] args;			//Argument(s) if any for the error
@@ -53,6 +57,8 @@ public class RunDMLException extends Exception {
 			errorMessage.append(" in class " + args[0]);
 		} else if (execPhase == SQL_ERROR) {
 			errorMessage.append("SQL Exception error during execution");
+		} else if (execPhase == SQL_MODEL_BUILD) {
+			errorMessage.append("Error during build of SQL statement model");
 		}
 		
 		return errorMessage.toString();

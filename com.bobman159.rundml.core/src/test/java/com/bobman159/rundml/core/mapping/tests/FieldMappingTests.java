@@ -17,10 +17,12 @@ import com.bobman159.rundml.core.mapping.FieldMap;
 import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
 import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
+import com.bobman159.rundml.core.mockclasses.test.FieldMapInstantiationException;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceAllColumnsDefined;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceClassNotUsed;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceSomeColumnsDefined;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoInterface;
+import com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException;
 
 class FieldMappingTests {
 
@@ -82,11 +84,21 @@ class FieldMappingTests {
 	@Test
 	void testCreateFieldMap() {
 		
+		final String NOFIELD_ERROR = "No Field named fieldOne found in class com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException";
 		FieldMap fieldMap = null;
 		try {
 			fieldMap = FieldMap.createFieldMap(FieldMapNoInterface.class);
+			assertNotNull(fieldMap);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		/* NoTableRowClassFieldException - Test */
+		try {
+			fieldMap = FieldMap.createFieldMap(FieldMapNoTableRowFieldClassException.class);
+		} catch (NoTableRowClassFieldException e) {
+			Assertions.assertNotNull(e);
+			Assertions.assertEquals(NOFIELD_ERROR,e.getMessage());
 			e.printStackTrace();
 		}
 		assertNotNull(fieldMap);
@@ -109,6 +121,12 @@ class FieldMappingTests {
 		FieldMapDefinitionList defList = fieldMap.getFieldDefinitions();
 		assertNotNull(defList);
 		Stream<IFieldMapDefinition> countStream = defList.getFieldDefinitions();		
+//		countStream.forEach(fieldDef -> {
+//			System.out.println("fieldDef.column: " + fieldDef.getColumnName());
+//			System.out.println("fieldDef.classField: " + fieldDef.getClassFieldName());
+//		});
+		
+		
 		Assertions.assertEquals(countStream.count(),noInterfaceDefinition.length);
 	
 		Stream<IFieldMapDefinition> defStream = defList.getFieldDefinitions();

@@ -1,4 +1,4 @@
-package com.bobman159.rundml.core.exprtypes.tests;
+package com.bobman159.rundml.core.expressions.tests;
 
 import java.sql.Types;
 
@@ -43,6 +43,32 @@ class CaseExpressionTest {
 	@AfterEach
 	void tearDown() throws Exception {
 	}
+	
+	@Test
+	void testExpressionCaseExpression() {
+		
+		/* Not all combinations of expressions in a CASE are tested here 
+		 * I think the likelihood/validity of CASE expression in nested CASE expressions is low */
+		CaseExpression colCase = Expression.caseExpr(Expression.column("Col01"));
+		Assertions.assertNotNull(colCase);
+		Assertions.assertTrue(colCase instanceof CaseExpression);
+		
+		CaseExpression nbrCase = Expression.caseExpr(Expression.number(10));
+		Assertions.assertNotNull(nbrCase);
+		Assertions.assertTrue(nbrCase instanceof CaseExpression);
+		
+		CaseExpression mathCase = Expression.caseExpr(Expression.number(10).add(Expression.number(20)));
+		Assertions.assertNotNull(mathCase);
+		Assertions.assertTrue(mathCase instanceof CaseExpression);
+		
+		CaseExpression parmCase = Expression.caseExpr(Expression.parm(Types.INTEGER, 10));
+		Assertions.assertNotNull(parmCase);
+		Assertions.assertTrue(parmCase instanceof CaseExpression);
+		
+		CaseExpression stringCase = Expression.caseExpr(Expression.string("abc"));
+		Assertions.assertNotNull(stringCase);
+		Assertions.assertTrue(stringCase instanceof CaseExpression);
+	}
 
 	@Test
 	void testWhen() {
@@ -56,7 +82,7 @@ class CaseExpressionTest {
 				.when(Expression.parm(Types.CHAR, "Def"))
 				.then(colNotNullChar)
 				.end().serialize();
-		Assertions.assertEquals(" case ?" + " when ? then " + COL_NOTNULLCHAR + " end ",caseExprParm);		
+		Assertions.assertEquals(" case ?" + " when ? then " + COL_NOTNULLCHAR + " end",caseExprParm);		
 
 		/*	CASE NOTNULLCHAR || 'ab' WHEN NOTNULLCHAR || 'ab' THEN NOTNULLCHAR END */
 		String caseExprConcat = new CaseExpression(colNotNullChar.concat("ab"))
@@ -64,14 +90,14 @@ class CaseExpressionTest {
 				.then(colNotNullChar)
 				.end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " || 'ab' when " + COL_NOTNULLCHAR + " || 'ab' " +
-						        "then " + COL_NOTNULLCHAR + " end ",caseExprConcat);
+						        "then " + COL_NOTNULLCHAR + " end",caseExprConcat);
 		
 		/* CASE NOTNULLCHAR WHEN NOTNULCHAR THEN 'A123456789' END */
 		String caseExprChar = new CaseExpression(colNotNullChar).when(colNotNullChar)
 																.then(Expression.string(STRING_EXPR_A))
 																.end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " when " + COL_NOTNULLCHAR + 
-						        " then '" + STRING_EXPR_A + "' end ",caseExprChar);
+						        " then '" + STRING_EXPR_A + "' end",caseExprChar);
 		
 		/* CASE NOTNULLCHAR WHEN '0123456789' || NOTNULLCHAR THEN 'A123456789' END */
 		String caseExprLiteral = new CaseExpression(colNotNullChar)
@@ -79,7 +105,7 @@ class CaseExpressionTest {
 				.then(Expression.string(STRING_EXPR_A)).end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + 
 					" when '" + STRING_EXPR + "' || " + COL_NOTNULLCHAR +
-					" then '" + STRING_EXPR_A + "' end ",caseExprLiteral);
+					" then '" + STRING_EXPR_A + "' end",caseExprLiteral);
 
 		/* CASE NOTNULLCHAR || 10 WHEN '112345678910' THEN 'B123456789' END */
 		CaseExpression caseExpr = new CaseExpression(colNotNullChar.concat(Expression.string("10")));		
@@ -87,7 +113,7 @@ class CaseExpressionTest {
 										  .then(Expression.string(STRING_EXPR_B)).end()
 										  .serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " || '10'"+ " when '" + STRING_EXPR_1 + 
-		     "' then '" + STRING_EXPR_B + "' end ",caseExprLiteralB);
+		     "' then '" + STRING_EXPR_B + "' end",caseExprLiteralB);
 
 		/* CASE DFLTINTEGER WHEN DFLTINTEGER + 100000 THEN 200000 END */
 		String caseExprNumb = new CaseExpression(colDfltInteger)
@@ -96,7 +122,7 @@ class CaseExpressionTest {
 				.end().serialize();
 		Assertions.assertEquals(" case " + COL_DFLTINTEGER + 
 				" when " + COL_DFLTINTEGER + " + " + String.valueOf(ONE_HUNDRED_THOUSAND) +
-				" then " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end ",caseExprNumb);
+				" then " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end",caseExprNumb);
 
 		/* CASE DFLTINTEGER + 10 WHEN 100000 + DFLTINTEGER THEN 200010 END */
 		CaseExpression caseAdd = new CaseExpression(colDfltInteger.add(10));				
@@ -105,7 +131,7 @@ class CaseExpressionTest {
 				   					.end().serialize();
 		Assertions.assertEquals(" case " + COL_DFLTINTEGER + " + " + 10 + 
 								" when " + String.valueOf(ONE_HUNDRED_THOUSAND) + " + " + COL_DFLTINTEGER +
-								" then " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end ",
+								" then " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end",
 								caseExprAdd);
 
 		/* String Expressions */
@@ -115,14 +141,14 @@ class CaseExpressionTest {
 										  .then(Expression.string("True"))
 										  .end().serialize();
 		Assertions.assertEquals(" case 'Abc' || 'Def'" + 
-								" when 'Abc' || 'Def' then 'True' end ", caseExprConcat2);
+								" when 'Abc' || 'Def' then 'True' end", caseExprConcat2);
 		
 		/* CASE '10' || '10' WHEN '10' || '10' THEN '1010' END */
 		CaseExpression caseString10 = new CaseExpression(Expression.string("10").concat("10"));
 		String caseExpr10 = caseString10.when(Expression.string("10").concat(Expression.string("10")))
 										  .then(Expression.string("1010"))
 										  .end().serialize();
-		Assertions.assertEquals(" case '10' || '10' when '10' || '10' then '1010' end ", caseExpr10);
+		Assertions.assertEquals(" case '10' || '10' when '10' || '10' then '1010' end", caseExpr10);
 
 		/* Number Expressions */
 		/* CASE 10 + 10 WHEN 20 THEN 20 END */
@@ -130,14 +156,14 @@ class CaseExpressionTest {
 		String caseNumber10Str = caseNumber10.when(Expression.number(20))
 										  .then(Expression.number(20))
 										  .end().serialize();
-		Assertions.assertEquals(" case 10 + 10 when 20 then 20 end ", caseNumber10Str);
+		Assertions.assertEquals(" case 10 + 10 when 20 then 20 end", caseNumber10Str);
 		
 		/* CASE 10 * 10 WHEN 10 * 10 THEN 100 END */
 		CaseExpression caseMult10 = new CaseExpression(Expression.number(10).multiply(Expression.number(10)));
 		String caseMult10Str = caseMult10.when(Expression.number(10).multiply(Expression.number(10)))
 										  .then(Expression.number(100))
 										  .end().serialize();
-		Assertions.assertEquals(" case 10 * 10 when 10 * 10 then 100 end ", caseMult10Str);
+		Assertions.assertEquals(" case 10 * 10 when 10 * 10 then 100 end", caseMult10Str);
 
 	}
 
@@ -150,7 +176,7 @@ class CaseExpressionTest {
 				.when(Expression.parm(Types.CHAR, "Def"))
 				.then(Expression.parm(Types.CHAR, "Test"))
 				.end().serialize();
-		Assertions.assertEquals(" case ?" + " when ? then ? end ",caseExprParm);
+		Assertions.assertEquals(" case ?" + " when ? then ? end",caseExprParm);
 		
 		/*	CASE NOTNULLCHAR || 'ab' WHEN NOTNULLCHAR || 'ab' THEN NOTNULLCHAR || 'ab' END */
 		String caseExprConcat = new CaseExpression(colNotNullChar.concat("ab"))
@@ -158,21 +184,21 @@ class CaseExpressionTest {
 				.then(colNotNullChar.concat("ab"))
 				.end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " || 'ab' when " + COL_NOTNULLCHAR + " || 'ab' " +
-						        "then " + COL_NOTNULLCHAR + " || 'ab' end ",caseExprConcat);
+						        "then " + COL_NOTNULLCHAR + " || 'ab' end",caseExprConcat);
 		
 		/* CASE NOTNULLCHAR WHEN NOTNULLCHAR THEN NOTNULLCHAR END */
 		String caseExprChar = new CaseExpression(colNotNullChar).when(colNotNullChar)
 																.then(colNotNullChar)
 																.end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " when " + COL_NOTNULLCHAR + 
-						        " then " + COL_NOTNULLCHAR + " end ",caseExprChar);
+						        " then " + COL_NOTNULLCHAR + " end",caseExprChar);
 		
 		/* CASE NOTNULLCHAR WHEN '0123456789' THEN 'A123456789' || NOTNULLCHAR END */
 		String caseExprLiteral = new CaseExpression(colNotNullChar)
 				.when(Expression.string(STRING_EXPR))
 				.then(Expression.string(STRING_EXPR_A)).end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " when '" + STRING_EXPR + 
-						        "' then '" + STRING_EXPR_A + "' end ",caseExprLiteral);
+						        "' then '" + STRING_EXPR_A + "' end",caseExprLiteral);
 
 		/* CASE NOTNULLCHAR || 10 WHEN '112345678910' THEN 'B123456789' || '10' END */
 		CaseExpression caseExpr = new CaseExpression(colNotNullChar.concat(Expression.string("10")));		
@@ -180,7 +206,7 @@ class CaseExpressionTest {
 										  .then(Expression.string(STRING_EXPR_B).concat("10")).end()
 										  .serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " || '10'"+ " when '" + STRING_EXPR_1 + 
-		     "' then '" + STRING_EXPR_B + "' || '10' end ",caseExprLiteralB);
+		     "' then '" + STRING_EXPR_B + "' || '10' end",caseExprLiteralB);
 		
 		/* CASE DFLTINTEGER WHEN 100000 THEN DFLTINTEGER + 200000 END */
 		String caseExprNumb = new CaseExpression(colDfltInteger)
@@ -189,7 +215,7 @@ class CaseExpressionTest {
 				.end().serialize();
 		Assertions.assertEquals(" case " + COL_DFLTINTEGER + 
 				" when " + String.valueOf(ONE_HUNDRED_THOUSAND) +
-				" then " + COL_DFLTINTEGER + " + " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end ",caseExprNumb);
+				" then " + COL_DFLTINTEGER + " + " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end",caseExprNumb);
 
 		/* CASE DFLTINTEGER + 10 WHEN 100000 - 10 THEN 200000 - 10 END */
 		CaseExpression caseAdd = new CaseExpression(colDfltInteger.add(10));				
@@ -199,7 +225,7 @@ class CaseExpressionTest {
 				.end().serialize();
 		Assertions.assertEquals(" case " + COL_DFLTINTEGER + " + " + 10 + 
 								" when " + String.valueOf(ONE_HUNDRED_THOUSAND) + " - 10" +
-								" then " + String.valueOf(TWO_HUNDRED_THOUSAND) + " - 10" + " end ",
+								" then " + String.valueOf(TWO_HUNDRED_THOUSAND) + " - 10" + " end",
 								caseExprAdd);
 
 		/* String Expressions */
@@ -209,7 +235,7 @@ class CaseExpressionTest {
 										  .then(Expression.string("True").concat(Expression.string(" That!")))
 										  .end().serialize();
 		Assertions.assertEquals(" case 'Abc' || 'Def'" + " when 'AbcDef'" +
-								" then 'True' || ' That!' end ", caseExprConcat2);
+								" then 'True' || ' That!' end", caseExprConcat2);
 		
 		/* CASE '10' || '10' WHEN '1010' THEN '10' || '10' END */
 		CaseExpression caseString10 = new CaseExpression(Expression.string("10").concat("10"));
@@ -217,7 +243,7 @@ class CaseExpressionTest {
 										  .then(Expression.string("10").concat(Expression.string("10")))
 										  .end().serialize();
 		Assertions.assertEquals(" case '10' || '10' when '1010'" + 
-								" then '10' || '10' end ", caseExpr10);
+								" then '10' || '10' end", caseExpr10);
 
 		/* Number Expressions */
 		/* CASE 10 / 10 WHEN 0 THEN 0 END */
@@ -225,14 +251,14 @@ class CaseExpressionTest {
 		String caseDiv0Str = caseDiv0.when(Expression.number(0))
 										  .then(Expression.number(0))
 										  .end().serialize();
-		Assertions.assertEquals(" case 10 / 10 when 0 then 0 end ", caseDiv0Str);
+		Assertions.assertEquals(" case 10 / 10 when 0 then 0 end", caseDiv0Str);
 		
 		/* CASE 10 / 10 WHEN 0 THEN 10 / 10 END */
 		CaseExpression caseDiv10 = new CaseExpression(Expression.number(10).divide(Expression.number(10)));
 		String caseDiv10Str = caseDiv10.when(Expression.number(0))
 										  .then(Expression.number(10).divide(Expression.number(10)))
 										  .end().serialize();
-		Assertions.assertEquals(" case 10 / 10 when 0 then 10 / 10 end ", caseDiv10Str);
+		Assertions.assertEquals(" case 10 / 10 when 0 then 10 / 10 end", caseDiv10Str);
 	}
 
 	@Test
@@ -245,7 +271,7 @@ class CaseExpressionTest {
 				.then(Expression.parm(Types.CHAR, "Test"))
 				.elseClause(Expression.parm(Types.CHAR, "Test2"))
 				.end().serialize();
-		Assertions.assertEquals(" case ?" + " when ? then ? else ? end ",caseExprParm);
+		Assertions.assertEquals(" case ?" + " when ? then ? else ? end",caseExprParm);
 		
 		/*	CASE NOTNULLCHAR || 'ab' WHEN NOTNULLCHAR || 'ab' THEN NOTNULLCHAR || 'ab' 
 		 *  ELSE NOTNULLCHAR || 'ab' END */
@@ -256,7 +282,7 @@ class CaseExpressionTest {
 				.end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " || 'ab' when " + COL_NOTNULLCHAR + " || 'ab' " +
 						        "then " + COL_NOTNULLCHAR + " || 'ab' " + 
-						        "else " + COL_NOTNULLCHAR + " || 'ab' end ",caseExprConcat);
+						        "else " + COL_NOTNULLCHAR + " || 'ab' end",caseExprConcat);
 		
 		/* CASE NOTNULLCHAR WHEN NOTNULLCHAR THEN NOTNULLCHAR ELSE NOTNULLCHAR END */
 		String caseExprChar = new CaseExpression(colNotNullChar).when(colNotNullChar)
@@ -265,7 +291,7 @@ class CaseExpressionTest {
 																.end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " when " + COL_NOTNULLCHAR + 
 						        " then " + COL_NOTNULLCHAR + 
-						        " else " + COL_NOTNULLCHAR + " end ",caseExprChar);
+						        " else " + COL_NOTNULLCHAR + " end",caseExprChar);
 		
 		/* CASE NOTNULLCHAR WHEN '0123456789' THEN 'A123456789' || NOTNULLCHAR 
 		 * ELSE 'Else' || NOTNULLCHAR END */
@@ -276,7 +302,7 @@ class CaseExpressionTest {
 				.end().serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " when '" + STRING_EXPR + 
 						        "' then '" + STRING_EXPR_A + "' " + 
-						        "else 'Else' || " + COL_NOTNULLCHAR + " end ",caseExprLiteral);
+						        "else 'Else' || " + COL_NOTNULLCHAR + " end",caseExprLiteral);
 
 		/* CASE NOTNULLCHAR || 10 WHEN '112345678910' THEN 'B123456789' || '10' 
 		 * ELSE 'Else' || '10' END */
@@ -288,7 +314,7 @@ class CaseExpressionTest {
 										  .serialize();
 		Assertions.assertEquals(" case " + COL_NOTNULLCHAR + " || '10'"+ " when '" + STRING_EXPR_1 + 
 		     "' then '" + STRING_EXPR_B + "' || '10' " + 
-			 "else '" + STRING_EXPR_B + "' || '10' end ",caseExprLiteralB);
+			 "else '" + STRING_EXPR_B + "' || '10' end",caseExprLiteralB);
 		
 		/* CASE DFLTINTEGER WHEN 100000 THEN DFLTINTEGER + 200000 
 		 * ELSE DFLTINTEGER + 200000 END */
@@ -300,7 +326,7 @@ class CaseExpressionTest {
 		Assertions.assertEquals(" case " + COL_DFLTINTEGER + 
 				" when " + String.valueOf(ONE_HUNDRED_THOUSAND) +
 				" then " + COL_DFLTINTEGER + " + " + String.valueOf(TWO_HUNDRED_THOUSAND) + 
-				" else " + COL_DFLTINTEGER + " + " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end ",caseExprNumb);
+				" else " + COL_DFLTINTEGER + " + " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end",caseExprNumb);
 
 		/* CASE DFLTINTEGER + 10 WHEN 100000 - 10 THEN 200000 - 10 
 		 * ELSE 200000 - 10 END */
@@ -313,7 +339,7 @@ class CaseExpressionTest {
 		Assertions.assertEquals(" case " + COL_DFLTINTEGER + " + " + 10 + 
 								" when " + String.valueOf(ONE_HUNDRED_THOUSAND) + " - 10" +
 								" then " + String.valueOf(TWO_HUNDRED_THOUSAND) + " - 10" +
-								" else " + String.valueOf(TWO_HUNDRED_THOUSAND) + " - 10" + " end ", caseExprAdd);
+								" else " + String.valueOf(TWO_HUNDRED_THOUSAND) + " - 10" + " end", caseExprAdd);
 
 		/* String Expressions */
 		/* CASE 'Abc' || 'Def' WHEN 'AbcDef' THEN 'True' || 'That!' 
@@ -325,7 +351,7 @@ class CaseExpressionTest {
 										  .end().serialize();
 		Assertions.assertEquals(" case 'Abc' || 'Def'" + " when 'AbcDef'" +
 								" then 'True' || ' That!'" +
-								" else 'Thats' || ' False' end ", caseExprConcat2);
+								" else 'Thats' || ' False' end", caseExprConcat2);
 		
 		/* CASE '10' || '10' WHEN '1010' THEN '10' || '10' 
 		 * ELSE '10' || '10' END */
@@ -336,7 +362,7 @@ class CaseExpressionTest {
 										  .end().serialize();
 		Assertions.assertEquals(" case '10' || '10' when '1010'" + 
 								" then '10' || '10'" +
-								" else '10' || '10' end ", caseExpr10);
+								" else '10' || '10' end", caseExpr10);
 
 		/* Number Expressions */
 		/* CASE 10 / 10 WHEN 0 THEN 0 ELSE 10 END */
@@ -345,7 +371,7 @@ class CaseExpressionTest {
 										  .then(Expression.number(0))
 										  .elseClause(Expression.number(10))
 										  .end().serialize();
-		Assertions.assertEquals(" case 10 / 10 when 0 then 0 else 10 end ", caseDiv0Str);
+		Assertions.assertEquals(" case 10 / 10 when 0 then 0 else 10 end", caseDiv0Str);
 		
 		/* CASE 10 / 10 WHEN 0 THEN 10 / 10 ELSE 10 / 10 END */
 		CaseExpression caseDiv10 = new CaseExpression(Expression.number(10).divide(Expression.number(10)));
@@ -353,7 +379,7 @@ class CaseExpressionTest {
 										  .then(Expression.number(10).divide(Expression.number(10)))
 										  .elseClause(Expression.number(10).divide(Expression.number(10)))
 										  .end().serialize();
-		Assertions.assertEquals(" case 10 / 10 when 0 then 10 / 10 else 10 / 10 end ", caseDiv10Str);
+		Assertions.assertEquals(" case 10 / 10 when 0 then 10 / 10 else 10 / 10 end", caseDiv10Str);
 	}
 
 }

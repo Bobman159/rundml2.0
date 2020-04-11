@@ -1,4 +1,4 @@
-package com.bobman159.rundml.core.exprtypes.tests;
+package com.bobman159.rundml.core.expressions.tests;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;

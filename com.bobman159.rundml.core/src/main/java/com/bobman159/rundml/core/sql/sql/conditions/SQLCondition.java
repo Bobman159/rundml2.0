@@ -33,8 +33,8 @@ public class SQLCondition implements IExpression {
 	@Override
 	public String serialize() {
 		String expr = "";
-		expr = lhs.serialize();
-		expr = expr + op.getOperator();
+		expr = lhs.serialize() + " ";
+		expr = expr + op.getOperator() + " ";
 		expr = expr + rhs.serialize();
 		
 		return expr;

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.exprtypes.IMathOperations;
 import com.bobman159.rundml.core.exprtypes.IStringOperations;
+import com.bobman159.rundml.core.exprtypes.ParmMarker;
 
 //  The first arg in these case statements appears to determine the return type 
 //  of the CASE statement.  IE CASE 123 returns a number, CASE 'abc' returns a
@@ -86,14 +87,24 @@ public class CaseExpression implements IExpression, IMathOperations, IStringOper
 		
 		StringBuilder expr = new StringBuilder();
 		expr.append(" case ").append(caseExpr.serialize());
+		doAppendSpace(expr);
 		whenConds.forEach(when -> expr.append(when.serialize()));
+		doAppendSpace(expr);
 		if (elseCondition != null) {
-			expr.append(" else ");
+			expr.append("else ");
 			expr.append(elseCondition.serialize());
+			doAppendSpace(expr);
 		}
-		expr.append(" end ");
+		expr.append("end");
 		
 		return expr.toString();
+	}
+	
+	//Appends a space to the expression if there is not one there already
+	private void doAppendSpace(StringBuilder expr) {
+		if (expr.charAt(expr.length() - 1) != ' ') {
+			expr.append(' ');
+		}
 	}
 	
 }

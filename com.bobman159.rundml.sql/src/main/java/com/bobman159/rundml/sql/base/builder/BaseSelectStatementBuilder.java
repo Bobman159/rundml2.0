@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.bobman159.rundml.core.exceptions.RunDMLException;
+import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
@@ -66,7 +68,13 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	 */
 	public B select(Class<?> clazz) {
 		model.addClause(SQLClause.SELECT);
-		model.addExpressionList(SQLClause.SELECTEXPR, CoreUtils.createColumnsFromClass(clazz));
+		try {
+			IExpression[] columnArray = CoreUtils.createColumnsFromClass(clazz);
+			model.addExpressionList(SQLClause.SELECTEXPR, columnArray);
+		} catch (RunDMLException rdex) {
+			RunDMLExceptionListeners.getInstance().notifyListeners(rdex);
+		}
+
 		return self();
 	}
 

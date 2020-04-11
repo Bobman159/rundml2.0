@@ -76,4 +76,19 @@ public class RunDMLExceptionListeners {
 		}
 	}
 	
+	/**
+	 * Clears the list of current listeners
+	 */
+	protected void clearListeners() {
+		listeners.clear();
+	}
+	
+	/**
+	 * Returns the size of the current exception listeners list
+	 * @return the size of the exception listeners
+	 */
+	protected int getListenersSize() {
+		return listeners.size();
+	}
+	
 }

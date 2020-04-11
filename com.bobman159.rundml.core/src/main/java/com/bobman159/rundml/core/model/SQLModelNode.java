@@ -58,15 +58,7 @@ class SQLModelNode implements ISQLModelNode {
 		}
 		
 		
-		if (arg instanceof Number) {
-			/*	For now I only support Integers, but this could be modified
-			 * 	to convert other Numeric types to a string.
-			 */
-			if (arg instanceof Integer) {
-				Integer intValue = (Integer) arg;
-				argText = Integer.toString(intValue);				
-			}
-		} else if (arg instanceof String) {
+		if (arg instanceof String) {
 			argText = (String) arg;
 		} else if (arg instanceof IExpression) {
 			IExpression expr = (IExpression) arg;

@@ -84,7 +84,6 @@ public class FieldMap {
 			}				
 			IFieldMap fieldMapClass = (IFieldMap) tableRowClass.cast(tableRow);			
 			fieldOverrides = fieldMapClass.getFieldMappings(fieldOverrides);
-			tableRow = null;			//Mark the class instance for GC
 			validateFieldNamesDefined(fieldOverrides,tableRowClass);
 		}
 		
@@ -125,20 +124,19 @@ public class FieldMap {
 //				 ENDIF
 //				 add FieldMapDefinition to the FieldMapDefinitionList
 
-			if (fieldOverrides != null) {
-				wkFieldDef = fieldOverrides.findMapDefinitionByField(classField.getName());
-				if (wkFieldDef != null) {
-					fieldsDef.addDefinition(wkFieldDef);
-				} else {
-					/*  This is NOT foolproof, if the field name entered in a map
-					 *	definition doesn't match a defined field in the class 
-					 *	I
-					 * 
-					 */
+			wkFieldDef = fieldOverrides.findMapDefinitionByField(classField.getName());
+			if (wkFieldDef != null) {
+				fieldsDef.addDefinition(wkFieldDef);
+			} else {
+				/*  This is NOT foolproof, if the field name entered in a map
+				*	definition doesn't match a defined field in the class 
+				*/
+				if (!classField.isSynthetic()) {
 					fieldsDef.addDefinition(classField.getName(), classField.getName());
 				}
 			}
 		}
+
 	}
 	
 	/*

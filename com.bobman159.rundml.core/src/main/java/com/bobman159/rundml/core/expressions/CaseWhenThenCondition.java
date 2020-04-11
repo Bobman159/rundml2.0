@@ -1,7 +1,6 @@
 package com.bobman159.rundml.core.expressions;
 
 import com.bobman159.rundml.core.exprtypes.IExpression;
-import com.bobman159.rundml.core.sql.sql.conditions.SQLCondition;
 
 /**
  * Defines a single "WHEN IExpressionType THEN expression for a CASE or CASE WHEN  SQL expression.
@@ -22,25 +21,25 @@ public class CaseWhenThenCondition implements IExpression {
 	}
 	
 	/**
-	 * Define a WHEN <code>sqlCondition</code> THEN <code>expr</code> 
-	 * @param when the WHEN SQL condition (a &gt; b)
-	 * @param then the THEN SQL expression
-	 */
-	public CaseWhenThenCondition(SQLCondition when, IExpression then) {
-		this.when = when;
-		this.then = then;
-	}
-	
-	/**
 	 * @see com.bobman159.rundml.core.exprtypes.IExpression#serialize()
 	 */
 	@Override
 	public String serialize() {
 		
-		String expr = "";
-		expr = expr + " when " + when.serialize();
-		expr = expr + " then " + then.serialize();
+		StringBuilder expr = new StringBuilder();
+//		expr.append(" ").append("when").append(" ").append(when.serialize());
+		expr.append("when ").append(when.serialize());
+		doAppendSpace(expr);
+		expr.append("then").append(" ").append(then.serialize());
+		doAppendSpace(expr);
 		
-		return expr;
+		return expr.toString();
+	}
+	
+	//Appends a space to the expression if there is not one there already
+	private void doAppendSpace(StringBuilder expr) {
+		if (expr.charAt(expr.length() - 1) != ' ') {
+			expr.append(' ');
+		}
 	}
 }

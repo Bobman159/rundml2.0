@@ -99,12 +99,26 @@ public class CaseWhenExpression implements IExpression, IMathOperations, IString
 	public String serialize() {
 		
 		StringBuilder expr = new StringBuilder();
-		expr.append(" case ");
-		whenConds.forEach(when -> expr.append(when.serialize()));
-		expr.append(" end ");
+		expr.append(" ").append("case ");
+		whenConds.forEach(when -> {
+			expr.append(when.serialize());	
+			doAppendSpace(expr);
+		});
+
+		if (elseCondition != null) {
+			expr.append("else ").append(elseCondition.serialize());
+			doAppendSpace(expr);
+		}
+		expr.append("end ");
 		
 		return expr.toString();
 
 	}
 	
+	//Appends a space to the expression if there is not one there already
+	private void doAppendSpace(StringBuilder expr) {
+		if (expr.charAt(expr.length() - 1) != ' ') {
+			expr.append(' ');
+		}
+	}
 }

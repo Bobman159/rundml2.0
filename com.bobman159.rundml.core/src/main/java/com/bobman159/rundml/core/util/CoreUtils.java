@@ -2,10 +2,9 @@ package com.bobman159.rundml.core.util;
 
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListener;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.expressions.Expression;
@@ -23,8 +22,6 @@ import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldExceptio
  *
  */
 public class CoreUtils {
-	
-	private static Logger logger = LogManager.getLogger(CoreUtils.class.getName());
 
 	private CoreUtils() {
 		//To make Sonar Lint happy
@@ -55,7 +52,24 @@ public class CoreUtils {
 	 * @return an array of <code>Field</code> entries for the class
 	 */
 	public static Field[] getClassDeclaredFields(Class<?> clazz) {
-		return clazz.getDeclaredFields();
+
+		Field[] classFields = clazz.getDeclaredFields();
+		ArrayList<Field> nonSynthClassFields = new ArrayList<Field>();
+
+		for (int ix = 0; ix < classFields.length;ix++) {
+			if (classFields[ix].isSynthetic()) {
+				continue;
+			} else {
+				nonSynthClassFields.add(classFields[ix]);
+			}			
+		}
+		
+		Field[] arrNonSynthClassFields = new Field[nonSynthClassFields.size()];
+		for (int ix = 0; ix < nonSynthClassFields.size(); ix++) {
+			arrNonSynthClassFields[ix] = nonSynthClassFields.get(ix);
+		}
+		
+		return arrNonSynthClassFields;
 	}
 	
 	/**
@@ -103,7 +117,7 @@ public class CoreUtils {
 	 * @param tableRowClass the table row class
 	 * @return an array of column names as an IExpression[] array
 	 */
-	public static IExpression[] createColumnsFromClass(Class<?> tableRowClass) {
+	public static IExpression[] createColumnsFromClass(Class<?> tableRowClass) throws RunDMLException {
 		IExpression[] exprs;
 		int index = 0;
 		
@@ -112,7 +126,8 @@ public class CoreUtils {
 			try {
 				fieldMap = FieldMap.createFieldMap(tableRowClass);
 			} catch (NoTableRowClassFieldException e) {
-				logger.error(e.getMessage(), e);
+				System.out.println("createColumnsFromClass throw RunDMLException");
+				throw RunDMLException.createRunDMLException(e, RunDMLException.SQL_MODEL_BUILD);
 			}
 		}
 		FieldMapDefinitionList defsList = fieldMap.getFieldDefinitions();
