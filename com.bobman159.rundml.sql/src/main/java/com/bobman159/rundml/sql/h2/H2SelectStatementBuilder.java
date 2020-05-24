@@ -1,6 +1,6 @@
 package com.bobman159.rundml.sql.h2;
 
-import com.bobman159.rundml.core.exprtypes.IExpression;
+import com.bobman159.rundml.core.types.IExpression;
 import com.bobman159.rundml.sql.base.builder.BaseSelectStatementBuilder;
 import com.bobman159.rundml.sql.h2.H2SQLClauses.H2SelectClause;
 
@@ -23,7 +23,7 @@ public class H2SelectStatementBuilder extends BaseSelectStatementBuilder<H2Selec
 	 * Specify a LIMIT clause for the SELECT statement
 	 * @param limitTerm an expression to limit the number of results returned
 	 * @return the SELECT statement builder
-	 * @see com.bobman159.rundml.core.exprtypes.IExpression
+	 * @see com.bobman159.rundml.core.types.IExpression
 	 * 
 	 */
 
@@ -47,7 +47,7 @@ public class H2SelectStatementBuilder extends BaseSelectStatementBuilder<H2Selec
 	 * Specify a TOP clause for the SELECT statement
 	 * @param topExpr an expression that limits the number of rows returned
 	 * @return the SELECT statement builder
-	 * @see com.bobman159.rundml.core.exprtypes.IExpression
+	 * @see com.bobman159.rundml.core.types.IExpression
 	 * 
 	 */
 	public H2SelectStatementBuilder top(IExpression topExpr) {

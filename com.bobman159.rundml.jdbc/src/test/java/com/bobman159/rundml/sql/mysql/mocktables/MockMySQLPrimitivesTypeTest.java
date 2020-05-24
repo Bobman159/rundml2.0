@@ -8,7 +8,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.IFieldMap;
+import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
 
 public class MockMySQLPrimitivesTypeTest implements IFieldMap {
 

@@ -2,8 +2,8 @@ package com.bobman159.rundml.core.model;
 
 import java.util.stream.Stream;
 
-import com.bobman159.rundml.core.sql.ISQLEnum;
-import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.ISQLClause;
+import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 
 /**
  * Serializes or creates an SQL Statement (SELECT, INSERT, UPDATE or DELETE) 
@@ -23,7 +23,7 @@ public abstract class SQLStatementSerializer { //NOSONAR
 		Stream<SQLModelNode> modelStream = model.sqlClauses();
 
 		modelStream.forEach(modelNode  -> {
-			ISQLEnum enumClause =  modelNode.getEnum();
+			ISQLClause enumClause =  modelNode.getEnum();
 			if (!enumClause.equals(SQLClause.SELECTEXPR) &&
 				!enumClause.equals(SQLClause.WHERE) 	 &&
 				!enumClause.equals(SQLClause.HAVING)) {

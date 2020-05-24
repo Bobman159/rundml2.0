@@ -1,12 +1,14 @@
 package com.bobman159.rundml.core.model;
 
 import com.bobman159.rundml.core.expressions.ExpressionList;
-import com.bobman159.rundml.core.exprtypes.IExpression;
+import com.bobman159.rundml.core.expressions.impl.ExpressionVisitor;
 import com.bobman159.rundml.core.predicates.Predicate;
-import com.bobman159.rundml.core.sql.ISQLEnum;
+import com.bobman159.rundml.core.sql.types.ISQLType;
 
 /**
- * Information for an SQL clause in an SQL statement. Each instance  of
+ * Model information for an SQL clause, expression, predicate in an SQL statement. 
+ * 
+ * Each instance  of
  * <code>SQLModelNode</code> represents the text of the SQL clause for the SQL 
  * statement and the "argument(s)" values for that SQL clause.
  * 
@@ -14,60 +16,59 @@ import com.bobman159.rundml.core.sql.ISQLEnum;
  * to build the text of an SQL Statement will be executed.
  *
  */
-class SQLModelNode implements ISQLModelNode {
+public class SQLModelNode {
 	
-	private ISQLEnum 	enumClause;
-	private Object 		arg;
+	private ModelNodeType	nodeType;
+	private ISQLType	arg;
 
 	/**
 	 * Define a SQL clause with no arguments
-	 * @param enumeration the enumeration of an SQL clause syntax
+	 * @param nodeType type of model node being defined
 	 */
-	public SQLModelNode(ISQLEnum enumeration) {
-		enumClause = enumeration;
+	public SQLModelNode(ModelNodeType nodeType) {
+		this.nodeType = nodeType;
 		arg = null;
 	}
 	
 	/**
 	 * Define an SQL clause with an argument
-	 * @param enumeration the enumeration of an SQL clause syntax
+	 * @param nodeType the enumeration of an SQL clause syntax
 	 * @param arg the argument of that clause
 	 */
-	public SQLModelNode(ISQLEnum enumeration,Object arg) {
-		enumClause = enumeration;
+	public SQLModelNode(ModelNodeType nodeType,ISQLType arg) {
+		this.nodeType = nodeType;
 		this.arg = arg;
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.model.ISQLModelNode#argToString()
+	 * @return the node type for the current model node
 	 */
-	@Override
-	public ISQLEnum getEnum() {
-		return enumClause;
+	public ModelNodeType getNodeType() {
+		return nodeType;
 	}
 	
 	/**
 	 * @see com.bobman159.rundml.core.model.ISQLModelNode#argToString()
 	 */
-	@Override
+//	@Override
 	public String argToString() {
+//	public String serialize() {
 		String argText = null;
 		
 		if (arg == null) {
 			return null;
 		}
 		
-		
 		if (arg instanceof String) {
 			argText = (String) arg;
-		} else if (arg instanceof IExpression) {
-			IExpression expr = (IExpression) arg;
-			argText = expr.serialize();
+		} else if (arg instanceof ISQLType) {
+			ISQLType expr = (ISQLType) arg;
+			argText = ExpressionVisitor.getInstance().acceptSerialize(expr);
 		} else if (arg instanceof Predicate) {
 			Predicate pred = (Predicate) arg;
 			argText = pred.serialize();
 		} else if (arg instanceof ExpressionList) {
-			//ASSUME: The list of objects for SELECTEXPR are IExpression(s)
+			//ASSUME: The list of objects for SELECTEXPR are ISQLType(s)
 			ExpressionList list = (ExpressionList) arg;
 			argText = list.toCSV();
 		}
@@ -79,9 +80,9 @@ class SQLModelNode implements ISQLModelNode {
 	/**
 	 * @see com.bobman159.rundml.core.model.ISQLModelNode#getArg()
 	 */
-	@Override
-	public Object getArg() {
-		return arg;
-	}
+//	@Override
+//	public Object getArg() {
+//		return arg;
+//	}
 	
 }

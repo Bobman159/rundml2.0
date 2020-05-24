@@ -11,8 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.Expression;
-import com.bobman159.rundml.core.exprtypes.ParmMarker;
 import com.bobman159.rundml.core.predicates.Predicate;
+import com.bobman159.rundml.core.sql.types.impl.ParmMarker;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
 import com.bobman159.rundml.sql.h2.mocktables.H2MockPrimitivesTypeTest;
@@ -101,9 +101,9 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectExpressionTest() {
 		/*
-		 * Test each of the supported IExpression types.
+		 * Test each of the supported ISQLType types.
 		 * The expression type combinations (math, concat, etc) are tested by 
-		 * the com.bobman159.rundml.core.exprtypes.tests JUnits.
+		 * the com.bobman159.rundml.core.types.tests JUnits.
 		 */
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()

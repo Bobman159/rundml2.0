@@ -1,7 +1,7 @@
 package com.bobman159.rundml.core.predicates;
 
-import com.bobman159.rundml.core.exprtypes.ExprTypeHelper;
-import com.bobman159.rundml.core.exprtypes.IExpression;
+import com.bobman159.rundml.core.sql.types.ExprTypeHelper;
+import com.bobman159.rundml.core.sql.types.ISQLType;
 
 /**
  * Represents a predicate WHERE, AND, OR clause in an SQL statement.
@@ -33,7 +33,7 @@ public class PredicateClause implements IPredicate {
 			return this.operand;
 		}
 	}
-	private IExpression exprLhs;
+	private ISQLType exprLhs;
 	private PredOperand predicate = PredOperand.WHERE;
 
 	/**
@@ -48,14 +48,20 @@ public class PredicateClause implements IPredicate {
 		exprLhs = ExprTypeHelper.convertExpression(lhs);
 	}
 
+	@Override
+	public String serialize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	/**
 	 * @see com.bobman159.rundml.core.predicates.IPredicate#serialize()
 	 */
-	@Override
-	public String serialize() {
-		String pred = "";
-		return pred + predicate.getPredicate() + " " + exprLhs.serialize() + " ";
-	}
+//	@Override
+//	public String serialize() {
+//		String pred = "";
+//		return pred + predicate.getPredicate() + " " + exprLhs.serialize() + " ";
+//	}
 
 }

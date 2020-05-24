@@ -3,6 +3,7 @@ package com.bobman159.rundml.core.mapping;
 import java.lang.reflect.Field;
 
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
+import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.util.CoreUtils;
 

@@ -11,11 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
-import com.bobman159.rundml.core.exprtypes.Column;
-import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceAllColumnsDefined;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoInterface;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException;
+import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.impl.Column;
 import com.bobman159.rundml.core.util.CoreUtils;
 
 class CoreUtilsTest {
@@ -75,18 +75,18 @@ class CoreUtilsTest {
 	@Test
 	void testCreateColumnsFromClass() {
 			
-		IExpression[] expectedColumns = new IExpression[] {new Column("tableCol1"),
+		ISQLType[] expectedColumns = new ISQLType[] {new Column("tableCol1"),
 															new Column("tableCol2"),
 															new Column("tableCol3"),
 															new Column("tableCol4"),
 															new Column("tableCol5")
 														  };
-		IExpression[] expectedColumns2 = new IExpression[] {new Column("field1"),
+		ISQLType[] expectedColumns2 = new ISQLType[] {new Column("field1"),
 				new Column("field2"),
 				new Column("field3")
 			  };
 		
-		IExpression[] actualColumns = null;
+		ISQLType[] actualColumns = null;
 		try {
 			actualColumns = CoreUtils.createColumnsFromClass(FieldMapInterfaceAllColumnsDefined.class);
 		} catch (RunDMLException e) {
@@ -96,7 +96,7 @@ class CoreUtilsTest {
 		Assertions.assertNotNull(actualColumns);
 		Assertions.assertEquals(5, actualColumns.length);
 		int ix = 0;
-		for (IExpression actualExpr: actualColumns) {
+		for (ISQLType actualExpr: actualColumns) {
 			if (actualExpr instanceof Column == false) {
 				fail("actualExpr index: " + ix + "is NOT a Column expression");
 			} else {
@@ -107,7 +107,7 @@ class CoreUtilsTest {
 			ix++;
 		}
 		
-		IExpression[] actualColumns2 = null;
+		ISQLType[] actualColumns2 = null;
 		try {
 			actualColumns2 = CoreUtils.createColumnsFromClass(FieldMapNoInterface.class);
 		} catch (RunDMLException e) {
@@ -117,7 +117,7 @@ class CoreUtilsTest {
 		Assertions.assertNotNull(actualColumns2);
 		Assertions.assertEquals(3, actualColumns2.length);
 		int ix2 = 0;
-		for (IExpression actualExpr: actualColumns2) {
+		for (ISQLType actualExpr: actualColumns2) {
 			if (actualExpr instanceof Column == false) {
 				fail("actualExpr index: " + ix2 + "is NOT a Column expression");
 			} else {
@@ -129,7 +129,7 @@ class CoreUtilsTest {
 		}
 		
 		final String NOFIELD_ERROR = "com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException: No Field named fieldOne found in class com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException";
-		IExpression[] actualColumns3 = null;
+		ISQLType[] actualColumns3 = null;
 		try {
 			actualColumns3 = CoreUtils.createColumnsFromClass(FieldMapNoTableRowFieldClassException.class);
 		} catch (RunDMLException e) {
@@ -143,9 +143,9 @@ class CoreUtilsTest {
 	@Test
 	void testCreateColumnsFromStrings() {
 		String[] expectedColumns = new String[] {"col01","col02","col03","col04","col05","col06"};
-		IExpression[] actualColumns = CoreUtils.createColumnsFromStrings(expectedColumns);
+		ISQLType[] actualColumns = CoreUtils.createColumnsFromStrings(expectedColumns);
 		int ix = 0;
-		for(IExpression actualExpr : actualColumns) {
+		for(ISQLType actualExpr : actualColumns) {
 			if (actualExpr instanceof Column == false) {
 				fail("actualExpr index: " + ix + "is NOT a Column expression");
 			} else {

@@ -1,6 +1,6 @@
 package com.bobman159.rundml.core.model;
 
-import com.bobman159.rundml.core.sql.ISQLEnum;
+import com.bobman159.rundml.core.sql.ISQLClause;
 
 /**
  * Information for an SQL clause in an SQL statement. Each instance  of
@@ -15,11 +15,11 @@ import com.bobman159.rundml.core.sql.ISQLEnum;
 public interface ISQLModelNode {
 	 
 	/**
-	 * Return the base type <code>ISQLEnum</code> of the java Enum for an SQL 
+	 * Return the base type <code>ISQLClause</code> of the java Enum for an SQL 
 	 * clause
-	 * @return a ISQLEnum of a Java enum for an SQL clause.
+	 * @return a ISQLClause of a Java enum for an SQL clause.
 	 */
-	public ISQLEnum 	getEnum();
+	public ISQLClause 	getEnum();
 
 	/**
 	 * Return the argument if any for the SQL clause

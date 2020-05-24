@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.Expression;
-import com.bobman159.rundml.core.exprtypes.Column;
 import com.bobman159.rundml.core.predicates.Predicate;
+import com.bobman159.rundml.core.sql.types.impl.Column;
 
 class PredicateWhereTest {
 

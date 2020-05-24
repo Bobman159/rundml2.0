@@ -7,8 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Default implementation of the <code>ExceptionListener</code> interface for RunDML. 
- * This implementation is added to the list of Exception listeners in RunDML and 
+ * Listener for RunDML Exceptions thrown during execution. The <code>ExceptionListener</code> 
+ * interface for RunDML. This implementation is added to the list of Exception listeners in RunDML and 
  * simply logs the exception and call stack information.  
  * 
  * This class may be sub-classed, but users who want or need a specific

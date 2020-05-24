@@ -2,7 +2,7 @@ package com.bobman159.rundml.jdbc.utils.tests;
 
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.util.CoreUtils;
 
 /**

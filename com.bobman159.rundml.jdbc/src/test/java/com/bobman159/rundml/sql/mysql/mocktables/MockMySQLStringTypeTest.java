@@ -1,7 +1,7 @@
 package com.bobman159.rundml.sql.mysql.mocktables;
 
 import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.IFieldMap;
+import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
 
 public class MockMySQLStringTypeTest implements IFieldMap {
 

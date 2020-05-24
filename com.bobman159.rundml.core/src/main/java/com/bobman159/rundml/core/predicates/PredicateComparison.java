@@ -1,8 +1,8 @@
 package com.bobman159.rundml.core.predicates;
 
-import com.bobman159.rundml.core.exprtypes.ExprTypeHelper;
-import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
+import com.bobman159.rundml.core.sql.types.ExprTypeHelper;
+import com.bobman159.rundml.core.sql.types.ISQLType;
 
 /**
  * Represents the comparison (&lt;,&gt; etc) clause for an SQL predicate 
@@ -11,7 +11,7 @@ import com.bobman159.rundml.core.sql.sql.conditions.Op;
  */
 public class PredicateComparison implements IPredicate {
 	
-	private IExpression exprRhs;
+	private ISQLType exprRhs;
 	private Op compareOp;
 
 	/**
@@ -26,14 +26,10 @@ public class PredicateComparison implements IPredicate {
 		this.compareOp = compareOp;
 	}
 
-	/**
-	 * @see com.bobman159.rundml.core.predicates.IPredicate#serialize()
-	 */
 	@Override
 	public String serialize() {
-		return compareOp.getOperator() + " " + exprRhs.serialize() + " ";
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	
 
 }

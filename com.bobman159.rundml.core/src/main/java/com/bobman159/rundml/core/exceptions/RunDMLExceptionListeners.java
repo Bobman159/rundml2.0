@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Maintains a list of <code>ExceptionListener</code> classes to be notified when an 
+ * List of <code>ExceptionListener</code> classes to be notified when an 
  * exception is thrown by RunDML.
  *
  */

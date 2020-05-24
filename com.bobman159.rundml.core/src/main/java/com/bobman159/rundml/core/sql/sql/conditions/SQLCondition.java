@@ -1,6 +1,9 @@
 package com.bobman159.rundml.core.sql.sql.conditions;
 
-import com.bobman159.rundml.core.exprtypes.IExpression;
+import com.bobman159.rundml.core.expressions.AbstractBaseExpression;
+import com.bobman159.rundml.core.expressions.IExpressionNode;
+import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.SQLType;
 
 
 /**
@@ -8,12 +11,8 @@ import com.bobman159.rundml.core.exprtypes.IExpression;
  * 
  *
  */
-public class SQLCondition implements IExpression {
+public class SQLCondition extends AbstractBaseExpression {
 
-	private IExpression lhs;
-	private Op op;
-	private IExpression rhs;
-	
 	/**
 	 * Defines an SQL condition which is evaluated as true or false.
 	 * 
@@ -21,23 +20,18 @@ public class SQLCondition implements IExpression {
 	 * @param op the operator (&gt;&lt;,&lt;&gt;,=") etc.
 	 * @param rhs the SQL expression on the right side of the operand
 	 */
-	public SQLCondition(IExpression lhs,Op op, IExpression rhs) {
-		this.lhs = lhs;
-		this.op = op;
-		this.rhs = rhs;
+	public SQLCondition(ISQLType leftExpr,Op op, ISQLType rightExpr) {
+		super(leftExpr,op,rightExpr);
 	}
 
-	/**
-	 * @see com.bobman159.rundml.core.exprtypes.IExpression#serialize()
-	 */
 	@Override
-	public String serialize() {
-		String expr = "";
-		expr = lhs.serialize() + " ";
-		expr = expr + op.getOperator() + " ";
-		expr = expr + rhs.serialize();
-		
-		return expr;
+	public AbstractBaseExpression createExpressionNode(ISQLType leftExpr, Op operator, ISQLType rightExpr) {
+		return new SQLCondition(leftExpr,operator,rightExpr);
 	}
-	
+
+	@Override
+	public SQLType getType() {
+		return SQLType.PREDICATE;
+	}
+
 }

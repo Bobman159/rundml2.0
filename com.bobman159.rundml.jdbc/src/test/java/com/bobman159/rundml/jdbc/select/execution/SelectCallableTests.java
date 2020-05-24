@@ -20,7 +20,7 @@ import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.predicates.Predicate;
-import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;

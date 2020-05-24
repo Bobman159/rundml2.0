@@ -6,6 +6,7 @@ package com.bobman159.rundml.core.mapping;
  * value.  Column names and class field names are case sensitive.
  * 
  */
+//TODO: Consider deleting this interface?
 public interface IFieldMapDefinition {
 
 	/**

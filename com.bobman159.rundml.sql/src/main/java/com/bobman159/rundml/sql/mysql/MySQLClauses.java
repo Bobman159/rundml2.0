@@ -1,6 +1,6 @@
 package com.bobman159.rundml.sql.mysql;
 
-import com.bobman159.rundml.core.sql.ISQLEnum;
+import com.bobman159.rundml.core.sql.ISQLClause;
 
 /**
  * Defines enumerations for SQL clauses specific to MySQL databases for 
@@ -14,7 +14,7 @@ public class MySQLClauses {
 	/**
 	 * Define MySQL DBMS specific SQL clauses.  Clauses are defined in alphabetical order.	 *
 	 */
-	public enum MySQLClause implements ISQLEnum {
+	public enum MySQLClause implements ISQLClause {
 		BIG_RESULT("sql_big_result"),
 		BUFFER_RESULT("sql_buffer_result"),
 		LIMIT("limit"),

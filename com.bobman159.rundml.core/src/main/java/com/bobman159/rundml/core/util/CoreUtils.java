@@ -8,13 +8,13 @@ import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListener;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.expressions.Expression;
-import com.bobman159.rundml.core.exprtypes.Column;
-import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.mapping.FieldMap;
 import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.IFieldMap;
 import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
+import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
+import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.impl.Column;
 
 /**
  * A utility class for use in building the SQL statements for RunDML.
@@ -36,15 +36,7 @@ public class CoreUtils {
 		
 	}
 	
-	/**
-	 * Returns a qualified table name (schema.tableName)
-	 * @param schema the database schema 
-	 * @param tbName the table name
-	 * @return the fully qualifed table name
-	 */
-	public static String qualifiedTbName(String schema,String tbName) {
-		return String.format("%s.%s", schema,tbName);
-	}
+
 	
 	/**
 	 * @see java.lang.Class#getDeclaredFields()
@@ -54,12 +46,10 @@ public class CoreUtils {
 	public static Field[] getClassDeclaredFields(Class<?> clazz) {
 
 		Field[] classFields = clazz.getDeclaredFields();
-		ArrayList<Field> nonSynthClassFields = new ArrayList<Field>();
+		ArrayList<Field> nonSynthClassFields = new ArrayList<>();
 
 		for (int ix = 0; ix < classFields.length;ix++) {
-			if (classFields[ix].isSynthetic()) {
-				continue;
-			} else {
+			if (!(classFields[ix].isSynthetic())) {
 				nonSynthClassFields.add(classFields[ix]);
 			}			
 		}
@@ -110,15 +100,15 @@ public class CoreUtils {
 	}
 
 	/**
-	 * Creates a list of IExpression column entries for a specified table row class.
+	 * Creates a list of ISQLType column entries for a specified table row class.
 	 * A table row class field name is used as the column name by default, unless an 
 	 * entry is added to the Field Map in which case the column name is from that entry is used.
 	 * 
 	 * @param tableRowClass the table row class
-	 * @return an array of column names as an IExpression[] array
+	 * @return an array of column names as an ISQLType[] array
 	 */
-	public static IExpression[] createColumnsFromClass(Class<?> tableRowClass) throws RunDMLException {
-		IExpression[] exprs;
+	public static ISQLType[] createColumnsFromClass(Class<?> tableRowClass) throws RunDMLException {
+		ISQLType[] exprs;
 		int index = 0;
 		
 		FieldMap fieldMap = FieldMap.findFieldMap(tableRowClass);
@@ -126,18 +116,17 @@ public class CoreUtils {
 			try {
 				fieldMap = FieldMap.createFieldMap(tableRowClass);
 			} catch (NoTableRowClassFieldException e) {
-				System.out.println("createColumnsFromClass throw RunDMLException");
 				throw RunDMLException.createRunDMLException(e, RunDMLException.SQL_MODEL_BUILD);
 			}
 		}
 		FieldMapDefinitionList defsList = fieldMap.getFieldDefinitions();
 		Object[] fieldDefs = defsList.getFieldDefinitions().toArray();
-		exprs = new IExpression[fieldDefs.length];
+		exprs = new ISQLType[fieldDefs.length];
 		Column col = null;
 		for (Object fieldDef : fieldDefs) {
 			if (fieldDef instanceof IFieldMapDefinition) {
 				IFieldMapDefinition wkFieldDef = (IFieldMapDefinition) fieldDef;
-				col = Expression.column(wkFieldDef.getColumnName());
+				col = (Column) Expression.column(wkFieldDef.getColumnName());
 			}
 				
 			exprs[index] = col;
@@ -160,14 +149,14 @@ public class CoreUtils {
 	}
 
 	/**
-	 * Create an array of IExpression[] table column names from a String array.
+	 * Create an array of ISQLType[] table column names from a String array.
 	 * No case sensitivity is expected for the list of column names
 	 * @param columns a string of array table column names
-	 * @return an array of <code>IExpression</code> column names
+	 * @return an array of <code>ISQLType</code> column names
 	 */
-	public static IExpression[] createColumnsFromStrings(String[] columns) {
+	public static ISQLType[] createColumnsFromStrings(String[] columns) {
 		
-		IExpression[] exprs = new IExpression[columns.length];
+		ISQLType[] exprs = new ISQLType[columns.length];
 		int index = 0;
 		
 		for (String columnName : columns) {
@@ -177,5 +166,20 @@ public class CoreUtils {
 		
 		return exprs;
 	}
+	
+	/**
+	 * Normalizes or removes leading, trailing and extra spaces "  " from an SQL clause
+	 * @param sqlClause a non normalized sql clause
+	 * @return a normalized SQL clause string
+	 */
+	public static String normalizeString(String sqlClause) {
+
+		String normalizedSQLClause = sqlClause;
+
+		normalizedSQLClause = normalizedSQLClause.replaceAll("( )+", " ");
+		normalizedSQLClause = normalizedSQLClause.trim();
+
+		return normalizedSQLClause;
+		}
 
 }

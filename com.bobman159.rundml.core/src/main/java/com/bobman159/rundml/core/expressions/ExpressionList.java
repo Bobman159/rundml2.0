@@ -1,22 +1,24 @@
 package com.bobman159.rundml.core.expressions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.bobman159.rundml.core.exprtypes.IExpression;
+import com.bobman159.rundml.core.sql.impl.SQLClauseClient;
+import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.util.CoreUtils;
 
 /**
- * Maintains a <code>List</code> of <code>IExpressionType</code> objects
+ * Maintains a <code>List</code> of <code>ISQLType</code> objects
  * for use in SQL select, insert, or update statements
  */
 
 public class ExpressionList {
 	
-	private List<IExpression> expressions;
+	private List<ISQLType> expressions;
 	
 	/**
-	 * Define the list for <code>IExpression</code> types.
+	 * Define the list for <code>ISQLType</code> types.
 	 */
 	public ExpressionList() {
 		expressions = new ArrayList<>();
@@ -28,8 +30,8 @@ public class ExpressionList {
 	 * 
 	 * @param expressionList expressions list of expressions
 	 */
-	public void addExpressions(IExpression[] expressionList) {
-		for (IExpression expr : expressionList) {
+	public void addExpressions(ISQLType[] expressionList) {
+		for (ISQLType expr : expressionList) {
 			this.expressions.add(expr);
 		}
 	}
@@ -38,7 +40,7 @@ public class ExpressionList {
 	 * Add an expression to list of expressions being tracked by this class
 	 * @param expresion the expression to be added
 	 */
-	public void addExpression(IExpression expresion) {
+	public void addExpression(ISQLType expresion) {
 		expressions.add(expresion);
 	}
 	
@@ -50,11 +52,17 @@ public class ExpressionList {
 	 */
 	public String toCSV() {
 	
-		String csvString = "";
-		csvString = expressions.stream()
-			.map(IExpression::serialize)
-            .collect( Collectors.joining(",") );
-		return csvString;
+		StringBuilder csvString = new StringBuilder();
+		Iterator<ISQLType> csvIterator = expressions.stream().iterator();
+		while (csvIterator.hasNext()) {
+			ISQLType exprBase = csvIterator.next();
+			csvString.append(SQLClauseClient.getInstance().toSQLClause(exprBase));
+			if (csvIterator.hasNext()) {
+				csvString.append(",");
+			}
+		}
+		
+		return CoreUtils.normalizeString(csvString.toString());
 	}
 
 }

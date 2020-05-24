@@ -6,8 +6,8 @@ package com.bobman159.rundml.sql.mysql;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.bobman159.rundml.core.exprtypes.IExpression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
+import com.bobman159.rundml.core.types.IExpression;
 import com.bobman159.rundml.sql.base.builder.BaseSelectStatementBuilder;
 import com.bobman159.rundml.sql.mysql.MySQLClauses.MySQLClause;
 

@@ -21,7 +21,7 @@ import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
-import com.bobman159.rundml.core.sql.SQLClauses;
+import com.bobman159.rundml.core.sql.impl.SQLClauses;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;

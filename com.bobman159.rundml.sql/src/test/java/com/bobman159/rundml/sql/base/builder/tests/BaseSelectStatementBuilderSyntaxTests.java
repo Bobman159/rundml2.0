@@ -100,9 +100,9 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectExpressionTest() {
 		/*
-		 * Test each of the supported IExpression types.
+		 * Test each of the supported ISQLType types.
 		 * The expression type combinations (math, concat, etc) are tested by 
-		 * the com.bobman159.rundml.core.exprtypes.tests JUnits.
+		 * the com.bobman159.rundml.core.types.tests JUnits.
 		 */
 		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select(Expression.number(10),Expression.string("This is a string"),Expression.column(DFLTINTEGER),

@@ -1,6 +1,6 @@
 package com.bobman159.rundml.sql.h2;
 
-import com.bobman159.rundml.core.sql.ISQLEnum;
+import com.bobman159.rundml.core.sql.ISQLClause;
 
 /**
  * Defines enumerations for SQL clauses specific to H2 databases for SELECT, INSERT, UPDATE,
@@ -14,7 +14,7 @@ public class H2SQLClauses  {
 	/**
 	 * Define H2 DBMS specifc SQL clauses.  Clauses are defined in alphabetical order.	 *
 	 */
-	public enum H2SelectClause implements ISQLEnum {
+	public enum H2SelectClause implements ISQLClause {
 		LIMIT("limit"),
 		OFFSET("offset"),
 		TOP("top");

@@ -5,9 +5,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.bobman159.rundml.core.expressions.ExpressionList;
-import com.bobman159.rundml.core.exprtypes.IExpression;
-import com.bobman159.rundml.core.sql.ISQLEnum;
-import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.ISQLClause;
+import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.types.ISQLType;
 
 /**
  * Model class for representing SQL clauses for SELECT, INSERT, UPDATE and
@@ -34,7 +34,7 @@ public class SQLStatementModel {
 	 * Add an SQL clause for the current model 
 	 * @param clause the clause being added
 	 */
-	public void addClause(ISQLEnum clause) {
+	public void addClause(ISQLClause clause) {
 		addNode(clause);
 	}
 	
@@ -46,12 +46,12 @@ public class SQLStatementModel {
 	 * @param clause the clause being added
 	 * @param value the value for the current clause being added
 	 */
-	public void addClause(ISQLEnum clause,Object value) {
+	public void addClause(ISQLClause clause,Object value) {
 		addNode(clause,value);
 	}
 	
 	/**
-	 * Add an SQL expression represented by an <code>IExpression</code> object
+	 * Add an SQL expression represented by an <code>ISQLType</code> object
 	 * to a list of other expressions that are defined in the model.  Only 
 	 * <code>SQLClause</code> enumerations defined for SQL expressions that are 
 	 * comma separated list such as SELECT_EXPR or GROUP_BY should use this method. 
@@ -59,7 +59,7 @@ public class SQLStatementModel {
 	 * @param clause <code>SQLClause</code> enumeration
 	 * @param expr an SQL expression 
 	 */
-	public void addExpressionList(ISQLEnum clause, IExpression expr) {
+	public void addExpressionList(ISQLClause clause, ISQLType expr) {
 		
 		ExpressionList exprList;
 		if (!containsSQLClause(clause)) { 
@@ -81,7 +81,7 @@ public class SQLStatementModel {
 	}
 	
 	/**
-	 * Add an SQL expression represented by a list  of <code>IExpression</code> 
+	 * Add an SQL expression represented by a list  of <code>ISQLType</code> 
 	 * objects to the model.  Only <code>SQLClause</code> enumerations defined 
 	 * for SQL expressions that are comma separated list such as SELECT_EXPR 
 	 * or GROUP_BY should use this method. 
@@ -89,7 +89,7 @@ public class SQLStatementModel {
 	 * @param clause <code>SQLClause</code> enumeration
 	 * @param expressions SQL expression list 
 	 */
-	public void addExpressionList(ISQLEnum clause,IExpression... expressions) {
+	public void addExpressionList(ISQLClause clause,ISQLType... expressions) {
 
 		ExpressionList exprsList = new ExpressionList();
 		exprsList.addExpressions(expressions);
@@ -111,7 +111,7 @@ public class SQLStatementModel {
 	 * @param srchClause the clause to search the model for
 	 * @return true if an entry was found, false otherwise.
 	 */
-	private boolean containsSQLClause(ISQLEnum srchClause) {
+	private boolean containsSQLClause(ISQLClause srchClause) {
 		
 		boolean clauseFound = false;
 
@@ -125,7 +125,7 @@ public class SQLStatementModel {
 	 * If no entry is found, then null is returned.
 	 * https://stackoverflow.com/questions/22940416/fetch-first-element-which-matches-criteria
 	 */
-	private SQLModelNode getSQLClause(ISQLEnum sqlClause) {
+	private SQLModelNode getSQLClause(ISQLClause sqlClause) {
 				
 		Optional<SQLModelNode> srchNode = model.stream()
 					.filter(modelNode -> modelNode.getEnum().equals(sqlClause))
@@ -140,13 +140,13 @@ public class SQLStatementModel {
 	}
 	
 	/* Adds a SQL clause to the model */
-	private void addNode(ISQLEnum clause) {
+	private void addNode(ISQLClause clause) {
 		SQLModelNode node = new SQLModelNode(clause);
 		model.add(node);
 	}
 	
 	/* Adds a SQL clause and it's arguments to the model */
-	private void addNode(ISQLEnum clause,Object arg) {
+	private void addNode(ISQLClause clause,Object arg) {
 		SQLModelNode node = new SQLModelNode(clause,arg);
 		model.add(node);
 	}

@@ -4,17 +4,15 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
-import com.bobman159.rundml.core.exprtypes.IExpression;
+import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
 import com.bobman159.rundml.core.predicates.Predicate;
-import com.bobman159.rundml.core.sql.OrderByExpression;
-import com.bobman159.rundml.core.sql.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.impl.OrderByExpression;
+import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
 import com.bobman159.rundml.sql.ISQLSelect;
@@ -36,7 +34,6 @@ import com.bobman159.rundml.sql.ISQLStatement;
 @SuppressWarnings("rawtypes")
 public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> implements ISQLStatement, ISQLSelect {
 
-	private Logger logger = LogManager.getLogger(BaseSelectStatementBuilder.class);
 	protected SQLStatementModel model = new SQLStatementModel();
 
 	public BaseSelectStatementBuilder() {
@@ -69,7 +66,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	public B select(Class<?> clazz) {
 		model.addClause(SQLClause.SELECT);
 		try {
-			IExpression[] columnArray = CoreUtils.createColumnsFromClass(clazz);
+			ISQLType[] columnArray = CoreUtils.createColumnsFromClass(clazz);
 			model.addExpressionList(SQLClause.SELECTEXPR, columnArray);
 		} catch (RunDMLException rdex) {
 			RunDMLExceptionListeners.getInstance().notifyListeners(rdex);
@@ -83,7 +80,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	 * list of String values "ABC","DEF" is treated as the list of column names in
 	 * the SELECT list. For example select("Col01","Col02") will generate "SELECT
 	 * COL01,COL02" as an SQL statement. If a column name should be used in an SQL
-	 * expression i.e. "COL01" + 10 or "COL02 || 'def' the select(IExpression...
+	 * expression i.e. "COL01" + 10 or "COL02 || 'def' the select(ISQLType...
 	 * expr) method should be used with the <code>Expression</code> method should be
 	 * used.
 	 * 
@@ -114,10 +111,10 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	 * }
 	 * </pre>
 	 * 
-	 * @param exprs one or more <code>IExpression</code> to be selected
+	 * @param exprs one or more <code>ISQLType</code> to be selected
 	 * @return an instance of this builder
 	 */
-	public B select(IExpression... exprs) {
+	public B select(ISQLType... exprs) {
 
 		model.addClause(SQLClause.SELECT);
 		model.addExpressionList(SQLClause.SELECTEXPR, exprs);
@@ -125,7 +122,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 		return self();
 	}
 
-	public B selectExpression(IExpression expr) {
+	public B selectExpression(ISQLType expr) {
 		model.addExpressionList(SQLClause.SELECTEXPR, expr);
 		return self();
 	}
@@ -158,7 +155,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	 * @return an instance of this builder
 	 */
 	public B from(String schema, String tbName) {
-		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName(schema, tbName));
+		model.addClause(SQLClause.FROM, Expression.qualifiedTable(schema, tbName));
 		return self();
 	}
 
@@ -178,11 +175,11 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	/**
 	 * Specify a GROUP BY clause for the SELECT statement.
 	 * 
-	 * @see com.bobman159.rundml.core.exprtypes.IExpression
+	 * @see com.bobman159.rundml.core.types.IExpression
 	 * @param groupByExprs list of expressions 1 to n
 	 * @return an instance of this builder
 	 */
-	public B groupBy(IExpression... groupByExprs) {
+	public B groupBy(ISQLType... groupByExprs) {
 		model.addExpressionList(SQLClause.GROUPBY, groupByExprs);
 		return self();
 	}
@@ -202,7 +199,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	/**
 	 * Specify a ORDER BY clause for the SELECT statement.
 	 * 
-	 * @see com.bobman159.rundml.core.sql.OrderByExpression
+	 * @see com.bobman159.rundml.core.sql.impl.OrderByExpression
 	 * @param orderByExprs expression(s) for the ORDER BY
 	 * @return an instance of this builder
 	 */
