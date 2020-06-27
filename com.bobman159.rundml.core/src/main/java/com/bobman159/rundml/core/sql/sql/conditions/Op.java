@@ -37,7 +37,6 @@ public enum Op {
 		   SUB("-"),
 		   MULT("*"),
 		   DIVIDE("/"),
-		   PARMMARK("?"),
 		   CONCAT("||");
 		   	   
 		   private String operator;
@@ -50,7 +49,7 @@ public enum Op {
 		    * Return the string representation for the operator.
 		    * @return the operator
 		    */
-		   public String getOperator() {
+		   public String opToString() {
 			   return this.operator;
 		   }
 }

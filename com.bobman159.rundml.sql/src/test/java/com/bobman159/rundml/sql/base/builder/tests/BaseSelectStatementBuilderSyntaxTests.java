@@ -10,7 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.Expression;
-import com.bobman159.rundml.core.predicates.Predicate;
+import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
+import com.bobman159.rundml.core.predicates.impl.PredicatesList;
 import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
 import com.bobman159.rundml.sql.h2.mocktables.TypeTest;
 
@@ -54,6 +55,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectExpressionClassTest() {
 		
+		@SuppressWarnings("unchecked")
 		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select(TypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -71,6 +73,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectClassTest() {
 		
+		@SuppressWarnings("unchecked")
 		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
 				.select(TypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -105,7 +108,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 		 * the com.bobman159.rundml.core.types.tests JUnits.
 		 */
 		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(10),Expression.string("This is a string"),Expression.column(DFLTINTEGER),
+				.select(Expression.constant(10),Expression.constant("This is a string"),Expression.column(DFLTINTEGER),
 				Expression.parm(Types.VARCHAR,"This is a string too"))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
@@ -183,7 +186,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 	@Test
 	void compatibleSelectWhereTest() {
 		
-		Predicate pred = Predicate.where(Expression.column(DFLTINTEGER))
+		PredicatesList pred = PredicateBuilder.where(Expression.column(DFLTINTEGER))
 				  .isGreater(100000)
 				  .and(Expression.column(NOTNULLDEC72))
 				  .isGreaterOrEqual(12345.10)
@@ -217,10 +220,10 @@ class BaseSelectStatementBuilderSyntaxTests {
 	void compatibleSelectGroupByTest() {
 		
 		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(Expression.number(100000),
-						 Expression.string(ABCDEFG_LITERAL),
+				.groupBy(Expression.constant(100000),
+						 Expression.constant(ABCDEFG_LITERAL),
 						 Expression.parm(Types.DECIMAL, 100000),
 						 Expression.column(DFLTINTEGER))
 				.getStatementText();
@@ -235,7 +238,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 	void compatibleSelectOrderByTest() {
 		
 		String stmtText = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2),Expression.orderBy(3))
 				.getStatementText();
@@ -245,7 +248,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "order by 1,2,3",stmtText);
 		
 		String stmtText2 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),
 						 Expression.orderBy(2),
@@ -257,9 +260,9 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "order by 1,2,dfltInteger",stmtText2);		
 		
 		String stmtText3 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(Expression.string(ABCDEFG_LITERAL)))
+				.orderBy(Expression.orderBy(Expression.constant(ABCDEFG_LITERAL)))
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -267,7 +270,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "order by 'Abcdefg'",stmtText3);
 		
 		String stmtText4 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1).asc())
 				.getStatementText();
@@ -277,7 +280,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "order by 1 asc",stmtText4);
 		
 		String stmtText5 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)).desc())
 				.getStatementText();
@@ -287,7 +290,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "order by dfltInteger desc",stmtText5);
 
 		String stmtText6 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc())
 				.getStatementText();
@@ -297,7 +300,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "order by 1,2 desc",stmtText6);		
 
 		String stmtText7 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc().nullsLast())
 				.getStatementText();
@@ -307,7 +310,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "order by 1,2 desc nulls last",stmtText7);		
 
 		String stmtText8 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)),
 						 Expression.orderBy(Expression.column(NOTNULLVARCHAR)).desc()
@@ -333,7 +336,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "notNullDec72",stmtText9);
 		
 		String stmtText10 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(100000),Expression.string(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
+				.select(Expression.constant(100000),Expression.constant(ABCDEFG_LITERAL),Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)).asc()
 								   .nullsFirst(),
@@ -358,8 +361,8 @@ class BaseSelectStatementBuilderSyntaxTests {
 				.select(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(Expression.column(DFLTINTEGER))
-				.having(Predicate.having(Expression.column(DFLTINTEGER)).isGreater(100000)
-								 .build())
+				.having(PredicateBuilder.having(Expression.column(DFLTINTEGER)).isGreater(100000)
+								 .build().toString())
 				.getStatementText();
 
 		Assertions.assertEquals("select dfltInteger " +
@@ -370,7 +373,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				.select(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(Expression.column(NOTNULLCHAR))
-				.having(Predicate.having(Expression.column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
+				.having(PredicateBuilder.having(Expression.column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
 								 .build())
 				.getStatementText();
 
@@ -382,7 +385,7 @@ class BaseSelectStatementBuilderSyntaxTests {
 				.select(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(Expression.column(NOTNULLCHAR))
-				.having(Predicate.having(Expression.column(NOTNULLCHAR))
+				.having(PredicateBuilder.having(Expression.column(NOTNULLCHAR))
 								 .isGreaterOrEqual(NUMERIC_LITERAL)
 								 .or(Expression.column(NOTNULLCHAR)).isEqual("223456789")
 								 .and(Expression.column(NOTNULLCHAR)).isLess("1123456789")
@@ -398,9 +401,9 @@ class BaseSelectStatementBuilderSyntaxTests {
 		String stmtText4 = RunDMLSQLFactory.createBaseSelectStatement()
 				.select(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(Expression.string("Abcdef"),
-						 Expression.string("Hiklmnop"))
-				.having(Predicate.having("Abcdef")
+				.groupBy(Expression.constant("Abcdef"),
+						 Expression.constant("Hiklmnop"))
+				.having(PredicateBuilder.having("Abcdef")
 								 .isEqual("Abcdef2")
 								 .or("Hijklmnop").isGreater("Hijklmno")
 								 .build())
@@ -412,12 +415,12 @@ class BaseSelectStatementBuilderSyntaxTests {
 				     "OR 'Hijklmnop' > 'Hijklmno'",stmtText4);
 
 		String stmtText5 = RunDMLSQLFactory.createBaseSelectStatement()
-				.select(Expression.number(10),Expression.number(20),Expression.number(30))
+				.select(Expression.constant(10),Expression.constant(20),Expression.constant(30))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(Expression.number(20),
-						 Expression.number(30),
-						 Expression.number(10))
-					.having(Predicate.having(20)
+				.groupBy(Expression.constant(20),
+						 Expression.constant(30),
+						 Expression.constant(10))
+					.having(PredicateBuilder.having(20)
 								 .isEqual(20)
 								 .and(20).isGreater(10)
 								 .and(10).isLess(30)

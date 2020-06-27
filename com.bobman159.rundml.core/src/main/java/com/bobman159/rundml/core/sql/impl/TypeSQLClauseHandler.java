@@ -33,7 +33,6 @@ public class TypeSQLClauseHandler extends AbstractSQLClauseHandler {
 		if ((SQLType.EXPRESSION.equals(typeNode.getType())) ||
 			(SQLType.PREDICATE.equals(typeNode.getType()))) {
 			setHandled(false);
-//			next(typeNode);
 			return "";
 		}
 		

@@ -1,7 +1,6 @@
 package com.bobman159.rundml.core.sql.sql.conditions;
 
 import com.bobman159.rundml.core.expressions.AbstractBaseExpression;
-import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.SQLType;
 
@@ -11,27 +10,91 @@ import com.bobman159.rundml.core.sql.types.SQLType;
  * 
  *
  */
-public class SQLCondition extends AbstractBaseExpression {
+public class SQLCondition implements ISQLCondition {
+	
+	private ISQLType leftCond;
+	private ISQLType rightCond;
+	private Op		 operator;
 
+	/**
+	 * Partial constructor for a SQL condition
+	 * @param leftExpr first operand (left) of the SQL condition
+	 * @return partial instance of an SQL condition
+	 */
+	public static SQLCondition createSQLCondition(ISQLType leftExpr) {
+		return new SQLCondition(leftExpr);
+	}
+	
 	/**
 	 * Defines an SQL condition which is evaluated as true or false.
 	 * 
-	 * @param lhs the SQL expression on the left of the operand
+	 * @param condition partially defined (left expression) sql condition
 	 * @param op the operator (&gt;&lt;,&lt;&gt;,=") etc.
 	 * @param rhs the SQL expression on the right side of the operand
 	 */
-	public SQLCondition(ISQLType leftExpr,Op op, ISQLType rightExpr) {
-		super(leftExpr,op,rightExpr);
+	public static SQLCondition createSQLCondition(ISQLCondition condition,Op op, ISQLType rightExpr) {
+		ISQLType leftExpr = condition.getLeftCondition();
+		return new SQLCondition(leftExpr, op, rightExpr);
+	}
+	
+//	/**
+//	 * Creates a complete SQL condition 
+//	 * @param leftCond the left part of the condition
+//	 * @param operator the operator for the condition
+//	 * @param rightCond the right part of the condition
+//	 * @return the completed SQL condition
+//	 */
+//	@Override
+//	public SQLCondition createSQLCondition(ISQLType leftCond, Op operator, ISQLType rightCond) {
+//		return new SQLCondition(leftCond,operator,rightCond);
+//	}
+	
+	/*
+	 * Partial constructor for a SQL condition
+	 * @param leftExpr first operand (left) of the SQL condition
+	 * @return partial instance of an SQL condition
+	 */
+	private SQLCondition(ISQLType leftCond) {
+		this.leftCond = leftCond;
+	}
+	
+	/*
+	 * Defines an SQL condition which is evaluated as true or false.
+	 * 
+	 * @param condition partially defined (left expression) sql condition
+	 * @param op the operator (&gt;&lt;,&lt;&gt;,=") etc.
+	 * @param rhs the SQL expression on the right side of the operand
+	 */
+	private SQLCondition(ISQLType leftCond,Op op, ISQLType rightCond) {
+		this.leftCond = leftCond;
+		this.operator = op;
+		this.rightCond = rightCond;
 	}
 
+
+
+	/**
+	 * @see com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition#getLeftCondition()
+	 */
 	@Override
-	public AbstractBaseExpression createExpressionNode(ISQLType leftExpr, Op operator, ISQLType rightExpr) {
-		return new SQLCondition(leftExpr,operator,rightExpr);
+	public ISQLType getLeftCondition() {
+		return leftCond;
 	}
 
+	/**
+	 * @see com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition#getRightCondition()
+	 */
 	@Override
-	public SQLType getType() {
-		return SQLType.PREDICATE;
+	public ISQLType getRightCondition() {
+		return rightCond;
+	}
+
+	/**
+	 * @see com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition#getOperator()
+	 */
+	@Override
+	public Op getOperator() {
+		return operator;
 	}
 
 }

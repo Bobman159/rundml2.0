@@ -1,6 +1,6 @@
 package com.bobman159.rundml.sql.h2;
 
-import com.bobman159.rundml.core.types.IExpression;
+import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.sql.base.builder.BaseSelectStatementBuilder;
 import com.bobman159.rundml.sql.h2.H2SQLClauses.H2SelectClause;
 
@@ -27,7 +27,7 @@ public class H2SelectStatementBuilder extends BaseSelectStatementBuilder<H2Selec
 	 * 
 	 */
 
-	public H2SelectStatementBuilder limit(IExpression limitTerm) {
+	public H2SelectStatementBuilder limit(ISQLType limitTerm) {
 		model.addClause(H2SelectClause.LIMIT,limitTerm);
 		return this;
 	}
@@ -38,7 +38,7 @@ public class H2SelectStatementBuilder extends BaseSelectStatementBuilder<H2Selec
 	 * @param offset specifies how many rows to skip
 	 * @return the SELECT statement builder
 	 */
-	public H2SelectStatementBuilder offset(IExpression offset) {
+	public H2SelectStatementBuilder offset(ISQLType offset) {
 		model.addClause(H2SelectClause.OFFSET,offset);
 		return this;
 	}
@@ -50,7 +50,7 @@ public class H2SelectStatementBuilder extends BaseSelectStatementBuilder<H2Selec
 	 * @see com.bobman159.rundml.core.types.IExpression
 	 * 
 	 */
-	public H2SelectStatementBuilder top(IExpression topExpr) {
+	public H2SelectStatementBuilder top(ISQLType topExpr) {
 		model.addClause(H2SelectClause.TOP,topExpr);
 		return this;
 	}

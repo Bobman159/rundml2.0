@@ -2,7 +2,7 @@ package com.bobman159.rundml.core.model;
 
 import com.bobman159.rundml.core.expressions.ExpressionList;
 import com.bobman159.rundml.core.expressions.impl.ExpressionVisitor;
-import com.bobman159.rundml.core.predicates.Predicate;
+import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
 /**
@@ -64,8 +64,8 @@ public class SQLModelNode {
 		} else if (arg instanceof ISQLType) {
 			ISQLType expr = (ISQLType) arg;
 			argText = ExpressionVisitor.getInstance().acceptSerialize(expr);
-		} else if (arg instanceof Predicate) {
-			Predicate pred = (Predicate) arg;
+		} else if (arg instanceof PredicateBuilder) {
+			PredicateBuilder pred = (PredicateBuilder) arg;
 			argText = pred.serialize();
 		} else if (arg instanceof ExpressionList) {
 			//ASSUME: The list of objects for SELECTEXPR are ISQLType(s)

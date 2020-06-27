@@ -9,7 +9,7 @@ import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
-import com.bobman159.rundml.core.predicates.Predicate;
+import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
 import com.bobman159.rundml.core.sql.impl.OrderByExpression;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.sql.types.ISQLType;
@@ -161,13 +161,13 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 
 	/**
 	 * Specify the WHERE clause for the SELECT statement to return table rows
-	 * matching the Predicate condition.
+	 * matching the PredicateBuilder condition.
 	 * 
-	 * @see com.bobman159.rundml.core.predicates.Predicate
+	 * @see com.bobman159.rundml.core.predicates.impl.PredicateBuilder
 	 * @param pred the predicate conditions
 	 * @return an instance of this builder
 	 */
-	public B where(Predicate pred) {
+	public B where(PredicateBuilder pred) {
 		model.addClause(SQLClause.WHERE, pred);
 		return self();
 	}
@@ -187,11 +187,11 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	/**
 	 * Specifies a HAVING clause for the SELECT statement
 	 * 
-	 * @see com.bobman159.rundml.core.predicates.Predicate
-	 * @param havingPred a <code>Predicate</code>
+	 * @see com.bobman159.rundml.core.predicates.impl.PredicateBuilder
+	 * @param havingPred a <code>PredicateBuilder</code>
 	 * @return an instance of this builder
 	 */
-	public B having(Predicate havingPred) {
+	public B having(PredicateBuilder havingPred) {
 		model.addClause(SQLClause.HAVING, havingPred);
 		return self();
 	}

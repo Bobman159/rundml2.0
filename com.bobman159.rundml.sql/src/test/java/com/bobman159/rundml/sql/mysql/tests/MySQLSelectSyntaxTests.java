@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.Expression;
-import com.bobman159.rundml.core.predicates.Predicate;
+import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
 import com.bobman159.rundml.core.sql.types.impl.ParmMarker;
 import com.bobman159.rundml.sql.factory.RunDMLSQLFactory;
 import com.bobman159.rundml.sql.mysql.mocktables.MockMySQLPrimitivesTypeTest;
@@ -59,7 +59,7 @@ class MySQLSelectSyntaxTests {
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(Expression.column(DFLTINTEGER))
-				.having(Predicate.having(Expression.column(DFLTINTEGER)).isGreater(100000)
+				.having(PredicateBuilder.having(Expression.column(DFLTINTEGER)).isGreater(100000)
 								 .build())
 				.getStatementText();
 				
@@ -73,7 +73,7 @@ class MySQLSelectSyntaxTests {
 				.selectExpression(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(Expression.column(NOTNULLCHAR))
-				.having(Predicate.having(Expression.column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
+				.having(PredicateBuilder.having(Expression.column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
 								 .build())
 				.getStatementText();
 
@@ -86,7 +86,7 @@ class MySQLSelectSyntaxTests {
 				.selectExpression(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.groupBy(Expression.column(NOTNULLCHAR))
-				.having(Predicate.having(Expression.column(NOTNULLCHAR))
+				.having(PredicateBuilder.having(Expression.column(NOTNULLCHAR))
 								 .isGreaterOrEqual(NUMERIC_LITERAL)
 								 .or(Expression.column(NOTNULLCHAR)).isEqual("223456789")
 								 .and(Expression.column(NOTNULLCHAR)).isLess("1123456789")
@@ -103,9 +103,9 @@ class MySQLSelectSyntaxTests {
 				.select()
 				.selectExpression(Expression.column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(Expression.string("Abcdef"),
-						 Expression.string("Hiklmnop"))
-				.having(Predicate.having("Abcdef")
+				.groupBy(Expression.constant("Abcdef"),
+						 Expression.constant("Hiklmnop"))
+				.having(PredicateBuilder.having("Abcdef")
 								 .isEqual("Abcdef2")
 								 .or("Hijklmnop").isGreater("Hijklmno")
 								 .build())
@@ -118,14 +118,14 @@ class MySQLSelectSyntaxTests {
 
 		String stmtText5 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(10))
-				.selectExpression(Expression.number(20))
-				.selectExpression(Expression.number(30))
+				.selectExpression(Expression.constant(10))
+				.selectExpression(Expression.constant(20))
+				.selectExpression(Expression.constant(30))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(Expression.number(2),
-						 Expression.number(3),
-						 Expression.number(1))
-				.having(Predicate.having(20)
+				.groupBy(Expression.constant(2),
+						 Expression.constant(3),
+						 Expression.constant(1))
+				.having(PredicateBuilder.having(20)
 								 .isEqual(20)
 								 .and(20).isGreater(10)
 								 .and(10).isLess(30)
@@ -148,7 +148,7 @@ class MySQLSelectSyntaxTests {
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select("dfltInteger")
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.limit(Expression.number(5)).offset(Expression.number(1))
+				.limit(Expression.constant(5)).offset(Expression.constant(1))
 				.getStatementText();
 
 		Assertions.assertEquals("select dfltInteger " + FROM_CLAUSE_SPACE + "limit 5 offset 1",stmtText);
@@ -161,12 +161,12 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(Expression.number(1),
-						 Expression.string(ABCDEFG_LITERAL),
+				.groupBy(Expression.constant(1),
+						 Expression.constant(ABCDEFG_LITERAL),
 						 Expression.parm(Types.DECIMAL, 100000),
 						 Expression.column(DFLTINTEGER))
 				.getStatementText();
@@ -183,7 +183,7 @@ class MySQLSelectSyntaxTests {
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select(MockMySQLPrimitivesTypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.limit(Expression.number(5))
+				.limit(Expression.constant(5))
 				.getStatementText();
 
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltIntUnsigned,DfltTinyInt,NotNullSmint," + 
@@ -199,8 +199,8 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2),Expression.orderBy(3))
@@ -212,8 +212,8 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText2 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),
@@ -227,11 +227,11 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText3 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(Expression.orderBy(Expression.string(ABCDEFG_LITERAL)))
+				.orderBy(Expression.orderBy(Expression.constant(ABCDEFG_LITERAL)))
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -240,8 +240,8 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText4 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1).asc())
@@ -253,8 +253,8 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText5 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)).desc())
@@ -266,8 +266,8 @@ class MySQLSelectSyntaxTests {
 
 		String stmtText6 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc())
@@ -280,8 +280,8 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText7 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(1),Expression.orderBy(2).desc())
@@ -294,8 +294,8 @@ class MySQLSelectSyntaxTests {
 
 		String stmtText8 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)),
@@ -324,8 +324,8 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText10 = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(100000))
-				.selectExpression(Expression.string(ABCDEFG_LITERAL))
+				.selectExpression(Expression.constant(100000))
+				.selectExpression(Expression.constant(ABCDEFG_LITERAL))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(Expression.orderBy(Expression.column(DFLTINTEGER)).asc(),
@@ -343,7 +343,7 @@ class MySQLSelectSyntaxTests {
 
 	@Test
 	void mySQLWhereTest() {
-		Predicate pred = Predicate.where(Expression.column(DFLTINTEGER))
+		PredicateBuilder pred = PredicateBuilder.where(Expression.column(DFLTINTEGER))
 				  .isGreater(100000)
 				  .and(Expression.column(NOTNULLDEC72))
 				  .isGreaterOrEqual(12345.10)
@@ -381,7 +381,7 @@ class MySQLSelectSyntaxTests {
 	void mySQLSelectExpressionTest() {
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
 				  .select()
-				  .selectExpression(Expression.number(10).add(10))
+				  .selectExpression(Expression.mathExpression(10)).add(Expression.constant(10))
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
 				  .getStatementText();
 	
@@ -568,8 +568,8 @@ class MySQLSelectSyntaxTests {
 		
 		String stmtText = RunDMLSQLFactory.createMySQLSelectStatement()
 				.select()
-				.selectExpression(Expression.number(10))
-				.selectExpression(Expression.string("This is a string"))
+				.selectExpression(Expression.constant(10))
+				.selectExpression(Expression.constant("This is a string"))
 				.selectExpression(Expression.column(DFLTINTEGER))
 				.selectExpression(new ParmMarker(Types.VARCHAR,"This is a string too"))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)

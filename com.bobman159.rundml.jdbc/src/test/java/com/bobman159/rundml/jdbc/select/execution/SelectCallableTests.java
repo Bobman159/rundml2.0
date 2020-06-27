@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.predicates.Predicate;
+import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
@@ -88,7 +88,7 @@ class SelectCallableTests {
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column("DfltInteger"));
 		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column("NotNullMediumInt"));
 		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName("rundml", "typeTest"));
-		Predicate pred = Predicate.where(Expression.column("DfltInteger")).isEqual(999999)
+		PredicateBuilder pred = PredicateBuilder.where(Expression.column("DfltInteger")).isEqual(999999)
 								  .build();
 		model.addClause(SQLClause.WHERE, pred);
 		Connection conn = h2Provider.getConnection();

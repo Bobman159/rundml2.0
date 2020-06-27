@@ -22,7 +22,7 @@ public enum SQLType {
 	 * An SQL Expression
 	 */
 	EXPRESSION,
-	/** A SQL Predicate WHERE, AND or OR clause *
+	/** A SQL PredicateBuilder WHERE, AND or OR clause *
 	 * 
 	 */
 	PREDICATE,

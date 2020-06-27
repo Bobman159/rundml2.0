@@ -15,7 +15,7 @@ import com.bobman159.rundml.core.util.CoreUtils;
 public class ExpressionSQLClauseHandler extends AbstractSQLClauseHandler {	
 
 	/**
-	 * Create a SQL clause handler for expressions and add a new handler 
+	 * A SQL clause handler for expressions and add a new handler 
 	 * @param handler the next SQL clause handler
 	 */
 	public ExpressionSQLClauseHandler(AbstractSQLClauseHandler handler) {
@@ -63,7 +63,7 @@ public class ExpressionSQLClauseHandler extends AbstractSQLClauseHandler {
 	}
 
 	/*
-	 * Serialize an expression node (math or string expression into a string SQL expression clause
+	 * Serialize an expression node (math or string) expression into a string SQL expression clause
 	 * @param exprNode the node to serialize
 	 * @return the expression node as an SQL expression string
 	 */
@@ -73,18 +73,24 @@ public class ExpressionSQLClauseHandler extends AbstractSQLClauseHandler {
 				
 		if (exprNode.getLeftExpr() instanceof IExpressionNode) {
 			sql.append(serializeIExpressionNode((IExpressionNode) exprNode.getLeftExpr())).append(" ");
-			sql.append(exprNode.getOperator().getOperator()).append(" ");
+			if (exprNode.getOperator() != null) {
+				sql.append(exprNode.getOperator().opToString()).append(" ");
+			}
 		} else {
 			ISQLType exprValue = exprNode.getLeftExpr();
 			sql.append(SQLClauseClient.getInstance().toSQLClause(exprValue)).append(" ");
-			sql.append(exprNode.getOperator().getOperator()).append(" ");
+			if (exprNode.getOperator() != null) {
+				sql.append(exprNode.getOperator().opToString()).append(" ");
+			}
 		}
 		
 		if (exprNode.getRightExpr() instanceof IExpressionNode) {
 			sql.append(serializeIExpressionNode((IExpressionNode) exprNode.getRightExpr())).append(" ");
 		} else {
 			ISQLType exprValue = exprNode.getRightExpr();
-			sql.append(SQLClauseClient.getInstance().toSQLClause(exprValue)).append(" ");					
+			if (exprValue != null) {
+				sql.append(SQLClauseClient.getInstance().toSQLClause(exprValue)).append(" ");
+			}
 		}
 		
 		return CoreUtils.normalizeString(sql.toString());

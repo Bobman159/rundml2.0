@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.types.IExpression;
+import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.sql.base.builder.BaseSelectStatementBuilder;
 import com.bobman159.rundml.sql.mysql.MySQLClauses.MySQLClause;
 
@@ -33,7 +33,7 @@ public class MySQLSelectStatementBuilder extends BaseSelectStatementBuilder<MySQ
 	 * @param offSet the offset of the row to be returned
 	 * @return an instance of this builder
 	 */
-	public MySQLSelectStatementBuilder offset(IExpression offSet) {
+	public MySQLSelectStatementBuilder offset(ISQLType offSet) {
 		model.addClause(MySQLClause.OFFSET,offSet);
 		return this;
 	}
@@ -43,7 +43,7 @@ public class MySQLSelectStatementBuilder extends BaseSelectStatementBuilder<MySQ
 	 * @param limitTerm maximum number of rows to return
 	 * @return an instance of this builder
 	 */
-	public MySQLSelectStatementBuilder limit(IExpression limitTerm) {
+	public MySQLSelectStatementBuilder limit(ISQLType limitTerm) {
 		model.addClause(MySQLClause.LIMIT,limitTerm);
 		return this;
 	}

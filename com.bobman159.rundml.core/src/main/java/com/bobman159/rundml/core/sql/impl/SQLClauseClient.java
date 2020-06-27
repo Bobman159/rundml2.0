@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.expressions.impl.ExpressionSQLClauseHandler;
-import com.bobman159.rundml.core.predicates.PredicateSQLClauseHandler;
+import com.bobman159.rundml.core.predicates.impl.PredicateSQLClauseHandler;
 import com.bobman159.rundml.core.sql.AbstractSQLClauseHandler;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
@@ -47,6 +47,7 @@ public class SQLClauseClient {
 	 * SQL Clause client creation, creates the Chain of Responsibility
 	 * 
 	 */
+	//TODO: Consider implementing Facory Class for creating the handlers....
 	private SQLClauseClient() {
 		chainRoot = new TypeSQLClauseHandler(
 										new ExpressionSQLClauseHandler(
