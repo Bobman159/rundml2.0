@@ -57,7 +57,7 @@ public abstract class AbstractBaseExpression implements IExpressionNode {
 		IExpressionNode wkNode = null;
 		
 		lastNode = doFindLastNode(nodeHead);
-		//ASSUME: rightExpr == null only when the Expression is incomplete (right Side has not yet been processed) 
+		//ASSUME: rightExpr == null only when the IExpressionFactory is incomplete (right Side has not yet been processed) 
 		if (nodeHead.getRightExpr() == null) {
 			//Instantiate a new (completed) expression
 			wkNode = createExpressionNode(lastNode.getLeftExpr(),operator,value);

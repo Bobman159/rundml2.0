@@ -7,6 +7,8 @@ import com.bobman159.rundml.core.sql.ICaseStatement;
 import com.bobman159.rundml.core.sql.ICaseWhenConditions;
 import com.bobman159.rundml.core.sql.ISQLClause;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition;
+import com.bobman159.rundml.core.sql.sql.conditions.SQLCondition;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
 //  The first arg in these case statements appears to determine the return type 
@@ -14,18 +16,19 @@ import com.bobman159.rundml.core.sql.types.ISQLType;
 //  String.  
 
 /**
- * Implements a CASE expression WHEN expression THEN expression ... 
+ * Defines a CASE expression WHEN expression THEN expression ... 
  * clause.  Math and String operations are supported for the CASE but type 
  * checking is done by the DBMS and not by rundml2.0.  Condition operations 
  * IE COLNOTNULLCHAR = 'Abc' are NOT currently supported use
  *
  */
 
-public class CaseClause implements ICaseStatement {
+public class CaseClause //implements ICaseStatement 
+{
 	
 	SQLClause caseType = null;
 	private ISQLType caseExpr;
-	private LinkedList<ICaseWhenConditions> whenConds;
+	private LinkedList<ISQLType> whenConds;
 	private ISQLType whenCondition;		//holds when ISQLType for the then() method
 	private ISQLType elseCondition = null;
 	
@@ -68,8 +71,8 @@ public class CaseClause implements ICaseStatement {
 	 * @return the THEN expression
 	 */
 	public CaseClause then(ISQLType expr) {
-		CaseWhenThenCondition condition = new CaseWhenThenCondition(whenCondition,expr);
-		whenConds.add(condition);
+//		CaseWhenThenCondition condition = new CaseWhenThenCondition(whenCondition,expr);
+		whenConds.add(expr);
 		return this;
 	}
 	
@@ -113,7 +116,7 @@ public class CaseClause implements ICaseStatement {
 	/**
 	 * @see com.bobman159.rundml.core.sql.ICaseStatement#getType()
 	 */
-	@Override
+//	@Override
 	public ISQLClause getType() {
 		return this.caseType;
 	}
@@ -121,7 +124,7 @@ public class CaseClause implements ICaseStatement {
 	/**
 	 * @see com.bobman159.rundml.core.sql.ICaseStatement#getCaseExpr()
 	 */
-	@Override
+//	@Override
 	public ISQLType getCaseExpr() {
 		return this.caseExpr;
 	}
@@ -129,15 +132,15 @@ public class CaseClause implements ICaseStatement {
 	/**
 	 * @see com.bobman159.rundml.core.sql.ICaseStatement#getWhenConditions()
 	 */
-	@Override
-	public Stream<ICaseWhenConditions> getWhenConditions() {
+//	@Override
+	public Stream<ISQLType> getWhenConditions() {
 		return whenConds.stream();
 	}
 	
 	/**
 	 * @see com.bobman159.rundml.core.sql.ICaseStatement#isCaseWhen()
 	 */
-	@Override
+//	@Override
 	public boolean isCaseWhen() {
 		
 		boolean isCaseWhen = false;
@@ -152,7 +155,7 @@ public class CaseClause implements ICaseStatement {
 	/**
 	 * @see com.bobman159.rundml.core.sql.ICaseStatement#hasElse()
 	 */
-	@Override
+//	@Override
 	public boolean hasElse() {
 		
 		boolean hasElse = false;
@@ -162,7 +165,7 @@ public class CaseClause implements ICaseStatement {
 		return hasElse;
 	}
 
-	@Override
+//	@Override
 	public ISQLType getElse() {
 		return this.elseCondition;
 	}

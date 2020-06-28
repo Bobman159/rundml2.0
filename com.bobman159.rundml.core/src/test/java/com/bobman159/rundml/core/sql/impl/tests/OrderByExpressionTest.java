@@ -1,4 +1,4 @@
-package com.bobman159.rundml.core.sql.types.tests;
+package com.bobman159.rundml.core.sql.impl.tests;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -7,7 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.expressions.IExpressionFactory;
+import com.bobman159.rundml.core.factory.RunDMLTestFactory;
 import com.bobman159.rundml.core.sql.impl.OrderByClause;
 
 
@@ -16,6 +17,7 @@ class OrderByExpressionTest {
 	private static final String DFLTINTEGER = "dfltInteger";
 	private static final String NOTNULLVARCHAR = "notNullVarchar";
 
+	private final RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 	@BeforeAll
 	static void setUpBeforeClass() {
 		//No setup needed
@@ -46,57 +48,57 @@ class OrderByExpressionTest {
 		 * "order by" text 
 		 */
 		String stmtText = new OrderByClause()
-								.addExpression(Expression.orderBy(1))
-								.addExpression(Expression.orderBy(2))
-								.addExpression(Expression.orderBy(3))
+								.addExpression(testFactory.orderBy(1))
+								.addExpression(testFactory.orderBy(2))
+								.addExpression(testFactory.orderBy(3))
 								.serialize();
 		Assertions.assertEquals("order by 1,2,3",stmtText);
 		
 		
 		String stmtText2 = new OrderByClause()
-							.addExpression(Expression.orderBy(1)) 
-						   	.addExpression(Expression.orderBy(2))
-						   	.addExpression(Expression.orderBy(
-						   					Expression.column(DFLTINTEGER)))
+							.addExpression(testFactory.orderBy(1)) 
+						   	.addExpression(testFactory.orderBy(2))
+						   	.addExpression(testFactory.orderBy(
+						   					testFactory.column(DFLTINTEGER)))
 							.serialize();			
 		Assertions.assertEquals("order by 1,2,dfltInteger",stmtText2);		
 		
 		
 		String stmtText3 = new OrderByClause()
-				.addExpression(Expression.orderBy(Expression.string("Abcdefg")))
+				.addExpression(testFactory.orderBy(testFactory.constant("Abcdefg")))
 				.serialize();
 		Assertions.assertEquals("order by 'Abcdefg'",stmtText3);
 		
 		
 		String stmtText4 = new OrderByClause()
-				.addExpression(Expression.orderBy(1).asc()).serialize();
+				.addExpression(testFactory.orderBy(1).asc()).serialize();
 		Assertions.assertEquals("order by 1 asc",stmtText4);
 		
 		
 		String stmtText5 = new OrderByClause()
-				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER))
+				.addExpression(testFactory.orderBy(testFactory.column(DFLTINTEGER))
 				.desc())
 				.serialize();
 		Assertions.assertEquals("order by dfltInteger desc",stmtText5);
 
 		
 		String stmtText6 = new OrderByClause()
-				.addExpression(Expression.orderBy(1))
-				.addExpression(Expression.orderBy(2).desc())
+				.addExpression(testFactory.orderBy(1))
+				.addExpression(testFactory.orderBy(2).desc())
 				.serialize();
 		Assertions.assertEquals("order by 1,2 desc",stmtText6);		
 
 		
 		String stmtText7 = new OrderByClause()
-				.addExpression(Expression.orderBy(1))
-				.addExpression(Expression.orderBy(2).desc().nullsLast())
+				.addExpression(testFactory.orderBy(1))
+				.addExpression(testFactory.orderBy(2).desc().nullsLast())
 				.serialize();
 		Assertions.assertEquals("order by 1,2 desc nulls last",stmtText7);		
 
 		
 		String stmtText8 = new OrderByClause()
-				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER)))
-				.addExpression(Expression.orderBy(Expression.column(NOTNULLVARCHAR))
+				.addExpression(testFactory.orderBy(testFactory.column(DFLTINTEGER)))
+				.addExpression(testFactory.orderBy(testFactory.column(NOTNULLVARCHAR))
 				.desc().nullsFirst())
 				.serialize();
 		Assertions.assertEquals("order by dfltInteger,notNullVarchar desc nulls first",
@@ -104,20 +106,20 @@ class OrderByExpressionTest {
 
 		
 		String stmtText9 = new OrderByClause()
-				.addExpression(Expression.orderBy(Expression.column(NOTNULLVARCHAR))
+				.addExpression(testFactory.orderBy(testFactory.column(NOTNULLVARCHAR))
 						.desc().nullsLast())
-				.addExpression(Expression.orderBy(1).asc().nullsFirst())
-				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER)))
+				.addExpression(testFactory.orderBy(1).asc().nullsFirst())
+				.addExpression(testFactory.orderBy(testFactory.column(DFLTINTEGER)))
 				.serialize();
 		Assertions.assertEquals("order by notNullVarchar desc nulls last,1 asc nulls first," +
 				     		"dfltInteger",stmtText9);
 		
 		
 		String stmtText10 = new OrderByClause()
-				.addExpression(Expression.orderBy(Expression.column(DFLTINTEGER))
+				.addExpression(testFactory.orderBy(testFactory.column(DFLTINTEGER))
 									  .asc().nullsFirst())
-				.addExpression(Expression.orderBy(2).desc().nullsLast())
-				.addExpression(Expression.orderBy(3).desc().nullsFirst())
+				.addExpression(testFactory.orderBy(2).desc().nullsLast())
+				.addExpression(testFactory.orderBy(3).desc().nullsFirst())
 				.serialize();
 		Assertions.assertEquals("order by dfltInteger asc nulls first," + 
 						    "2 desc nulls last,3 desc nulls first",stmtText10);

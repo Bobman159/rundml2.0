@@ -17,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
@@ -85,10 +85,10 @@ class SelectCallableTests {
 		selectModel = SQLModelTestFactory.getInstance().createH2SelectTypeTestModel();
 		SQLStatementModel model = new SQLStatementModel();
 		model.addClause(SQLClause.SELECT);
-		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column("DfltInteger"));
-		model.addExpressionList(SQLClause.SELECTEXPR, Expression.column("NotNullMediumInt"));
+		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column("DfltInteger"));
+		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column("NotNullMediumInt"));
 		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName("rundml", "typeTest"));
-		PredicateBuilder pred = PredicateBuilder.where(Expression.column("DfltInteger")).isEqual(999999)
+		PredicateBuilder pred = PredicateBuilder.where(IExpressionFactory.column("DfltInteger")).isEqual(999999)
 								  .build();
 		model.addClause(SQLClause.WHERE, pred);
 		Connection conn = h2Provider.getConnection();
@@ -128,8 +128,8 @@ class SelectCallableTests {
 		/* NoTableRowClassFieldException - Testing Exception path in call method */
 		SQLStatementModel ntrcfexModel = new SQLStatementModel();
 		ntrcfexModel.addClause(SQLClause.SELECT);
-		ntrcfexModel.addExpressionList(SQLClause.SELECTEXPR, Expression.column("DfltInteger"));
-		ntrcfexModel.addExpressionList(SQLClause.SELECTEXPR, Expression.column("NotNullMediumInt"));
+		ntrcfexModel.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column("DfltInteger"));
+		ntrcfexModel.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column("NotNullMediumInt"));
 		ntrcfexModel.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName("rundml", "typeTest"));
 		Connection ntrcfexConn = h2Provider.getConnection();
 		SelectCallable ntrcfexCallable = new SelectCallable(ntrcfexConn, ntrcfexModel, 

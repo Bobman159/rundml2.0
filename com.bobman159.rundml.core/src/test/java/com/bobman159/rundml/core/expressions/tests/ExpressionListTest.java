@@ -9,14 +9,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.expressions.ExpressionList;
+import com.bobman159.rundml.core.factory.RunDMLTestFactory;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 import com.bobman159.rundml.core.sql.types.impl.NumericType;
 import com.bobman159.rundml.core.sql.types.impl.ParmMarker;
 
 class ExpressionListTest {
+	
+	private final RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -39,8 +41,8 @@ class ExpressionListTest {
 		
 		ISQLType [] exprArray = {new Column("column_name"),
 										new ParmMarker(Types.SMALLINT,new NumericType(10)),
-										Expression.mathExpression(Expression.constant(100)).divide(10),
-										Expression.stringExpression(Expression.constant("ABC")).concat("DEF")
+										testFactory.mathExpression(testFactory.constant(100)).divide(10),
+										testFactory.stringExpression(testFactory.constant("ABC")).concat("DEF")
 		};
 											
 		ExpressionList exprList = new ExpressionList();
@@ -57,8 +59,8 @@ class ExpressionListTest {
 		
 		exprList.addExpression(new Column("column_name"));
 		exprList.addExpression(new ParmMarker(Types.SMALLINT,new NumericType(10)));
-		exprList.addExpression(Expression.mathExpression(Expression.constant(100)).divide(10));
-		exprList.addExpression(Expression.stringExpression(Expression.constant("ABC")).concat("DEF"));
+		exprList.addExpression(testFactory.mathExpression(testFactory.constant(100)).divide(10));
+		exprList.addExpression(testFactory.stringExpression(testFactory.constant("ABC")).concat("DEF"));
 		String csv = exprList.toCSV();
 		Assertions.assertEquals("column_name,?,100 / 10,'ABC' || 'DEF'",csv);		
 

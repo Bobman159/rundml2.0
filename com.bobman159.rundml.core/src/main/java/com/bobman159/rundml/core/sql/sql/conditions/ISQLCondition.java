@@ -6,7 +6,7 @@ import com.bobman159.rundml.core.sql.types.ISQLType;
  * Defines an SQL condition such as a predicate clause
  *
  */
-public interface ISQLCondition {
+public interface ISQLCondition extends ISQLType {
 
 
 	/**

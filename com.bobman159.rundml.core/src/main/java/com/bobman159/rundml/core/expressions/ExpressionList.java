@@ -1,7 +1,7 @@
 package com.bobman159.rundml.core.expressions;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.bobman159.rundml.core.sql.impl.SQLClauseClient;
@@ -21,7 +21,7 @@ public class ExpressionList {
 	 * Define the list for <code>ISQLType</code> types.
 	 */
 	public ExpressionList() {
-		expressions = new ArrayList<>();
+		expressions = new LinkedList<>();
 	}
 	
 	/**

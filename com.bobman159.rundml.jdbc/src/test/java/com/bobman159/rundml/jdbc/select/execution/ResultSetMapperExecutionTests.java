@@ -17,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
@@ -241,7 +241,7 @@ public class ResultSetMapperExecutionTests {
 		
 		logger.info("****** allColumnTypesStringTest ******");
 		
-		selectModel.addExpressionList(SQLClauses.SQLClause.SELECTEXPR, Expression.column("NotNullIdentity"));
+		selectModel.addExpressionList(SQLClauses.SQLClause.SELECTEXPR, IExpressionFactory.column("NotNullIdentity"));
 		List<Object> results = RunDMLExecutor.getInstance()
 											 .executeSelect(h2Provider.getConnection(), selectModel,
 													 		H2MockStringTypeTest.class);		

@@ -1,11 +1,12 @@
 package com.bobman159.rundml.core.expressions.impl;
 
 import com.bobman159.rundml.core.expressions.AbstractBaseExpression;
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.expressions.IMathExpression;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
 import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.ISQLTypesFactory;
 
 /**
  * A math operation between two SQL Expressions, numbers,
@@ -38,7 +39,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	@Override
 	public MathExpression add(Number number) {
 
-		return (MathExpression) addToExpression(this,Op.ADD,Expression.constant(number));
+		return (MathExpression) addToExpression(this,Op.ADD,new ISQLTypesFactory() {}.constant(number));
 	}
 
 	/**
@@ -54,7 +55,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public MathExpression subtract(Number number) {
-		return (MathExpression) addToExpression(this,Op.SUB,Expression.constant(number));
+		return (MathExpression) addToExpression(this,Op.SUB,new ISQLTypesFactory() {}.constant(number));
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public MathExpression multiply(Number number) {
-		return (MathExpression) addToExpression(this,Op.MULT,Expression.constant(number));
+		return (MathExpression) addToExpression(this,Op.MULT,new ISQLTypesFactory() {}.constant(number));
 	}
 
 	/**
@@ -86,7 +87,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public MathExpression divide(Number number) {
-		return (MathExpression) addToExpression(this,Op.DIVIDE,Expression.constant(number));
+		return (MathExpression) addToExpression(this,Op.DIVIDE,new ISQLTypesFactory() {}.constant(number));
 	}
 
 	/**

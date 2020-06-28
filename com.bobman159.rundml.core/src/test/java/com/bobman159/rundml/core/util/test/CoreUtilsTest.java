@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
+import com.bobman159.rundml.core.factory.RunDMLTestFactory;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceAllColumnsDefined;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoInterface;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException;
@@ -19,6 +20,8 @@ import com.bobman159.rundml.core.sql.types.impl.Column;
 import com.bobman159.rundml.core.util.CoreUtils;
 
 class CoreUtilsTest {
+	
+	private final RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -34,12 +37,6 @@ class CoreUtilsTest {
 
 	@AfterEach
 	void tearDown() throws Exception {
-	}
-
-	@Test
-	void testQualifiedTbName() {
-		String tbName = CoreUtils.qualifiedTbName("rundml", "typeTest");
-		Assertions.assertEquals("rundml.typeTest", tbName);
 	}
 
 	@Test
@@ -102,7 +99,7 @@ class CoreUtilsTest {
 			} else {
 				Column expectedColumn = (Column) expectedColumns[ix];
 				Column actualColumn = (Column) actualColumns[ix];
-				Assertions.assertEquals(expectedColumn.getName(), actualColumn.getName());
+				Assertions.assertEquals(expectedColumn.getColumnName(), actualColumn.getColumnName());
 			}
 			ix++;
 		}
@@ -123,7 +120,7 @@ class CoreUtilsTest {
 			} else {
 				Column expectedColumn = (Column) expectedColumns2[ix2];
 				Column actualColumn = (Column) actualColumns2[ix2];
-				Assertions.assertEquals(expectedColumn.getName(), actualColumn.getName());
+				Assertions.assertEquals(expectedColumn.getColumnName(), actualColumn.getColumnName());
 			}
 			ix2++;
 		}
@@ -150,7 +147,7 @@ class CoreUtilsTest {
 				fail("actualExpr index: " + ix + "is NOT a Column expression");
 			} else {
 				Column actualColumn = (Column) actualColumns[ix];
-				Assertions.assertEquals(expectedColumns[ix], actualColumn.getName());
+				Assertions.assertEquals(expectedColumns[ix], actualColumn.getColumnName());
 			}
 			ix++;
 		}	

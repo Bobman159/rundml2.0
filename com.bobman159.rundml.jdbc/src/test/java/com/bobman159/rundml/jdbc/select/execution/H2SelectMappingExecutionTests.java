@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.util.CoreUtils;
@@ -260,7 +260,7 @@ class H2SelectMappingExecutionTests {
 		
 		logger.info("****** allColumnTypesStringTest ******");
 		
-		selectModel.addExpressionList(SQLClause.SELECTEXPR, Expression.column("NotNullIdentity"));
+		selectModel.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column("NotNullIdentity"));
 		List<Object> results = RunDMLExecutor.getInstance()
 											 .executeSelect(h2Provider.getConnection(), selectModel,
 													 		H2MockStringTypeTest.class);

@@ -9,12 +9,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.expressions.IExpressionNode;
+import com.bobman159.rundml.core.factory.RunDMLTestFactory;
 import com.bobman159.rundml.core.sql.impl.SQLClauseClient;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 
 class ExprStringTest {
+	
+	private final RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 
 	@BeforeAll
 	static void setUpBeforeClass() {
@@ -38,7 +40,7 @@ class ExprStringTest {
 
 	@Test
 	void testConncat() {
-		IExpressionNode  strExpr = Expression.stringExpression(Expression.constant("abc"))
+		IExpressionNode  strExpr = testFactory.stringExpression(testFactory.constant("abc"))
 																		 .concat("def");
 		String expr = SQLClauseClient.getInstance().toSQLClause(strExpr);
 		Assertions.assertEquals("\'abc\' || \'def\'",expr);
@@ -46,23 +48,23 @@ class ExprStringTest {
 		Column lhs = new Column("ingredient");
 		Column rhs = new Column("unit_of_measure");
 		
-		IExpressionNode strExpr2 = Expression.stringExpression(lhs).concat(rhs);
+		IExpressionNode strExpr2 = testFactory.stringExpression(lhs).concat(rhs);
 		String expr2 = SQLClauseClient.getInstance().toSQLClause(strExpr2);
 		Assertions.assertEquals("ingredient || unit_of_measure",expr2);
 		
-		IExpressionNode strExpr3 = Expression.stringExpression(Expression.constant("Ingred: ")).concat(lhs)				
-								 										 .concat(Expression.constant("UnitMeasure: "))
+		IExpressionNode strExpr3 = testFactory.stringExpression(testFactory.constant("Ingred: ")).concat(lhs)				
+								 										 .concat(testFactory.constant("UnitMeasure: "))
 								 										 .concat(rhs);
 		String expr3 = SQLClauseClient.getInstance().toSQLClause(strExpr3);
 		Assertions.assertEquals("\'Ingred: \' || ingredient || \'UnitMeasure: \' || unit_of_measure",expr3);
 
-		IExpressionNode strExpr4 = Expression.stringExpression(Expression.column("ingredient"))
-								 .concat(Expression.column("unit_of_measure"));
+		IExpressionNode strExpr4 = testFactory.stringExpression(testFactory.column("ingredient"))
+								 .concat(testFactory.column("unit_of_measure"));
 		String expr4 = SQLClauseClient.getInstance().toSQLClause(strExpr4);
 		Assertions.assertEquals("ingredient || unit_of_measure",expr4);
 		
-		IExpressionNode strExpr5 = Expression.stringExpression(Expression.parm(Types.VARCHAR, "varchar_value"))
-				 														 .concat(Expression.parm(Types.CHAR, "char_value"));
+		IExpressionNode strExpr5 = testFactory.stringExpression(testFactory.parm(Types.VARCHAR, "varchar_value"))
+				 														 .concat(testFactory.parm(Types.CHAR, "char_value"));
 		String expr5 = SQLClauseClient.getInstance().toSQLClause(strExpr5);
 		Assertions.assertEquals("? || ?",expr5);
 		

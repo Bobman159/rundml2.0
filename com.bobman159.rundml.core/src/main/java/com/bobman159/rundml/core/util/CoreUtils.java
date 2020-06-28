@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListener;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
-import com.bobman159.rundml.core.expressions.Expression;
 import com.bobman159.rundml.core.mapping.FieldMap;
 import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
 import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.ISQLTypesFactory;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 
 /**
@@ -23,6 +23,9 @@ import com.bobman159.rundml.core.sql.types.impl.Column;
  */
 public class CoreUtils {
 
+	static class TypesFactory implements ISQLTypesFactory{};
+	private static TypesFactory typeFactory = new TypesFactory();
+	
 	private CoreUtils() {
 		//To make Sonar Lint happy
 	}
@@ -126,7 +129,7 @@ public class CoreUtils {
 		for (Object fieldDef : fieldDefs) {
 			if (fieldDef instanceof IFieldMapDefinition) {
 				IFieldMapDefinition wkFieldDef = (IFieldMapDefinition) fieldDef;
-				col = (Column) Expression.column(wkFieldDef.getColumnName());
+				col = (Column) typeFactory.column(wkFieldDef.getColumnName());
 			}
 				
 			exprs[index] = col;
@@ -160,7 +163,7 @@ public class CoreUtils {
 		int index = 0;
 		
 		for (String columnName : columns) {
-			exprs[index] = Expression.column(columnName);
+			exprs[index] = typeFactory.column(columnName);
 			index++;
 		}
 		

@@ -1,9 +1,7 @@
 package com.bobman159.rundml.core.sql.sql.conditions;
 
-import com.bobman159.rundml.core.expressions.AbstractBaseExpression;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.SQLType;
-
 
 /**
  * Represents a condition (eg COL01 = 10, 10 &gt; 20) in an SQL statement.  
@@ -95,6 +93,14 @@ public class SQLCondition implements ISQLCondition {
 	@Override
 	public Op getOperator() {
 		return operator;
+	}
+
+	/**
+	 * @see com.bobman159.rundml.core.sql.types.ISQLType#getType()
+	 */
+	@Override
+	public SQLType getType() {
+		return SQLType.CONDITION;
 	}
 
 }

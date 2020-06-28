@@ -9,7 +9,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.expressions.IExpressionFactory;
+import com.bobman159.rundml.core.factory.RunDMLTestFactory;
 import com.bobman159.rundml.core.predicates.IPredicate;
 import com.bobman159.rundml.core.predicates.impl.PredOperand;
 import com.bobman159.rundml.core.predicates.impl.PredicateClause;
@@ -19,6 +20,8 @@ import com.bobman159.rundml.core.sql.sql.conditions.SQLCondition;
 import com.bobman159.rundml.core.sql.types.SQLType;
 
 class PredicatesListTest {
+	
+	private RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
@@ -38,17 +41,17 @@ class PredicatesListTest {
 		PredicatesList predList = new PredicatesList();
 		
 		IPredicate whereClause = PredicateClause.createPredicate(PredOperand.WHERE, 
-					SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.constant(10)),
-													Op.EQ,Expression.constant(10)));
+					SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.constant(10)),
+													Op.EQ,testFactory.constant(10)));
 		predList.addPredicate(whereClause);
 		IPredicate orClause = PredicateClause.createPredicate(PredOperand.OR, 
-				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.constant("Abc")), Op.LTE, 
-												Expression.constant("Abc")));
+				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.constant("Abc")), Op.LTE, 
+												testFactory.constant("Abc")));
 		predList.addPredicate(orClause);
 		
 		IPredicate andClause = PredicateClause.createPredicate(PredOperand.AND,
-				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.column("COL01")), 
-												Op.NOT, Expression.column("COL02")));
+				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.column("COL01")), 
+												Op.NOT, testFactory.column("COL02")));
 		predList.addPredicate(andClause);
 		
 		assertEquals(3, predList.size());
@@ -62,13 +65,13 @@ class PredicatesListTest {
 		PredicatesList predList = new PredicatesList();
 		
 		IPredicate whereClause = PredicateClause.createPredicate(PredOperand.WHERE, 
-					SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.constant(10)),
-													Op.EQ,Expression.constant(10)));
+					SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.constant(10)),
+													Op.EQ,testFactory.constant(10)));
 		predList.addPredicate(whereClause);
 		
 		IPredicate orClause = PredicateClause.createPredicate(PredOperand.OR, 
-				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.constant("Abc")), Op.LTE, 
-												Expression.constant("Abc")));
+				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.constant("Abc")), Op.LTE, 
+												testFactory.constant("Abc")));
 		predList.addPredicate(orClause);
 		
 		IPredicate firstPred = predList.getFirstPredicate();
@@ -86,18 +89,18 @@ class PredicatesListTest {
 		PredicatesList predList = new PredicatesList();
 		
 		IPredicate whereClause = PredicateClause.createPredicate(PredOperand.WHERE, 
-					SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.constant(10)),
-													Op.EQ,Expression.constant(10)));
+					SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.constant(10)),
+													Op.EQ,testFactory.constant(10)));
 
 		IPredicate andClause = PredicateClause.createPredicate(PredOperand.AND,
-				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.column("COL01")), 
-												Op.NOT, Expression.column("COL02")));
+				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.column("COL01")), 
+												Op.NOT, testFactory.column("COL02")));
 		predList.addPredicate(andClause);
 		
 		predList.addPredicate(whereClause);
 		IPredicate orClause = PredicateClause.createPredicate(PredOperand.OR, 
-				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.constant("Abc")), Op.LTE, 
-												Expression.constant("Abc")));
+				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.constant("Abc")), Op.LTE, 
+												testFactory.constant("Abc")));
 		predList.addPredicate(orClause);
 		
 		IPredicate lastPred = predList.getLastPredicate();
@@ -115,18 +118,18 @@ class PredicatesListTest {
 		PredicatesList predList = new PredicatesList();
 		
 		IPredicate whereClause = PredicateClause.createPredicate(PredOperand.WHERE, 
-					SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.constant(10)),
-													Op.EQ,Expression.constant(10)));
+					SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.constant(10)),
+													Op.EQ,testFactory.constant(10)));
 		predList.addPredicate(whereClause);
 		
 		IPredicate andClause = PredicateClause.createPredicate(PredOperand.AND,
-				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.column("COL01")), 
-												Op.NOT, Expression.column("COL02")));
+				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.column("COL01")), 
+												Op.NOT, testFactory.column("COL02")));
 		predList.addPredicate(andClause);
 		
 		IPredicate orClause = PredicateClause.createPredicate(PredOperand.OR, 
-				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(Expression.constant("Abc")), Op.LTE, 
-												Expression.constant("Abc")));
+				SQLCondition.createSQLCondition(SQLCondition.createSQLCondition(testFactory.constant("Abc")), Op.LTE, 
+												testFactory.constant("Abc")));
 		predList.addPredicate(orClause);
 		
 		String sql = predList.toString();

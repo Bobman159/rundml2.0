@@ -19,7 +19,7 @@ public enum SQLType {
 	/** A parameter marker '?' value */
 	PARM_MARKER,
 	/** 
-	 * An SQL Expression
+	 * An SQL IExpressionFactory
 	 */
 	EXPRESSION,
 	/** A SQL PredicateBuilder WHERE, AND or OR clause *
@@ -29,7 +29,9 @@ public enum SQLType {
 	/**
 	 * A Database Table
 	 */
-	TABLE;
+	TABLE,
+	/** And SQL condition */
+	CONDITION;
 	/** A string expression (eg "COL01 || COL02") */
 //	STRING_EXPR,
 	/** A math expression addition, subtraction, multiply, divide (eg 10 + 20) */

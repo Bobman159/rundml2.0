@@ -16,7 +16,7 @@ public class OrderByExpression implements ISQLType {
 	OrderByNullsEnum orderByNull;
 	
 	/**
-	 * Create an Order By Expression
+	 * Create an Order By IExpressionFactory
 	 * @param orderByExpr the SQL ORDER BY expression
 	 */
 	public OrderByExpression(ISQLType orderByExpr) {

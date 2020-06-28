@@ -1,11 +1,12 @@
 package com.bobman159.rundml.core.expressions.impl;
 
 import com.bobman159.rundml.core.expressions.AbstractBaseExpression;
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.expressions.IStringExpression;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
 import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.ISQLTypesFactory;
 
 /**
  * An SQL String expression for an SQL statement clause.
@@ -19,7 +20,7 @@ public class StringExpression extends AbstractBaseExpression implements IExpress
 	 * @param firstString the first string in the expression
 	 */
 	public StringExpression(String firstString) {
-		super(Expression.constant(firstString));
+		super(new ISQLTypesFactory() {}.constant(firstString));
 	}
 	
 	/**
@@ -46,7 +47,7 @@ public class StringExpression extends AbstractBaseExpression implements IExpress
 	 */
 	@Override
 	public StringExpression concat(String secondString) {
-		 return (StringExpression) addToExpression(this,Op.CONCAT,Expression.constant(secondString));
+		 return (StringExpression) addToExpression(this,Op.CONCAT,new ISQLTypesFactory() {}.constant(secondString));
 	
 	}
 

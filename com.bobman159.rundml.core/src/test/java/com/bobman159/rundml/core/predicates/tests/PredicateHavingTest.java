@@ -7,13 +7,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.Expression;
+import com.bobman159.rundml.core.factory.RunDMLTestFactory;
 import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
 
 class PredicateHavingTest {
 
 	private static final String DFLTINTEGER = "dfltInteger";
 	private static final String NOTNULLVARCHAR = "notNullVarchar";
+	private final RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 
 	@BeforeAll
 	static void setUpBeforeClass() {
@@ -38,19 +39,19 @@ class PredicateHavingTest {
 	@Test
 	void testHavingPreidcates() {
 
-		String stmtText = PredicateBuilder.having(Expression.column(DFLTINTEGER)).isGreater(100000)
+		String stmtText = PredicateBuilder.having(testFactory.column(DFLTINTEGER)).isGreater(100000)
 								 .build().toString();
 		Assertions.assertEquals("HAVING dfltInteger > 100000",stmtText);
 
-		String stmtText2 = PredicateBuilder.having(Expression.column(NOTNULLVARCHAR))
+		String stmtText2 = PredicateBuilder.having(testFactory.column(NOTNULLVARCHAR))
 				 .isGreater("0123456789")
 				 .build().toString();
 		Assertions.assertEquals("HAVING notNullVarchar > '0123456789'",stmtText2);
 
-		String stmtText3 = PredicateBuilder.having(Expression.column(NOTNULLVARCHAR))
+		String stmtText3 = PredicateBuilder.having(testFactory.column(NOTNULLVARCHAR))
 				 .isGreaterOrEqual("0123456789")
-				 .or(Expression.column(NOTNULLVARCHAR)).isEqual("223456789")
-				 .and(Expression.column(NOTNULLVARCHAR)).isLess("1123456789")
+				 .or(testFactory.column(NOTNULLVARCHAR)).isEqual("223456789")
+				 .and(testFactory.column(NOTNULLVARCHAR)).isLess("1123456789")
 				 .build().toString();
 		Assertions.assertEquals("HAVING notNullVarchar >= '0123456789' " + 
 				 			"OR notNullVarchar = '223456789' " + 
@@ -68,8 +69,8 @@ class PredicateHavingTest {
 		Assertions.assertEquals("HAVING 20 = 20 " + 
 				 			"AND 20 > 10 AND 10 < 30",stmtText5);
 		
-		String stmtText6 = PredicateBuilder.having(20).isNot(Expression.constant(20))
-				 .and(20).isNotEqual(Expression.constant(10))
+		String stmtText6 = PredicateBuilder.having(20).isNot(testFactory.constant(20))
+				 .and(20).isNotEqual(testFactory.constant(10))
 				 .and(10).isLess(30)
 				 .build().toString();
 		Assertions.assertEquals("HAVING 20 ! 20 " + 
