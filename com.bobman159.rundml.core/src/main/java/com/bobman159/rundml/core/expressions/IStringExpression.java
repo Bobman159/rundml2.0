@@ -1,23 +1,22 @@
 package com.bobman159.rundml.core.expressions;
 
-import com.bobman159.rundml.core.expressions.impl.StringExpression;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
 /**
  * SQL String expression such as concatenation in an SQL expression.  
  * 
  */
-public interface IStringExpression {
+public interface IStringExpression extends IExpressionNode {
 	
 	/**
 	 * Define a concatenation operation between two <code>SQLStrings</code>
 	 * SQLStrings are automatically escaped with ''
-	 * <p> example : IExpressionFactory.string("abc").concat("def") =&lt; "'abcdef'"
+	 * <p> example : SQLTypeFactory.constant("abc").concat("def") =&lt; "'abcdef'"
 	 * 
 	 * @param rightExpr the string to the right of the concat operator
 	 * @return An expression representing the concatenated strings
 	 */
-	public StringExpression concat(String rightExpr);
+	public IStringExpression concat(String rightExpr);
 
 	/**
 	 * Define a concatenation operation between an SQL String and a Column
@@ -27,6 +26,6 @@ public interface IStringExpression {
 	 * @param rightExpr the column to the right of the concat operator
 	 * @return An expression representing the concatenated strings
 	 */
-	public StringExpression concat(ISQLType rightExpr);
+	public IStringExpression concat(ISQLType rightExpr);
 	
 }

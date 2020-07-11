@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
-import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.model.SQLStatementModel;
 import com.bobman159.rundml.core.model.SQLStatementSerializer;
 import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
+import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.impl.OrderByExpression;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.sql.types.ISQLType;
@@ -102,7 +102,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	 * 
 	 * <pre>
 	 * {code
-	 * 	List &lt;Object&gt; rows2 = RunDMLSQLFactory.createBaseSelectStatement()
+	 * 	List &lt;Object&gt; rows2 = RunDMLSQLFactory.createBaseSelectStatement(conn)
 	 * 			.select(IExpressionFactory.number(10), IExpressionFactory.string("This is a string"),
 	 * 					IExpressionFactory.column("DFLTINTEGER"), IExpressionFactory.parm(Types.VARCHAR, "This is a string too"),
 	 * 					IExpressionFactory.column("DFLTINTEGER").add(10),
@@ -155,7 +155,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	 * @return an instance of this builder
 	 */
 	public B from(String schema, String tbName) {
-		model.addClause(SQLClause.FROM, IExpressionFactory.qualifiedTable(schema, tbName));
+		model.addClause(SQLClause.FROM, SQLTypeFactory.qualifiedTable(schema, tbName));
 		return self();
 	}
 

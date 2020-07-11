@@ -28,8 +28,7 @@ public class StringType implements ISQLType {
 		return SQLType.STRING;
 	}
 	
-	@Override
-	public String toString() {
+	public String getConstant() {
 		return this.strConst;
 	}
 

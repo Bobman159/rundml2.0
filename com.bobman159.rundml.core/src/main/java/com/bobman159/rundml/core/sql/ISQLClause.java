@@ -13,6 +13,4 @@ public interface ISQLClause {
 	 */
 //	public String serializeClause();
 	
-	
-	
 }

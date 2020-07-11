@@ -10,11 +10,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.model.SQLStatementModel;
+import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
@@ -260,7 +259,7 @@ class H2SelectMappingExecutionTests {
 		
 		logger.info("****** allColumnTypesStringTest ******");
 		
-		selectModel.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column("NotNullIdentity"));
+		selectModel.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column("NotNullIdentity"));
 		List<Object> results = RunDMLExecutor.getInstance()
 											 .executeSelect(h2Provider.getConnection(), selectModel,
 													 		H2MockStringTypeTest.class);

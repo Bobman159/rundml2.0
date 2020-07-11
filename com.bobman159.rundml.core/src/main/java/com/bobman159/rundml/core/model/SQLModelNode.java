@@ -1,7 +1,6 @@
 package com.bobman159.rundml.core.model;
 
 import com.bobman159.rundml.core.expressions.ExpressionList;
-import com.bobman159.rundml.core.expressions.impl.ExpressionVisitor;
 import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
@@ -50,9 +49,7 @@ public class SQLModelNode {
 	/**
 	 * @see com.bobman159.rundml.core.model.ISQLModelNode#argToString()
 	 */
-//	@Override
 	public String argToString() {
-//	public String serialize() {
 		String argText = null;
 		
 		if (arg == null) {
@@ -62,7 +59,7 @@ public class SQLModelNode {
 		if (arg instanceof String) {
 			argText = (String) arg;
 		} else if (arg instanceof ISQLType) {
-			ISQLType expr = (ISQLType) arg;
+			ISQLType expr = arg;
 			argText = ExpressionVisitor.getInstance().acceptSerialize(expr);
 		} else if (arg instanceof PredicateBuilder) {
 			PredicateBuilder pred = (PredicateBuilder) arg;
@@ -76,13 +73,5 @@ public class SQLModelNode {
 		argText = argText + " ";
 		return argText;
 	}
-
-	/**
-	 * @see com.bobman159.rundml.core.model.ISQLModelNode#getArg()
-	 */
-//	@Override
-//	public Object getArg() {
-//		return arg;
-//	}
 	
 }

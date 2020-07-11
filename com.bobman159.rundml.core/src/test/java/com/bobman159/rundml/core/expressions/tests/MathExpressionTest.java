@@ -7,12 +7,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.factory.RunDMLTestFactory;
-import com.bobman159.rundml.core.sql.impl.SQLClauseClient;
+import com.bobman159.rundml.core.sql.BaseSQLSerializer;
+import com.bobman159.rundml.core.sql.SQLTypeFactory;
 
 class MathExpressionTest {
 
-	RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 	//TODO: Test math operations (add, subtract etc) number to other expression types (CASE, COLUMN, parm marker)
 	
 	private short shortTen = 10;
@@ -24,7 +23,7 @@ class MathExpressionTest {
 	private static final String TENPLUS20 = "10 + 20";
 	private static final String TENDIV20 = "10 / 20";
 	
-	private static final SQLClauseClient client = SQLClauseClient.getInstance();
+	private static final BaseSQLSerializer serializer = new BaseSQLSerializer();
 	
 	@BeforeAll
 	static void setUpBeforeClass()  {
@@ -49,16 +48,16 @@ class MathExpressionTest {
 	@Test
 	void addPrimitives() {
 
-		String expr = client.toSQLClause(testFactory.mathExpression(10).add(20));
+		String expr = serializer.serialize(SQLTypeFactory.mathExpression(10).add(20));
 		Assertions.assertEquals(TENPLUS20,expr);
 		
-		String expr2 = client.toSQLClause(testFactory.mathExpression(shortTen).add(twenty));
+		String expr2 = serializer.serialize(SQLTypeFactory.mathExpression(shortTen).add(twenty));
 		Assertions.assertEquals(TENPLUS20,expr2);
 		
-		String expr3 = client.toSQLClause(testFactory.mathExpression(dblTen).add(20).add(dblThirty));
+		String expr3 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen).add(20).add(dblThirty));
 		Assertions.assertEquals("10.001 + 20 + 30.225",expr3);
 		
-		String expr4 = client.toSQLClause(testFactory.mathExpression(dblTen).add(20).add(dblThirty).add(40));		
+		String expr4 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen).add(20).add(dblThirty).add(40));		
 		Assertions.assertEquals("10.001 + 20 + 30.225 + 40",expr4);
 
 	}
@@ -66,21 +65,21 @@ class MathExpressionTest {
 	@Test
 	void addExpressions() {
 
-		String expr = client.toSQLClause(testFactory.mathExpression(10).add(testFactory.constant(20)));
+		String expr = serializer.serialize(SQLTypeFactory.mathExpression(10).add(SQLTypeFactory.constant(20)));
 		Assertions.assertEquals(TENPLUS20,expr);
 		
-		String expr2 = client.toSQLClause(testFactory.mathExpression(shortTen).add(testFactory.constant(twenty)));
+		String expr2 = serializer.serialize(SQLTypeFactory.mathExpression(shortTen).add(SQLTypeFactory.constant(twenty)));
 		Assertions.assertEquals(TENPLUS20,expr2);
 		
-		String expr3 = client.toSQLClause(testFactory.mathExpression(dblTen)
-								 .add(testFactory.constant(20))
-								 .add(testFactory.constant(dblThirty)));
+		String expr3 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen)
+								 .add(SQLTypeFactory.constant(20))
+								 .add(SQLTypeFactory.constant(dblThirty)));
 		Assertions.assertEquals("10.001 + 20 + 30.225",expr3);
 		
-		String expr4 = client.toSQLClause(testFactory.mathExpression(dblTen)
-								 .add(testFactory.constant(20))
-								 .add(testFactory.constant(dblThirty))
-								 .add(testFactory.constant(40)));		
+		String expr4 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen)
+								 .add(SQLTypeFactory.constant(20))
+								 .add(SQLTypeFactory.constant(dblThirty))
+								 .add(SQLTypeFactory.constant(40)));		
 		Assertions.assertEquals("10.001 + 20 + 30.225 + 40",expr4);
 	}
 	
@@ -88,16 +87,16 @@ class MathExpressionTest {
 	@Test
 	void subtractPrimitives() {
 
-		String expr = client.toSQLClause(testFactory.mathExpression(20).subtract(10));
+		String expr = serializer.serialize(SQLTypeFactory.mathExpression(20).subtract(10));
 		Assertions.assertEquals("20 - 10",expr);
 		
-		String expr2 = client.toSQLClause(testFactory.mathExpression(shortTen).subtract(twenty));
+		String expr2 = serializer.serialize(SQLTypeFactory.mathExpression(shortTen).subtract(twenty));
 		Assertions.assertEquals("10 - 20",expr2);
 		
-		String expr3 = client.toSQLClause(testFactory.mathExpression(dblTen).subtract(20).subtract(dblThirty));
+		String expr3 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen).subtract(20).subtract(dblThirty));
 		Assertions.assertEquals("10.001 - 20 - 30.225",expr3);
 		
-		String expr4 = client.toSQLClause(testFactory.mathExpression(dblTen).subtract(20).subtract(dblThirty)
+		String expr4 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen).subtract(20).subtract(dblThirty)
 							.subtract(40));		
 		Assertions.assertEquals("10.001 - 20 - 30.225 - 40",expr4);
 	}
@@ -105,22 +104,22 @@ class MathExpressionTest {
 	@Test
 	void subtractExpressions() {
 		
-		String expr = client.toSQLClause(testFactory.mathExpression(20).subtract(testFactory.constant(10)));
+		String expr = serializer.serialize(SQLTypeFactory.mathExpression(20).subtract(SQLTypeFactory.constant(10)));
 		Assertions.assertEquals("20 - 10",expr);
 		
-		String expr2 = client.toSQLClause(testFactory.mathExpression(shortTen)
-								 .subtract(testFactory.constant(twenty)));
+		String expr2 = serializer.serialize(SQLTypeFactory.mathExpression(shortTen)
+								 .subtract(SQLTypeFactory.constant(twenty)));
 		Assertions.assertEquals("10 - 20",expr2);
 		
-		String expr3 = client.toSQLClause(testFactory.mathExpression(dblTen)
-								 .subtract(testFactory.constant(20))
-								 .subtract(testFactory.constant(dblThirty)));
+		String expr3 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen)
+								 .subtract(SQLTypeFactory.constant(20))
+								 .subtract(SQLTypeFactory.constant(dblThirty)));
 		Assertions.assertEquals("10.001 - 20 - 30.225",expr3);
 		
-		String expr4 = client.toSQLClause(testFactory.mathExpression(dblTen)
-								 .subtract(testFactory.constant(20))
-								 .subtract(testFactory.constant(dblThirty))
-								 .subtract(testFactory.constant(40)));		
+		String expr4 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen)
+								 .subtract(SQLTypeFactory.constant(20))
+								 .subtract(SQLTypeFactory.constant(dblThirty))
+								 .subtract(SQLTypeFactory.constant(40)));		
 		Assertions.assertEquals("10.001 - 20 - 30.225 - 40",expr4);
 		
 	}
@@ -128,16 +127,16 @@ class MathExpressionTest {
 	@Test
 	void multiplyPrimitives() {
 		
-		String expr = client.toSQLClause(testFactory.mathExpression(10).multiply(20));
+		String expr = serializer.serialize(SQLTypeFactory.mathExpression(10).multiply(20));
 		Assertions.assertEquals("10 * 20",expr);
 		
-		String expr2 = client.toSQLClause(testFactory.mathExpression(shortTen).multiply(twenty));
+		String expr2 = serializer.serialize(SQLTypeFactory.mathExpression(shortTen).multiply(twenty));
 		Assertions.assertEquals(TENTIMES20,expr2);
 		
-		String expr3 = client.toSQLClause(testFactory.mathExpression(dblTen).multiply(20).multiply(dblThirty));
+		String expr3 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen).multiply(20).multiply(dblThirty));
 		Assertions.assertEquals("10.001 * 20 * 30.225",expr3);
 		
-		String expr4 = client.toSQLClause(testFactory.mathExpression(dblTen).multiply(20).multiply(dblThirty)
+		String expr4 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen).multiply(20).multiply(dblThirty)
 								 .multiply(40));		
 		Assertions.assertEquals("10.001 * 20 * 30.225 * 40",expr4);
 
@@ -146,22 +145,22 @@ class MathExpressionTest {
 	@Test
 	void multiplyExpressions() {
 		
-		String expr = client.toSQLClause(testFactory.mathExpression(20).multiply(testFactory.constant(10)));
+		String expr = serializer.serialize(SQLTypeFactory.mathExpression(20).multiply(SQLTypeFactory.constant(10)));
 		Assertions.assertEquals("20 * 10",expr);
 		
-		String expr2 = client.toSQLClause(testFactory.mathExpression(shortTen)
-								 .multiply(testFactory.constant(twenty)));
+		String expr2 = serializer.serialize(SQLTypeFactory.mathExpression(shortTen)
+								 .multiply(SQLTypeFactory.constant(twenty)));
 		Assertions.assertEquals(TENTIMES20,expr2);
 		
-		String expr3 = client.toSQLClause(testFactory.mathExpression(dblTen)
-								 .multiply(testFactory.constant(20))
-								 .multiply(testFactory.constant(dblThirty)));
+		String expr3 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen)
+								 .multiply(SQLTypeFactory.constant(20))
+								 .multiply(SQLTypeFactory.constant(dblThirty)));
 		Assertions.assertEquals("10.001 * 20 * 30.225",expr3);
 		
-		String expr4 = client.toSQLClause(testFactory.mathExpression(dblTen)
-								 .multiply(testFactory.constant(20))
-								 .multiply(testFactory.constant(dblThirty))
-								 .multiply(testFactory.constant(40)));		
+		String expr4 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen)
+								 .multiply(SQLTypeFactory.constant(20))
+								 .multiply(SQLTypeFactory.constant(dblThirty))
+								 .multiply(SQLTypeFactory.constant(40)));		
 		Assertions.assertEquals("10.001 * 20 * 30.225 * 40",expr4);
 		
 	}
@@ -169,16 +168,16 @@ class MathExpressionTest {
 	@Test
 	void dividePrimitives() {
 		
-		String expr = client.toSQLClause(testFactory.mathExpression(10).divide(20));
+		String expr = serializer.serialize(SQLTypeFactory.mathExpression(10).divide(20));
 		Assertions.assertEquals(TENDIV20,expr);
 		
-		String expr2 = client.toSQLClause(testFactory.mathExpression(shortTen).divide(twenty));
+		String expr2 = serializer.serialize(SQLTypeFactory.mathExpression(shortTen).divide(twenty));
 		Assertions.assertEquals(TENDIV20,expr2);
 		
-		String expr3 = client.toSQLClause(testFactory.mathExpression(dblTen).divide(20).divide(dblThirty));
+		String expr3 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen).divide(20).divide(dblThirty));
 		Assertions.assertEquals("10.001 / 20 / 30.225",expr3);
 		
-		String expr4 = client.toSQLClause(testFactory.mathExpression(dblTen).divide(20).divide(dblThirty)
+		String expr4 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen).divide(20).divide(dblThirty)
 								 .divide(40));		
 		Assertions.assertEquals("10.001 / 20 / 30.225 / 40",expr4);
 
@@ -187,22 +186,22 @@ class MathExpressionTest {
 	@Test
 	void divideExpressions() {
 		
-		String expr = client.toSQLClause(testFactory.mathExpression(20).divide(testFactory.constant(10)));
+		String expr = serializer.serialize(SQLTypeFactory.mathExpression(20).divide(SQLTypeFactory.constant(10)));
 		Assertions.assertEquals("20 / 10",expr);
 		
-		String expr2 = client.toSQLClause(testFactory.mathExpression(shortTen)
-								 .divide(testFactory.constant(twenty)));
+		String expr2 = serializer.serialize(SQLTypeFactory.mathExpression(shortTen)
+								 .divide(SQLTypeFactory.constant(twenty)));
 		Assertions.assertEquals(TENDIV20,expr2);
 		
-		String expr3 = client.toSQLClause(testFactory.mathExpression(dblTen)
-								 .divide(testFactory.constant(20))
-								 .divide(testFactory.constant(dblThirty)));
+		String expr3 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen)
+								 .divide(SQLTypeFactory.constant(20))
+								 .divide(SQLTypeFactory.constant(dblThirty)));
 		Assertions.assertEquals("10.001 / 20 / 30.225",expr3);
 		
-		String expr4 = client.toSQLClause(testFactory.mathExpression(dblTen)
-								 .divide(testFactory.constant(20))
-								 .divide(testFactory.constant(dblThirty))
-								 .divide(testFactory.constant(40)));		
+		String expr4 = serializer.serialize(SQLTypeFactory.mathExpression(dblTen)
+								 .divide(SQLTypeFactory.constant(20))
+								 .divide(SQLTypeFactory.constant(dblThirty))
+								 .divide(SQLTypeFactory.constant(40)));		
 		Assertions.assertEquals("10.001 / 20 / 30.225 / 40",expr4);
 		
 	}

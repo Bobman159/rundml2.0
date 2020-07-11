@@ -3,12 +3,12 @@ package com.bobman159.rundml.core.sql.impl;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
-import com.bobman159.rundml.core.sql.ICaseStatement;
-import com.bobman159.rundml.core.sql.ICaseWhenConditions;
-import com.bobman159.rundml.core.sql.ISQLClause;
+import com.bobman159.rundml.core.expressions.IExpressionNode;
+import com.bobman159.rundml.core.sql.ICaseClause;
+import com.bobman159.rundml.core.sql.ICaseWhenThen;
+import com.bobman159.rundml.core.sql.ICaseWhenValue;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition;
-import com.bobman159.rundml.core.sql.sql.conditions.SQLCondition;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
 //  The first arg in these case statements appears to determine the return type 
@@ -23,139 +23,142 @@ import com.bobman159.rundml.core.sql.types.ISQLType;
  *
  */
 
-public class CaseClause //implements ICaseStatement 
-{
+public class CaseClause implements ICaseClause {
+	
+	private class CaseWhenThen implements ICaseWhenThen {
+		private ICaseWhenValue	when;
+		private ISQLType		then;
+		
+		protected CaseWhenThen(ICaseWhenValue when, ISQLType then) {
+			this.when = when;
+			this.then = then;
+		}
+		
+		@Override
+		public ISQLType getThenCondition() {
+			return then;
+		}
+		
+		/**
+		 * @see com.bobman159.rundml.core.sql.ICaseWhenThen#isWhenValueSQLCondition()
+		 */
+		@Override
+		public boolean isWhenValueSQLCondition() {
+			boolean isSQLCond = false;
+			if (when instanceof ISQLCondition) {
+				isSQLCond = true;
+			}
+			return isSQLCond;
+		}
+
+		/**
+		 * @see com.bobman159.rundml.core.sql.ICaseClause#isWhenValueSQLType(ICaseWhenValue)
+		 */
+		@Override
+		public boolean isWhenValueSQLType() {
+			boolean isSQLType = false;
+			if (when instanceof ISQLType) {
+				isSQLType = true;
+			}
+			return isSQLType;
+		}
+
+		/**
+		 * @see com.bobman159.rundml.core.sql.ICaseWhenThen#getWhenValue()
+		 */
+		@Override
+		public ISQLType getWhenType() {
+			return (ISQLType) when;
+		}
+
+		@Override
+		public ISQLCondition getWhenCondition() {
+			return (ISQLCondition) when;
+		}
+
+			
+	}
 	
 	SQLClause caseType = null;
-	private ISQLType caseExpr;
-	private LinkedList<ISQLType> whenConds;
-	private ISQLType whenCondition;		//holds when ISQLType for the then() method
+	private ISQLType caseValue;
+	private LinkedList<ICaseWhenThen> whenConds;
 	private ISQLType elseCondition = null;
+	private boolean 	caseWhen = false;		//is this a CASE WHEN statement?
 	
 	//TODO: Consider supporting Conditions (CASE COLNOTNULL CHAR = 'Abc')
 	//Support for CASE, WHEN, THEN and ELSE as well as String, Math.  Think this may be
 	//a YAGNI (You aint gonna need it)
 	
 	/**
-	 * Creates a CASE WHEN expression clause
+	 * Create a CASE WHEN SQL clause
 	 */
 	public CaseClause() {
-		this.caseExpr = null;
+		this.caseValue = null;
 		whenConds = new LinkedList<>();
-		caseType = SQLClause.CASE_WHEN;
 	}
 	
 	/**
-	 * Creates a CASE expression clause
-	 * @param expr the <code>ISQLType</code> for the CASE clause
+	 * Creates a CASE 
+	 * @param value the <code>ISQLType</code> for the CASE clause
 	 */
-	public CaseClause(ISQLType expr) {
-		this.caseExpr = expr;
+	public CaseClause(ISQLType value) {
+		this.caseValue = value;
 		whenConds = new LinkedList<>();
-		caseType = SQLClause.CASE_EXPR;
 	}
 	
 	/**
-	 * Creates a WHEN expression clause
-	 * @param expr the <code>ISQLType</code> for the WHEN condition
-	 * @return the WHEN expression
+	 * Create a CASE math expression WHEN... clause
+	 * @param mathExpr the math expression for the CASE clause
 	 */
-	public CaseClause when(ISQLType expr) {
-		whenCondition = expr;
-		return this;
-	}
-
-	/**
-	 * Creates a THEN expression clause
-	 * @param expr the <code>ISQLType</code> for the WHEN clause
-	 * @return the THEN expression
-	 */
-	public CaseClause then(ISQLType expr) {
-//		CaseWhenThenCondition condition = new CaseWhenThenCondition(whenCondition,expr);
-		whenConds.add(expr);
-		return this;
-	}
-	
-	/**
-	 * Creates a ELSE expression clause
-	 * @param expr the <code>ISQLType</code> for the ELSE clause
-	 * @return the ELSE expression
-	 */
-	public CaseClause elseClause(ISQLType expr) {
-		elseCondition = expr;
-		return this;
-	}
-	
-	/**
-	 * Generate the END clause for the CASE
-	 * @return CASE expression
-	 */
-	public CaseClause end() {
-		//Does nothing, implemented for readability during coding
-		return this;
-	}
-	
-	/**
-	 * @see com.bobman159.rundml.core.sql.ISQLClause#serializeClause()
-	 */
-//	@Override
-	public String serializeClause() {
-		
-		String caseClause = "";
-		
-		if (caseType.equals(SQLClause.CASE_EXPR)) {
-			caseClause = " CASE ";
+	public CaseClause(IExpressionNode caseExpr) {
+		if (caseExpr instanceof ISQLType) {
+			this.caseValue = caseExpr;
 		} else {
-			caseClause = " CASE WHEN ";
+			throw new IllegalArgumentException("mathExp must be an inherited instance of ISQLType");
 		}
+		whenConds = new LinkedList<>();
+	}
 		
-		return caseClause;
+	/**
+	 * Add a new WHEN value THEN value to the list of WHEN clauses for the current CASE
+	 * @param whenValue 
+	 * @param thenValue
+	 */
+	@Override
+	public void setWhenThen(ICaseWhenValue whenValue, ISQLType thenValue) {
+		ICaseWhenThen tempWhenThen = new CaseWhenThen(whenValue,thenValue);
+		whenConds.add(tempWhenThen);
 	}
-	
 
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseStatement#getType()
+	 * @see com.bobman159.rundml.core.sql.ICaseClause#getCaseExpr()
 	 */
-//	@Override
-	public ISQLClause getType() {
-		return this.caseType;
-	}
-	
-	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseStatement#getCaseExpr()
-	 */
-//	@Override
+	@Override
 	public ISQLType getCaseExpr() {
-		return this.caseExpr;
+		return caseValue;
 	}
-
+	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseStatement#getWhenConditions()
+	 * @see com.bobman159.rundml.core.sql.ICaseClause#getWhenConditions()
 	 */
-//	@Override
-	public Stream<ISQLType> getWhenConditions() {
+	@Override
+	public Stream<ICaseWhenThen> getWhenThenConditions() {
 		return whenConds.stream();
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseStatement#isCaseWhen()
+	 * @see com.bobman159.rundml.core.sql.ICaseClause#isCaseWhen()
 	 */
-//	@Override
+	@Override
 	public boolean isCaseWhen() {
 		
-		boolean isCaseWhen = false;
-		
-		if (SQLClause.CASE_WHEN.equals(caseType)) {
-			isCaseWhen = true;
-		}
-		
-		return isCaseWhen;
+		return caseWhen;
 	}
 
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseStatement#hasElse()
+	 * @see com.bobman159.rundml.core.sql.ICaseClause#hasElse()
 	 */
-//	@Override
+	@Override
 	public boolean hasElse() {
 		
 		boolean hasElse = false;
@@ -165,9 +168,19 @@ public class CaseClause //implements ICaseStatement
 		return hasElse;
 	}
 
-//	@Override
+	@Override
 	public ISQLType getElse() {
 		return this.elseCondition;
 	}
+
+	/**
+	 * @see com.bobman159.rundml.core.sql.ICaseClause#setElse(ISQLType)
+	 */
+	@Override
+	public void setElse(ISQLType elseExpr) {
+		elseCondition = elseExpr;
+	}
+
+
 
 }

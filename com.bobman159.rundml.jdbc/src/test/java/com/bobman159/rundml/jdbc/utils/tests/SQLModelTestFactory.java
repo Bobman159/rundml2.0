@@ -1,7 +1,7 @@
 package com.bobman159.rundml.jdbc.utils.tests;
 
-import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.model.SQLStatementModel;
+import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.util.CoreUtils;
 
@@ -66,29 +66,29 @@ public class SQLModelTestFactory {
 
 		SQLStatementModel model = new SQLStatementModel();
 		model.addClause(SQLClause.SELECT);
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTINTEGER));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLMEDINT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTSIGNED));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTTINYINT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLSMINT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLDEC72));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTNUM72));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTINTEGER));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLMEDINT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTSIGNED));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTTINYINT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLSMINT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLDEC72));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTNUM72));
 
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLTIME));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLDATE));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLTSTAMP));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLDATETIME));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLVARCHAR));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLCHAR));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTBLOB));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTCLOB));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBOOLEAN));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBOOL));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBIT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTBIGINT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTINT8));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBINARY));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTVARBINARY));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLTIME));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLDATE));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLTSTAMP));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLDATETIME));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLVARCHAR));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLCHAR));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTBLOB));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTCLOB));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBOOLEAN));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBOOL));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBIT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTBIGINT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTINT8));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBINARY));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTVARBINARY));
 		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName(RUNDML_SCHEMA, TYPETEST_TABLE));
 
 		return model;
@@ -103,25 +103,25 @@ public class SQLModelTestFactory {
 				
 		SQLStatementModel model = new SQLStatementModel();
 		model.addClause(SQLClause.SELECT);
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTINTEGER));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLMEDINT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTINTUNSIGNED));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(DFLTTINYINT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLSMINT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLDEC72));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLTIME));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLDATE));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLTSTAMP));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLDATETIME));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLVARCHAR));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLCHAR));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBLOB));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLTEXT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBOOLEAN));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBIT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBIGINT));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLBINARY));
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column(NOTNULLVARBINARY));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTINTEGER));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLMEDINT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTINTUNSIGNED));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(DFLTTINYINT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLSMINT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLDEC72));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLTIME));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLDATE));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLTSTAMP));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLDATETIME));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLVARCHAR));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLCHAR));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBLOB));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLTEXT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBOOLEAN));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBIT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBIGINT));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLBINARY));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column(NOTNULLVARBINARY));
 		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName(RUNDML_SCHEMA, TYPETEST_TABLE));
 
 		return model;
@@ -136,7 +136,7 @@ public class SQLModelTestFactory {
 		
 		SQLStatementModel model = new SQLStatementModel();
 		model.addClause(SQLClause.SELECT);
-		model.addExpressionList(SQLClause.SELECTEXPR, IExpressionFactory.column("Col01"));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column("Col01"));
 		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName(RUNDML_SCHEMA, TYPETEST_TABLE));
 
 		return model;

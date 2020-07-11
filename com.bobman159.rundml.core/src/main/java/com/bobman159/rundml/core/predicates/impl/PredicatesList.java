@@ -1,11 +1,8 @@
 package com.bobman159.rundml.core.predicates.impl;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.bobman159.rundml.core.predicates.IPredicate;
-import com.bobman159.rundml.core.sql.impl.SQLClauseClient;
-import com.bobman159.rundml.core.util.CoreUtils;
 
 /**
  * Maintains a list of the predicates (WHERE, AND, OR) for an SQL statement.
@@ -54,16 +51,11 @@ public class PredicatesList {
 	public int size() {
 		return predicateList.size();
 	}
-	
-	@Override
-	public String toString() {
-		
-		StringBuilder sql = new StringBuilder();
-		for (IPredicate pred : predicateList) {
-			sql.append(SQLClauseClient.getInstance().toSQLClause(pred)).append(" ");
-		}
-		
-		return CoreUtils.normalizeString(sql.toString());
-	}
 
+	/**
+	 * @return the list of predicates as a stream
+	 */
+	public Iterable<IPredicate> iteratable() {
+		return predicateList;
+	}
 }

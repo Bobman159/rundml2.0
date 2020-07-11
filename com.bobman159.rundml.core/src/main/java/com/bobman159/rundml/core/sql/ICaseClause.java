@@ -13,13 +13,8 @@ import com.bobman159.rundml.core.sql.types.ISQLType;
  *
  *	<p>are supported</p>
  */
-public interface ICaseStatement extends ISQLClause {
-	
-	/**
-	 * @return the type of SQL clause
-	 */
-	public ISQLClause getType();
-	
+public interface ICaseClause extends ISQLClause {
+
 	/**
 	 * 
 	 * @return the CASE expression type value or  expression node for CASE expression statement
@@ -27,29 +22,40 @@ public interface ICaseStatement extends ISQLClause {
 	public ISQLType getCaseExpr();
 	
 	/**
+	 * Add a WHEN value THEN value 
+	 * @param whenValue the sql condition or value for WHEN clause
+	 * @param thenValue the sql condition or value for THEN clause
+	 */
+	public void setWhenThen(ICaseWhenValue whenValue,ISQLType thenValue);
+	
+	/**
 	 * Get the list WHEN expression THEN expression condition clauses for the SQL CASE statement as a 
 	 * <code>Stream</code>
 	 * @return the list of WHEN conditions for the CASE
 	 */
-	public Stream<ICaseWhenConditions> getWhenConditions();
+	public Stream<ICaseWhenThen> getWhenThenConditions();
 	
 	/**
 	 * 
 	 * @return true if the CASE has an ELSE expression, false otherwise
 	 */
 	public boolean hasElse();
-
+	
 	/**
-	 * 
-	 * @return true if this is a CASE WHEN expression clause, false if this is a CASE expession WHEN expression clause
+	 * Add an ELSE expression condition for the CASE
+	 * @param elseExpr the sql value or condition for the ELSE
 	 */
-	public boolean isCaseWhen();
+	public void setElse(ISQLType elseExpr);
 	
 	/**
 	 * @return the ELSE condition for this CASE statement
 	 */
 	public ISQLType getElse();
-	
-	
-	
+
+	/**
+	 * 
+	 * @return true if this is a CASE WHEN statement , false if this is a CASE WHEN clause
+	 */
+	public boolean isCaseWhen();
+		
 }

@@ -1,26 +1,25 @@
 package com.bobman159.rundml.core.expressions.impl;
 
 import com.bobman159.rundml.core.expressions.AbstractBaseExpression;
-import com.bobman159.rundml.core.expressions.IExpressionFactory;
 import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.expressions.IStringExpression;
+import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
 import com.bobman159.rundml.core.sql.types.ISQLType;
-import com.bobman159.rundml.core.sql.types.ISQLTypesFactory;
 
 /**
  * An SQL String expression for an SQL statement clause.
  * @author Robert Anderson
  *
  */
-public class StringExpression extends AbstractBaseExpression implements IExpressionNode, IStringExpression {
-
+public class StringExpression extends AbstractBaseExpression implements  IStringExpression {
+	
 	/**
 	 * Define an SQL string expression between two strings
 	 * @param firstString the first string in the expression
 	 */
 	public StringExpression(String firstString) {
-		super(new ISQLTypesFactory() {}.constant(firstString));
+		super(SQLTypeFactory.constant(firstString));
 	}
 	
 	/**
@@ -46,8 +45,8 @@ public class StringExpression extends AbstractBaseExpression implements IExpress
 	 * @see com.bobman159.rundml.core.expressions.IStringExpression#concat(String)
 	 */
 	@Override
-	public StringExpression concat(String secondString) {
-		 return (StringExpression) addToExpression(this,Op.CONCAT,new ISQLTypesFactory() {}.constant(secondString));
+	public IStringExpression concat(String secondString) {
+		 return (StringExpression) addToExpression(this,Op.CONCAT,SQLTypeFactory.constant(secondString));
 	
 	}
 
@@ -55,7 +54,7 @@ public class StringExpression extends AbstractBaseExpression implements IExpress
 	 * @see com.bobman159.rundml.core.expressions.IStringExpression#concat(ISQLType)
 	 */
 	@Override
-	public StringExpression concat(ISQLType rhs) {
+	public IStringExpression concat(ISQLType rhs) {
 		return (StringExpression) addToExpression(this, Op.CONCAT, rhs);
 	}
 

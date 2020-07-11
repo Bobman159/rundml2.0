@@ -10,14 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.IExpressionNode;
-import com.bobman159.rundml.core.factory.RunDMLTestFactory;
-import com.bobman159.rundml.core.sql.impl.SQLClauseClient;
+import com.bobman159.rundml.core.sql.BaseSQLSerializer;
+import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 
 class ExprStringTest {
-	
-	private final RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 
+	private BaseSQLSerializer serializer = new BaseSQLSerializer();
+	
 	@BeforeAll
 	static void setUpBeforeClass() {
 		//No Set up needed at this time
@@ -40,32 +40,32 @@ class ExprStringTest {
 
 	@Test
 	void testConncat() {
-		IExpressionNode  strExpr = testFactory.stringExpression(testFactory.constant("abc"))
+		IExpressionNode  strExpr = SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc"))
 																		 .concat("def");
-		String expr = SQLClauseClient.getInstance().toSQLClause(strExpr);
+		String expr = serializer.serialize(strExpr);
 		Assertions.assertEquals("\'abc\' || \'def\'",expr);
 
 		Column lhs = new Column("ingredient");
 		Column rhs = new Column("unit_of_measure");
 		
-		IExpressionNode strExpr2 = testFactory.stringExpression(lhs).concat(rhs);
-		String expr2 = SQLClauseClient.getInstance().toSQLClause(strExpr2);
+		IExpressionNode strExpr2 = SQLTypeFactory.stringExpression(lhs).concat(rhs);
+		String expr2 = serializer.serialize(strExpr2);
 		Assertions.assertEquals("ingredient || unit_of_measure",expr2);
 		
-		IExpressionNode strExpr3 = testFactory.stringExpression(testFactory.constant("Ingred: ")).concat(lhs)				
-								 										 .concat(testFactory.constant("UnitMeasure: "))
+		IExpressionNode strExpr3 = SQLTypeFactory.stringExpression(SQLTypeFactory.constant("Ingred: ")).concat(lhs)				
+								 										 .concat(SQLTypeFactory.constant("UnitMeasure: "))
 								 										 .concat(rhs);
-		String expr3 = SQLClauseClient.getInstance().toSQLClause(strExpr3);
+		String expr3 = serializer.serialize(strExpr3);
 		Assertions.assertEquals("\'Ingred: \' || ingredient || \'UnitMeasure: \' || unit_of_measure",expr3);
 
-		IExpressionNode strExpr4 = testFactory.stringExpression(testFactory.column("ingredient"))
-								 .concat(testFactory.column("unit_of_measure"));
-		String expr4 = SQLClauseClient.getInstance().toSQLClause(strExpr4);
+		IExpressionNode strExpr4 = SQLTypeFactory.stringExpression(SQLTypeFactory.column("ingredient"))
+								 .concat(SQLTypeFactory.column("unit_of_measure"));
+		String expr4 = serializer.serialize(strExpr4);
 		Assertions.assertEquals("ingredient || unit_of_measure",expr4);
 		
-		IExpressionNode strExpr5 = testFactory.stringExpression(testFactory.parm(Types.VARCHAR, "varchar_value"))
-				 														 .concat(testFactory.parm(Types.CHAR, "char_value"));
-		String expr5 = SQLClauseClient.getInstance().toSQLClause(strExpr5);
+		IExpressionNode strExpr5 = SQLTypeFactory.stringExpression(SQLTypeFactory.parm(Types.VARCHAR, "varchar_value"))
+				 														 .concat(SQLTypeFactory.parm(Types.CHAR, "char_value"));
+		String expr5 = serializer.serialize(strExpr5);
 		Assertions.assertEquals("? || ?",expr5);
 		
 	}

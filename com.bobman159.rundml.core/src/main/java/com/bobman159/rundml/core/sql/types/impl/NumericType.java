@@ -28,9 +28,11 @@ public class NumericType implements ISQLType {
 		return SQLType.NUMERIC;
 	}
 
-	@Override
-	public String toString() {
-		return this.number.toString();
+	/** 
+	 * @return the number value for this instance
+	 */
+	public Number getNumber() {
+		return this.number;
 	}
 
 }

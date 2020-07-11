@@ -7,9 +7,6 @@ package com.bobman159.rundml.core.sql.types;
 public enum SQLType {
 
 	CASE,
-	
-	ORDER_BY,
-	
 	/** A numeric constant with a number value */
 	NUMERIC,
 	/** A string/character constant */
@@ -32,9 +29,5 @@ public enum SQLType {
 	TABLE,
 	/** And SQL condition */
 	CONDITION;
-	/** A string expression (eg "COL01 || COL02") */
-//	STRING_EXPR,
-	/** A math expression addition, subtraction, multiply, divide (eg 10 + 20) */
-//	MATH_EXPR;
 	
 }

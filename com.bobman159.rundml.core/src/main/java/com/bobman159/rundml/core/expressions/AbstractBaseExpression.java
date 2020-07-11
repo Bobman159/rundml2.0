@@ -9,7 +9,9 @@ import com.bobman159.rundml.core.sql.types.SQLType;
 /**
  * Abstract base class for represents an expression in an SQL expression. Both RunDML supported
  * type (Number, String, Column name, parameter marker etc) in an expression and
- * expressions (String and Mathematical) are supported
+ * expressions (String and Mathematical) are supported.
+ * 
+ * This class <b>must be</ 
  *
  */
 public abstract class AbstractBaseExpression implements IExpressionNode {

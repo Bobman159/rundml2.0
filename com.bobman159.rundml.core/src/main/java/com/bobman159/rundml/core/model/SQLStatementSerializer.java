@@ -23,7 +23,7 @@ public abstract class SQLStatementSerializer { //NOSONAR
 		Stream<SQLModelNode> modelStream = model.sqlClauses();
 
 		modelStream.forEach(modelNode  -> {
-			ISQLClause enumClause =  modelNode.getEnum();
+			ISQLClause enumClause =  modelNode.getNodeType();
 			if (!enumClause.equals(SQLClause.SELECTEXPR) &&
 				!enumClause.equals(SQLClause.WHERE) 	 &&
 				!enumClause.equals(SQLClause.HAVING)) {

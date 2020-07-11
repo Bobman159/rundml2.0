@@ -1,12 +1,10 @@
 package com.bobman159.rundml.core.expressions;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
-import com.bobman159.rundml.core.sql.impl.SQLClauseClient;
 import com.bobman159.rundml.core.sql.types.ISQLType;
-import com.bobman159.rundml.core.util.CoreUtils;
 
 /**
  * Maintains a <code>List</code> of <code>ISQLType</code> objects
@@ -45,24 +43,13 @@ public class ExpressionList {
 	}
 	
 	/**
-	 * Returns a list of SQL expressions as comma separated text 
-	 * "expr1,expr2,expr3..."
 	 * 
-	 * @return comma separated text string
+	 * @return the expressions list as a Stream<ISQLType>
 	 */
-	public String toCSV() {
-	
-		StringBuilder csvString = new StringBuilder();
-		Iterator<ISQLType> csvIterator = expressions.stream().iterator();
-		while (csvIterator.hasNext()) {
-			ISQLType exprBase = csvIterator.next();
-			csvString.append(SQLClauseClient.getInstance().toSQLClause(exprBase));
-			if (csvIterator.hasNext()) {
-				csvString.append(",");
-			}
-		}
-		
-		return CoreUtils.normalizeString(csvString.toString());
+	public Stream<ISQLType> stream() {
+		return expressions.stream();
 	}
+	
+
 
 }

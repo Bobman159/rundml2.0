@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
-import com.bobman159.rundml.core.factory.RunDMLTestFactory;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceAllColumnsDefined;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoInterface;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException;
@@ -20,8 +19,6 @@ import com.bobman159.rundml.core.sql.types.impl.Column;
 import com.bobman159.rundml.core.util.CoreUtils;
 
 class CoreUtilsTest {
-	
-	private final RunDMLTestFactory testFactory = RunDMLTestFactory.getInstance();
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -126,9 +123,8 @@ class CoreUtilsTest {
 		}
 		
 		final String NOFIELD_ERROR = "com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException: No Field named fieldOne found in class com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException";
-		ISQLType[] actualColumns3 = null;
 		try {
-			actualColumns3 = CoreUtils.createColumnsFromClass(FieldMapNoTableRowFieldClassException.class);
+			ISQLType[] actualColumns3 = CoreUtils.createColumnsFromClass(FieldMapNoTableRowFieldClassException.class);
 		} catch (RunDMLException e) {
 			Assertions.assertNotNull(e);
 			Assertions.assertEquals(RunDMLException.SQL_MODEL_BUILD, e.getExecutionPhase());

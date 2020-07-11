@@ -1,7 +1,6 @@
 package com.bobman159.rundml.core.sql.sql.conditions;
 
 import com.bobman159.rundml.core.sql.types.ISQLType;
-import com.bobman159.rundml.core.sql.types.SQLType;
 
 /**
  * Represents a condition (eg COL01 = 10, 10 &gt; 20) in an SQL statement.  
@@ -34,18 +33,6 @@ public class SQLCondition implements ISQLCondition {
 		ISQLType leftExpr = condition.getLeftCondition();
 		return new SQLCondition(leftExpr, op, rightExpr);
 	}
-	
-//	/**
-//	 * Creates a complete SQL condition 
-//	 * @param leftCond the left part of the condition
-//	 * @param operator the operator for the condition
-//	 * @param rightCond the right part of the condition
-//	 * @return the completed SQL condition
-//	 */
-//	@Override
-//	public SQLCondition createSQLCondition(ISQLType leftCond, Op operator, ISQLType rightCond) {
-//		return new SQLCondition(leftCond,operator,rightCond);
-//	}
 	
 	/*
 	 * Partial constructor for a SQL condition
@@ -93,14 +80,6 @@ public class SQLCondition implements ISQLCondition {
 	@Override
 	public Op getOperator() {
 		return operator;
-	}
-
-	/**
-	 * @see com.bobman159.rundml.core.sql.types.ISQLType#getType()
-	 */
-	@Override
-	public SQLType getType() {
-		return SQLType.CONDITION;
 	}
 
 }
