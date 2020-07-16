@@ -42,7 +42,7 @@ public class PredicateBuilder {
 	 * @return predicate builder next step
 	 */
 	public static IPredicateComparisonStep where(Number leftPred) {
-		return new PredicateSteps(PredOperand.WHERE,SQLTypeFactory.constant(leftPred));
+		return new PredicateSteps(PredOperand.WHERE,SQLTypeFactory.getInstance().constant(leftPred));
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class PredicateBuilder {
 	 * @return predicate builder next step
 	 */
 	public static IPredicateComparisonStep where(String leftPred) {
-		return new PredicateSteps(PredOperand.WHERE,SQLTypeFactory.constant(leftPred));
+		return new PredicateSteps(PredOperand.WHERE,SQLTypeFactory.getInstance().constant(leftPred));
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class PredicateBuilder {
 	 * @return predicate builder next step
 	 */
 	public static IPredicateComparisonStep having(Number leftPred) {
-		return new PredicateSteps(PredOperand.HAVING,SQLTypeFactory.constant(leftPred));
+		return new PredicateSteps(PredOperand.HAVING,SQLTypeFactory.getInstance().constant(leftPred));
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class PredicateBuilder {
 	 * @return predicate builder next step
 	 */
 	public static IPredicateComparisonStep having(String leftPred) {
-		return new PredicateSteps(PredOperand.HAVING,SQLTypeFactory.constant(leftPred));
+		return new PredicateSteps(PredOperand.HAVING,SQLTypeFactory.getInstance().constant(leftPred));
 	}
 	
 	/**
@@ -129,7 +129,7 @@ public class PredicateBuilder {
 		@Override
 		public IPredicateComparisonStep and(Number leftPred) {
 			predList.addPredicate(PredicateClause.createPredicate(PredOperand.AND,
-								  SQLTypeFactory.constant(leftPred)));
+								  SQLTypeFactory.getInstance().constant(leftPred)));
 			return this;
 		}
 		
@@ -142,7 +142,7 @@ public class PredicateBuilder {
 		public IPredicateComparisonStep and(String leftPred) {
 
 				predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,
-									  SQLTypeFactory.constant(leftPred)));
+									  SQLTypeFactory.getInstance().constant(leftPred)));
 				return this;		
 		}
 		
@@ -153,7 +153,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateComparisonStep or(Number leftPred) {
-			predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,SQLTypeFactory.constant(leftPred)));
+			predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,SQLTypeFactory.getInstance().constant(leftPred)));
 			return this;
 		}
 		
@@ -164,7 +164,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateComparisonStep or(String leftPred) {	//NOSONAR
-			predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,SQLTypeFactory.constant(leftPred)));
+			predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,SQLTypeFactory.getInstance().constant(leftPred)));
 			return this;
 		}
 		
@@ -183,7 +183,7 @@ public class PredicateBuilder {
 		@Override
 		public IPredicateClauseStep isEqual(Number expr) {
 
-			addCompletePredicate(predList.getLastPredicate(),Op.EQ,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.EQ,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -193,7 +193,7 @@ public class PredicateBuilder {
 		@Override
 		public IPredicateClauseStep isEqual(String expr) {
 			
-			addCompletePredicate(predList.getLastPredicate(),Op.EQ,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.EQ,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -211,7 +211,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isGreater(Number expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.GT,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.GT,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -220,7 +220,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isGreater(String expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.GT,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.GT,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}	
 
@@ -238,7 +238,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isGreaterOrEqual(Number expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.GTE,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.GTE,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -247,7 +247,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isGreaterOrEqual(String expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.GTE,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.GTE,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -265,7 +265,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isLess(Number expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.LT,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.LT,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -274,7 +274,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isLess(String expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.LT,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.LT,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -292,7 +292,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isLessOrEqual(Number expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.LTE,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.LTE,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -301,7 +301,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isLessOrEqual(String expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.LTE,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.LTE,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -319,7 +319,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isNot(Number expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.NOT,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.NOT,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -328,7 +328,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isNot(String expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.NOT,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.NOT,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -346,7 +346,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isNotEqual(Number expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.NOTEQ,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.NOTEQ,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		
@@ -355,7 +355,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateClauseStep isNotEqual(String expr) {
-			addCompletePredicate(predList.getLastPredicate(),Op.NOTEQ,SQLTypeFactory.constant(expr));
+			addCompletePredicate(predList.getLastPredicate(),Op.NOTEQ,SQLTypeFactory.getInstance().constant(expr));
 			return this;
 		}
 		

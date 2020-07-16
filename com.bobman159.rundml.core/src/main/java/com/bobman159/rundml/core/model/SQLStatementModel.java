@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.bobman159.rundml.core.expressions.ExpressionList;
+import com.bobman159.rundml.core.sql.IOrderByEntry;
 import com.bobman159.rundml.core.sql.ISQLClause;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.sql.types.ISQLType;
@@ -149,6 +150,11 @@ public class SQLStatementModel {
 	private void addNode(ISQLClause clause,Object arg) {
 		SQLModelNode node = new SQLModelNode(clause,arg);
 		model.add(node);
+	}
+
+	public void addExpressionList(SQLClause orderby, IOrderByEntry[] orderByExprs) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

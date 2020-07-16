@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.ExpressionList;
-import com.bobman159.rundml.core.sql.BaseSQLSerializer;
 import com.bobman159.rundml.core.sql.SQLTypeFactory;
+import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 import com.bobman159.rundml.core.sql.types.impl.NumericType;
@@ -40,13 +40,13 @@ class ExpressionListTest {
 		
 		ISQLType [] exprArray = {new Column("column_name"),
 										new ParmMarker(Types.SMALLINT,new NumericType(10)),
-										SQLTypeFactory.mathExpression(SQLTypeFactory.constant(100)).divide(10),
-										SQLTypeFactory.stringExpression(SQLTypeFactory.constant("ABC")).concat("DEF")
+										SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(100)).divide(10),
+										SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("ABC")).concat("DEF")
 		};
 											
 		ExpressionList exprList = new ExpressionList();
 		exprList.addExpressions(exprArray);
-		String csv = new BaseSQLSerializer().serialize(exprList);
+		String csv = new TestBaseSQLSerializer().serialize(exprList);
 		Assertions.assertEquals("column_name,?,100 / 10,'ABC' || 'DEF'",csv);
 
 	}
@@ -58,9 +58,9 @@ class ExpressionListTest {
 		
 		exprList.addExpression(new Column("column_name"));
 		exprList.addExpression(new ParmMarker(Types.SMALLINT,new NumericType(10)));
-		exprList.addExpression(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(100)).divide(10));
-		exprList.addExpression(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("ABC")).concat("DEF"));
-		String csv = new BaseSQLSerializer().serialize(exprList);
+		exprList.addExpression(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(100)).divide(10));
+		exprList.addExpression(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("ABC")).concat("DEF"));
+		String csv = new TestBaseSQLSerializer().serialize(exprList);
 		Assertions.assertEquals("column_name,?,100 / 10,'ABC' || 'DEF'",csv);		
 
 	}

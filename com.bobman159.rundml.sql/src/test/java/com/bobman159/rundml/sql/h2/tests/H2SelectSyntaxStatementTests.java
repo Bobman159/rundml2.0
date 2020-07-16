@@ -83,13 +83,13 @@ class H2SelectSyntaxStatementTests {
 	void h2SelectTableDefinitionTest() {
 		String stmtText =  RunDMLSQLFactory.createH2SelectStatement()				
 				  .select()
-				  .selectExpression(SQLTypeFactory.column(DFLTINTEGER))
-				  .selectExpression(SQLTypeFactory.column(NOTNULLDEC72))
-				  .selectExpression(SQLTypeFactory.column(NOTNULLDATE))
-				  .selectExpression(SQLTypeFactory.column(NOTNULLCHAR))
-				  .selectExpression(SQLTypeFactory.column("dfltSigned"))
-				  .selectExpression(SQLTypeFactory.column("dfltTinyInt"))
-				  .selectExpression(SQLTypeFactory.column(NOTNULLVARCHAR))				  
+				  .selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
+				  .selectExpression(SQLTypeFactory.getInstance().column(NOTNULLDEC72))
+				  .selectExpression(SQLTypeFactory.getInstance().column(NOTNULLDATE))
+				  .selectExpression(SQLTypeFactory.getInstance().column(NOTNULLCHAR))
+				  .selectExpression(SQLTypeFactory.getInstance().column("dfltSigned"))
+				  .selectExpression(SQLTypeFactory.getInstance().column("dfltTinyInt"))
+				  .selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))				  
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
 				  .getStatementText();
 		
@@ -107,9 +107,9 @@ class H2SelectSyntaxStatementTests {
 		 */
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(10))
-				.selectExpression(SQLTypeFactory.constant("This is a string"))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(10))
+				.selectExpression(SQLTypeFactory.getInstance().constant("This is a string"))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.selectExpression(new ParmMarker(Types.VARCHAR,"This is a string too"))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
@@ -124,8 +124,8 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.top(SQLTypeFactory.constant(5))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.top(SQLTypeFactory.getInstance().constant(5))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -134,8 +134,8 @@ class H2SelectSyntaxStatementTests {
 		
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.top(SQLTypeFactory.constant(NUMERIC_LITERAL))
-				.selectExpression(SQLTypeFactory.column(NOTNULLVARCHAR))
+				.top(SQLTypeFactory.getInstance().constant(NUMERIC_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -149,8 +149,8 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.top(SQLTypeFactory.constant(5)).distinct()
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.top(SQLTypeFactory.getInstance().constant(5)).distinct()
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -159,8 +159,8 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.top(SQLTypeFactory.constant(NUMERIC_LITERAL)).distinct()
-				.selectExpression(SQLTypeFactory.column(NOTNULLVARCHAR))
+				.top(SQLTypeFactory.getInstance().constant(NUMERIC_LITERAL)).distinct()
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -174,8 +174,8 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.top(SQLTypeFactory.constant(5)).all()
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.top(SQLTypeFactory.getInstance().constant(5)).all()
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -184,8 +184,8 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.top(SQLTypeFactory.constant("5")).all()
-				.selectExpression(SQLTypeFactory.column(NOTNULLVARCHAR))
+				.top(SQLTypeFactory.getInstance().constant("5")).all()
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -202,7 +202,7 @@ class H2SelectSyntaxStatementTests {
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
 				.distinct().all()
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -212,7 +212,7 @@ class H2SelectSyntaxStatementTests {
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
 				.distinct().all()
-				.selectExpression(SQLTypeFactory.column(NOTNULLVARCHAR))
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.getStatementText();
 		
@@ -224,24 +224,24 @@ class H2SelectSyntaxStatementTests {
 	@Test
 	void h2SelectWhereTest() {
 		
-		PredicateBuilder pred = PredicateBuilder.where(SQLTypeFactory.column(DFLTINTEGER))
+		PredicateBuilder pred = PredicateBuilder.where(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 								  .isGreater(100000)
-								  .and(SQLTypeFactory.column(NOTNULLDEC72))
+								  .and(SQLTypeFactory.getInstance().column(NOTNULLDEC72))
 								  .isGreaterOrEqual(12345.10)
-								  .or(SQLTypeFactory.column(NOTNULLDATE))
+								  .or(SQLTypeFactory.getInstance().column(NOTNULLDATE))
 								  .isEqual("2019-03-15")
-								  .or(SQLTypeFactory.column(NOTNULLVARCHAR))
+								  .or(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 								  .isGreaterOrEqual(ABCDEFG_LITERAL)
-								  .or(SQLTypeFactory.column(NOTNULLVARCHAR))
-								  .isEqual(SQLTypeFactory.parm(Types.BIGINT, "This is a test"))
+								  .or(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
+								  .isEqual(SQLTypeFactory.getInstance().parm(Types.BIGINT, "This is a test"))
 								  .build();
 								  
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 								.select()
-								.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
-								.selectExpression(SQLTypeFactory.column(NOTNULLDEC72))
-								.selectExpression(SQLTypeFactory.column(NOTNULLDATE))
-								.selectExpression(SQLTypeFactory.column(NOTNULLVARCHAR))
+								.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
+								.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLDEC72))
+								.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLDATE))
+								.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 								.from(RUNDML_SCHEMA,RUNDML_TABLE)
 								.where(pred)
 								.getStatementText();
@@ -261,14 +261,14 @@ class H2SelectSyntaxStatementTests {
 		
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(SQLTypeFactory.constant(100000),
-						 SQLTypeFactory.constant(ABCDEFG_LITERAL),
-						 SQLTypeFactory.parm(Types.DECIMAL, 100000),
-						 SQLTypeFactory.column(DFLTINTEGER))
+				.groupBy(SQLTypeFactory.getInstance().constant(100000),
+						 SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL),
+						 SQLTypeFactory.getInstance().parm(Types.DECIMAL, 100000),
+						 SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -282,11 +282,11 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(1),SQLTypeFactory.orderBy(2),SQLTypeFactory.orderBy(3))
+				.orderBy(SQLTypeFactory.getInstance().orderBy(1),SQLTypeFactory.getInstance().orderBy(2),SQLTypeFactory.getInstance().orderBy(3))
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -295,13 +295,13 @@ class H2SelectSyntaxStatementTests {
 		
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(1),
-						 SQLTypeFactory.orderBy(2),
-						 SQLTypeFactory.orderBy(SQLTypeFactory.column(DFLTINTEGER)))
+				.orderBy(SQLTypeFactory.getInstance().orderBy(1),
+						 SQLTypeFactory.getInstance().orderBy(2),
+						 SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(DFLTINTEGER)))
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -310,11 +310,11 @@ class H2SelectSyntaxStatementTests {
 		
 		String stmtText3 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(SQLTypeFactory.constant(ABCDEFG_LITERAL)))
+				.orderBy(SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL)))
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -323,11 +323,11 @@ class H2SelectSyntaxStatementTests {
 		
 		String stmtText4 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(1).asc())
+				.orderBy(SQLTypeFactory.getInstance().orderBy(1).asc())
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -336,11 +336,11 @@ class H2SelectSyntaxStatementTests {
 		
 		String stmtText5 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(SQLTypeFactory.column(DFLTINTEGER)).desc())
+				.orderBy(SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(DFLTINTEGER)).desc())
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -349,11 +349,11 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText6 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(1),SQLTypeFactory.orderBy(2).desc())
+				.orderBy(SQLTypeFactory.getInstance().orderBy(1),SQLTypeFactory.getInstance().orderBy(2).desc())
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -362,11 +362,11 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText7 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(1),SQLTypeFactory.orderBy(2).desc().nullsLast())
+				.orderBy(SQLTypeFactory.getInstance().orderBy(1),SQLTypeFactory.getInstance().orderBy(2).desc().nullsLast())
 				.getStatementText();
 
 		Assertions.assertEquals(SELECT_1000 +
@@ -375,12 +375,12 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText8 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(SQLTypeFactory.column(DFLTINTEGER)),
-						 SQLTypeFactory.orderBy(SQLTypeFactory.column(NOTNULLVARCHAR)).desc()
+				.orderBy(SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(DFLTINTEGER)),
+						 SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).desc()
 						 			.nullsFirst())
 				.getStatementText();
 
@@ -390,14 +390,14 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText9 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
-				.selectExpression(SQLTypeFactory.column(NOTNULLDEC72))
-				.selectExpression(SQLTypeFactory.column(NOTNULLVARCHAR))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLDEC72))
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(SQLTypeFactory.column(NOTNULLVARCHAR)).desc()
+				.orderBy(SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).desc()
 								   .nullsLast(),
-						 SQLTypeFactory.orderBy(1).asc().nullsFirst(),
-						 SQLTypeFactory.orderBy(SQLTypeFactory.column(NOTNULLDEC72)))
+						 SQLTypeFactory.getInstance().orderBy(1).asc().nullsFirst(),
+						 SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(NOTNULLDEC72)))
 				.getStatementText();
 
 		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullVarchar " +
@@ -407,15 +407,15 @@ class H2SelectSyntaxStatementTests {
 		
 		String stmtText10 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(100000))
-				.selectExpression(SQLTypeFactory.constant(ABCDEFG_LITERAL))
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().constant(100000))
+				.selectExpression(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.orderBy(SQLTypeFactory.orderBy(SQLTypeFactory.column(DFLTINTEGER)).asc()
+				.orderBy(SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(DFLTINTEGER)).asc()
 								   .nullsFirst(),
-						 SQLTypeFactory.orderBy(2).desc().nullsLast(),
-						 SQLTypeFactory.orderBy(3).desc().nullsFirst(),
-						 SQLTypeFactory.orderBy(SQLTypeFactory.parm(Types.TINYINT,10)).asc()
+						 SQLTypeFactory.getInstance().orderBy(2).desc().nullsLast(),
+						 SQLTypeFactory.getInstance().orderBy(3).desc().nullsFirst(),
+						 SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().parm(Types.TINYINT,10)).asc()
 						 		   .nullsLast())
 				.getStatementText();
 
@@ -431,10 +431,10 @@ class H2SelectSyntaxStatementTests {
 				
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.column(DFLTINTEGER))
+				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(SQLTypeFactory.column(DFLTINTEGER))
-				.having(PredicateBuilder.having(SQLTypeFactory.column(DFLTINTEGER)).isGreater(100000)
+				.groupBy(SQLTypeFactory.getInstance().column(DFLTINTEGER))
+				.having(PredicateBuilder.having(SQLTypeFactory.getInstance().column(DFLTINTEGER)).isGreater(100000)
 								 .build())
 				.getStatementText();
 
@@ -444,10 +444,10 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText2 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.column(NOTNULLCHAR))
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(SQLTypeFactory.column(NOTNULLCHAR))
-				.having(PredicateBuilder.having(SQLTypeFactory.column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
+				.groupBy(SQLTypeFactory.getInstance().column(NOTNULLCHAR))
+				.having(PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
 								 .build())
 				.getStatementText();
 
@@ -457,13 +457,13 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText3 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.column(NOTNULLCHAR))
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(SQLTypeFactory.column(NOTNULLCHAR))
-				.having(PredicateBuilder.having(SQLTypeFactory.column(NOTNULLCHAR))
+				.groupBy(SQLTypeFactory.getInstance().column(NOTNULLCHAR))
+				.having(PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLCHAR))
 								 .isGreaterOrEqual(NUMERIC_LITERAL)
-								 .or(SQLTypeFactory.column(NOTNULLCHAR)).isEqual("223456789")
-								 .and(SQLTypeFactory.column(NOTNULLCHAR)).isLess("1123456789")
+								 .or(SQLTypeFactory.getInstance().column(NOTNULLCHAR)).isEqual("223456789")
+								 .and(SQLTypeFactory.getInstance().column(NOTNULLCHAR)).isLess("1123456789")
 								 .build())
 				.getStatementText();
 
@@ -475,10 +475,10 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText4 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.column(NOTNULLCHAR))
+				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(SQLTypeFactory.constant("Abcdef"),
-						 SQLTypeFactory.constant("Hiklmnop"))
+				.groupBy(SQLTypeFactory.getInstance().constant("Abcdef"),
+						 SQLTypeFactory.getInstance().constant("Hiklmnop"))
 				.having(PredicateBuilder.having("Abcdef")
 								 .isEqual("Abcdef2")
 								 .or("Hijklmnop").isGreater("Hijklmno")
@@ -492,18 +492,18 @@ class H2SelectSyntaxStatementTests {
 
 		String stmtText5 = RunDMLSQLFactory.createH2SelectStatement()
 				.select()
-				.selectExpression(SQLTypeFactory.constant(10))
-				.selectExpression(SQLTypeFactory.constant(20))
-				.selectExpression(SQLTypeFactory.constant(30))
+				.selectExpression(SQLTypeFactory.getInstance().constant(10))
+				.selectExpression(SQLTypeFactory.getInstance().constant(20))
+				.selectExpression(SQLTypeFactory.getInstance().constant(30))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.groupBy(SQLTypeFactory.constant(20),
-						 SQLTypeFactory.constant(30),
-						 SQLTypeFactory.constant(10))
+				.groupBy(SQLTypeFactory.getInstance().constant(20),
+						 SQLTypeFactory.getInstance().constant(30),
+						 SQLTypeFactory.getInstance().constant(10))
 				.having(PredicateBuilder.having(20)
 								 .isEqual(20)
 								 .and(20).isGreater(10)
 								 .and(10).isLess(30)
-								 .and(SQLTypeFactory.parm(Types.CHAR, ABCDEFG_LITERAL)).isEqual("Abcdefg")
+								 .and(SQLTypeFactory.getInstance().parm(Types.CHAR, ABCDEFG_LITERAL)).isEqual("Abcdefg")
 								 .build())
 				.getStatementText();
 
@@ -521,7 +521,7 @@ class H2SelectSyntaxStatementTests {
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select(H2MockPrimitivesTypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.limit(SQLTypeFactory.constant(5))
+				.limit(SQLTypeFactory.getInstance().constant(5))
 				.getStatementText();
 
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," + 
@@ -539,7 +539,7 @@ class H2SelectSyntaxStatementTests {
 		String stmtText = RunDMLSQLFactory.createH2SelectStatement()
 				.select(H2MockStringTypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.limit(SQLTypeFactory.constant(5)).offset(SQLTypeFactory.constant(1))
+				.limit(SQLTypeFactory.getInstance().constant(5)).offset(SQLTypeFactory.getInstance().constant(1))
 				.getStatementText();
 
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," + 

@@ -7,11 +7,11 @@ import java.util.List;
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.model.SQLStatementSerializer;
 import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
+import com.bobman159.rundml.core.sql.IOrderByEntry;
 import com.bobman159.rundml.core.sql.SQLTypeFactory;
-import com.bobman159.rundml.core.sql.impl.OrderByExpression;
 import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.serialize.impl.SQLStatementSerializer;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
@@ -155,7 +155,7 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	 * @return an instance of this builder
 	 */
 	public B from(String schema, String tbName) {
-		model.addClause(SQLClause.FROM, SQLTypeFactory.qualifiedTable(schema, tbName));
+		model.addClause(SQLClause.FROM, SQLTypeFactory.getInstance().qualifiedTable(schema, tbName));
 		return self();
 	}
 
@@ -199,11 +199,11 @@ public class BaseSelectStatementBuilder<B extends BaseSelectStatementBuilder> im
 	/**
 	 * Specify a ORDER BY clause for the SELECT statement.
 	 * 
-	 * @see com.bobman159.rundml.core.sql.impl.OrderByExpression
+	 * @see com.bobman159.rundml.core.sql.IOrderByEntry
 	 * @param orderByExprs expression(s) for the ORDER BY
 	 * @return an instance of this builder
 	 */
-	public B orderBy(OrderByExpression... orderByExprs) {
+	public B orderBy(IOrderByEntry... orderByExprs) {
 		model.addExpressionList(SQLClause.ORDERBY, orderByExprs);
 		return self();
 	}

@@ -16,6 +16,9 @@ import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 
+//TODO: Refactor this & move methods to Utils* classes where
+// -	IE  Method in Coreutils used for field mapping should belong in a FieldMappingUtils
+// -	Eliminate this class if possible
 /**
  * A utility class for use in building the SQL statements for RunDML.
  * 
@@ -126,7 +129,7 @@ public class CoreUtils {
 		for (Object fieldDef : fieldDefs) {
 			if (fieldDef instanceof IFieldMapDefinition) {
 				IFieldMapDefinition wkFieldDef = (IFieldMapDefinition) fieldDef;
-				col = (Column) SQLTypeFactory.column(wkFieldDef.getColumnName());
+				col = (Column) SQLTypeFactory.getInstance().column(wkFieldDef.getColumnName());
 			}
 				
 			exprs[index] = col;
@@ -160,7 +163,7 @@ public class CoreUtils {
 		int index = 0;
 		
 		for (String columnName : columns) {
-			exprs[index] = SQLTypeFactory.column(columnName);
+			exprs[index] = SQLTypeFactory.getInstance().column(columnName);
 			index++;
 		}
 		

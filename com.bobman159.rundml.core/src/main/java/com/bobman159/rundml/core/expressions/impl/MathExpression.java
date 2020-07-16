@@ -38,7 +38,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	@Override
 	public IMathExpression add(Number number) {
 
-		return (MathExpression) addToExpression(this,Op.ADD,SQLTypeFactory.constant(number));
+		return (MathExpression) addToExpression(this,Op.ADD,SQLTypeFactory.getInstance().constant(number));
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression subtract(Number number) {
-		return (MathExpression) addToExpression(this,Op.SUB,SQLTypeFactory.constant(number));
+		return (MathExpression) addToExpression(this,Op.SUB,SQLTypeFactory.getInstance().constant(number));
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression multiply(Number number) {
-		return (MathExpression) addToExpression(this,Op.MULT,SQLTypeFactory.constant(number));
+		return (MathExpression) addToExpression(this,Op.MULT,SQLTypeFactory.getInstance().constant(number));
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression divide(Number number) {
-		return (MathExpression) addToExpression(this,Op.DIVIDE,SQLTypeFactory.constant(number));
+		return (MathExpression) addToExpression(this,Op.DIVIDE,SQLTypeFactory.getInstance().constant(number));
 	}
 
 	/**

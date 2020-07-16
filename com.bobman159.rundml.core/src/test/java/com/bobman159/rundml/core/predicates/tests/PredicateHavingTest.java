@@ -8,14 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
-import com.bobman159.rundml.core.sql.BaseSQLSerializer;
 import com.bobman159.rundml.core.sql.SQLTypeFactory;
+import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 
 class PredicateHavingTest {
 
 	private static final String DFLTINTEGER = "dfltInteger";
 	private static final String NOTNULLVARCHAR = "notNullVarchar";
-	private final BaseSQLSerializer serializer = new BaseSQLSerializer();
+	private final TestBaseSQLSerializer serializer = new TestBaseSQLSerializer();
 
 	@BeforeAll
 	static void setUpBeforeClass() {
@@ -40,19 +40,19 @@ class PredicateHavingTest {
 	@Test
 	void testHavingPreidcates() {
 
-		String stmtText = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.column(DFLTINTEGER)).isGreater(100000)
+		String stmtText = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.getInstance().column(DFLTINTEGER)).isGreater(100000)
 								 .build());
 		Assertions.assertEquals("HAVING dfltInteger > 100000",stmtText);
 
-		String stmtText2 = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.column(NOTNULLVARCHAR))
+		String stmtText2 = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				 .isGreater("0123456789")
 				 .build());
 		Assertions.assertEquals("HAVING notNullVarchar > '0123456789'",stmtText2);
 
-		String stmtText3 = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.column(NOTNULLVARCHAR))
+		String stmtText3 = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				 .isGreaterOrEqual("0123456789")
-				 .or(SQLTypeFactory.column(NOTNULLVARCHAR)).isEqual("223456789")
-				 .and(SQLTypeFactory.column(NOTNULLVARCHAR)).isLess("1123456789")
+				 .or(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).isEqual("223456789")
+				 .and(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).isLess("1123456789")
 				 .build());
 		Assertions.assertEquals("HAVING notNullVarchar >= '0123456789' " + 
 				 			"OR notNullVarchar = '223456789' " + 
@@ -70,8 +70,8 @@ class PredicateHavingTest {
 		Assertions.assertEquals("HAVING 20 = 20 " + 
 				 			"AND 20 > 10 AND 10 < 30",stmtText5);
 		
-		String stmtText6 = serializer.serialize(PredicateBuilder.having(20).isNot(SQLTypeFactory.constant(20))
-				 .and(20).isNotEqual(SQLTypeFactory.constant(10))
+		String stmtText6 = serializer.serialize(PredicateBuilder.having(20).isNot(SQLTypeFactory.getInstance().constant(20))
+				 .and(20).isNotEqual(SQLTypeFactory.getInstance().constant(10))
 				 .and(10).isLess(30)
 				 .build());
 		Assertions.assertEquals("HAVING 20 ! 20 " + 

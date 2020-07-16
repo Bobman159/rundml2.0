@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
-import com.bobman159.rundml.core.sql.BaseSQLSerializer;
 import com.bobman159.rundml.core.sql.SQLTypeFactory;
+import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 
 class PredicateWhereTest {
@@ -27,7 +27,7 @@ class PredicateWhereTest {
 	private static final String ABCDEF = "abcdef";
 	private static final String COLTEST = "coltest";
 	
-	private final BaseSQLSerializer serializer = new BaseSQLSerializer();
+	private final TestBaseSQLSerializer serializer = new TestBaseSQLSerializer();
 		
 	@BeforeAll
 	static void setUpBeforeClass() {
@@ -56,53 +56,53 @@ class PredicateWhereTest {
 		String predResult = serializer.serialize(PredicateBuilder.where(10).isEqual(10).build());
 		Assertions.assertEquals("WHERE 10 = 10",predResult);
 		
-		String predResult2 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.constant(10))
+		String predResult2 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().constant(10))
 									  .isLessOrEqual(10)
 									  .build());
 		Assertions.assertEquals("WHERE 10 <= 10",predResult2);
 
-		Column colTest = (Column) SQLTypeFactory.column(COLTEST);
+		Column colTest = (Column) SQLTypeFactory.getInstance().column(COLTEST);
 		String predResult3 = serializer.serialize(PredicateBuilder.where(colTest).isLessOrEqual(10)
 									  .build());
 		Assertions.assertEquals(WHERECOLTESTLETEN,predResult3);
 		
-		String predResult4 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.parm(Types.BIGINT, 10))
+		String predResult4 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().parm(Types.BIGINT, 10))
 									  .isLessOrEqual(10)
 									  .build());
 		Assertions.assertEquals("WHERE ? <= 10",predResult4);
 		
-		String predResult5 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.mathExpression(10).add(10))
+		String predResult5 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().mathExpression(10).add(10))
 									  .isLessOrEqual(10)
 									  .build());
 		Assertions.assertEquals(WHERETENPLUS10LETEN,predResult5);
 		
-		String predResult6 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.stringExpression(
-													SQLTypeFactory.constant("abc")).concat("def"))
+		String predResult6 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().stringExpression(
+													SQLTypeFactory.getInstance().constant("abc")).concat("def"))
 				  					  .isLessOrEqual(ABCDEF)
 				  					  .build());
 		Assertions.assertEquals("WHERE \'abc\' || \'def\' <= 'abcdef'",predResult6);
 		
-		String predResult7 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.stringExpression(
-				SQLTypeFactory.constant("abc")).concat("def"))
-						  .isLessOrEqual(SQLTypeFactory.constant(ABCDEF))
+		String predResult7 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().stringExpression(
+				SQLTypeFactory.getInstance().constant("abc")).concat("def"))
+						  .isLessOrEqual(SQLTypeFactory.getInstance().constant(ABCDEF))
 						  .build());
 		Assertions.assertEquals("WHERE \'abc\' || \'def\' <= 'abcdef'",predResult7);
 		
-		String predResult8 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.stringExpression(
-				SQLTypeFactory.constant("abc")).concat("def"))
-						  .isLessOrEqual(SQLTypeFactory.constant(ABCDEF))
+		String predResult8 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().stringExpression(
+				SQLTypeFactory.getInstance().constant("abc")).concat("def"))
+						  .isLessOrEqual(SQLTypeFactory.getInstance().constant(ABCDEF))
 						  .build());
 		Assertions.assertEquals("WHERE \'abc\' || \'def\' <= 'abcdef'",predResult8);
 		
-		String predResult9 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-				.add(SQLTypeFactory.constant(20)))
-			  .isEqual(SQLTypeFactory.constant(30))
+		String predResult9 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+				.add(SQLTypeFactory.getInstance().constant(20)))
+			  .isEqual(SQLTypeFactory.getInstance().constant(30))
 			  .build());
 		Assertions.assertEquals("WHERE 10 + 20 = 30",predResult9);
 		
-		String predResult10 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.mathExpression(SQLTypeFactory.parm(Types.INTEGER, 10))
-				.add(SQLTypeFactory.parm(Types.SMALLINT, 20)))
-			  .isGreater(SQLTypeFactory.parm(Types.BIGINT,30))
+		String predResult10 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().parm(Types.INTEGER, 10))
+				.add(SQLTypeFactory.getInstance().parm(Types.SMALLINT, 20)))
+			  .isGreater(SQLTypeFactory.getInstance().parm(Types.BIGINT,30))
 			  .build());
 		Assertions.assertEquals("WHERE ? + ? > ?",predResult10);
 		
@@ -120,58 +120,58 @@ class PredicateWhereTest {
 									 .and(10).isEqual(10).build());
 		Assertions.assertEquals("WHERE 10 = 10 AND 10 = 10",predResult);
 		
-		String predResult2 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.constant(10))
+		String predResult2 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().constant(10))
 									  .isLessOrEqual(10)
-									  .and(SQLTypeFactory.constant(10))
+									  .and(SQLTypeFactory.getInstance().constant(10))
 									  .isLessOrEqual(10)
 									  .build());
 		Assertions.assertEquals("WHERE 10 <= 10 AND 10 <= 10",predResult2);
 		
-		Column colTest = (Column) SQLTypeFactory.column(COLTEST);
+		Column colTest = (Column) SQLTypeFactory.getInstance().column(COLTEST);
 		String predResult3 = serializer.serialize(PredicateBuilder.where(colTest).isLessOrEqual(10)
 									  .and(colTest).isLessOrEqual(10)
 									  .build());
 		Assertions.assertEquals(WHERECOLTESTLETEN +
 							" AND coltest <= 10",predResult3);
 		
-		String predResult4 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.parm(Types.BIGINT, 10))
+		String predResult4 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().parm(Types.BIGINT, 10))
 									  .isLessOrEqual(10)
-									  .and(SQLTypeFactory.parm(Types.BIGINT, 10))
+									  .and(SQLTypeFactory.getInstance().parm(Types.BIGINT, 10))
 									  .isLessOrEqual(10)
 									  .build());
 		Assertions.assertEquals("WHERE ? <= 10 AND ? <= 10",predResult4);
 		
-		String predResult5 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.mathExpression(10).add(10))
+		String predResult5 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().mathExpression(10).add(10))
 									  .isLessOrEqual(10)
-									  .and(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10)).add(10))
+									  .and(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10)).add(10))
 									  .isLessOrEqual(10)
 									  .build());
 		Assertions.assertEquals(WHERETENPLUS10LETEN +
 							ANDTENPLUS10LETEN,predResult5);
 		
 		String predResult6 = serializer.serialize(PredicateBuilder.where(
-				SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
+				SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
 				  					  .isLessOrEqual(ABCDEF)
-				  					  .and(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
+				  					  .and(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
 				  					  .isEqual(ABCDEF)
 				  					  .build());
 		Assertions.assertEquals(WHERECONCATABCDEF +
 				  			" AND 'abc' || 'def' = 'abcdef'",predResult6);
 		
 		String predResult7 = serializer.serialize(PredicateBuilder.where(
-				SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
+				SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
 				  					  .isLess(ABCDEF)
-				  					  .and(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
-				  					  .isLess(SQLTypeFactory.column("col01"))
+				  					  .and(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
+				  					  .isLess(SQLTypeFactory.getInstance().column("col01"))
 				  					  .build());
 		Assertions.assertEquals(WHERECONCATABCDEF_LT +
 				  			" AND 'abc' || 'def' < col01",predResult7);
 		
 		String predResult8 = serializer.serialize(PredicateBuilder.where(
-				SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
+				SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
 				  					  .isLess(ABCDEF)
-				  					  .and(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
-				  					  .isLessOrEqual(SQLTypeFactory.stringExpression(SQLTypeFactory.column("col01")).concat("def"))
+				  					  .and(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
+				  					  .isLessOrEqual(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().column("col01")).concat("def"))
 				  					  .build());
 		Assertions.assertEquals(WHERECONCATABCDEF_LT +
 				  			" AND 'abc' || 'def' <= col01 || 'def'",predResult8);
@@ -185,67 +185,67 @@ class PredicateWhereTest {
 				 .or(10).isEqual(10).build());
 		Assertions.assertEquals("WHERE 10 = 10 OR 10 = 10",predResult);
 
-		String predResult2 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.constant(10))
+		String predResult2 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().constant(10))
 				  					  .isLessOrEqual(10)
-				  					  .or(SQLTypeFactory.constant(10))
+				  					  .or(SQLTypeFactory.getInstance().constant(10))
 				  					  .isLessOrEqual(10)
 				  					  .build());
 		Assertions.assertEquals("WHERE 10 <= 10 OR 10 <= 10",predResult2);
 
-		Column colTest = (Column) SQLTypeFactory.column(COLTEST);
+		Column colTest = (Column) SQLTypeFactory.getInstance().column(COLTEST);
 		String predResult3 = serializer.serialize(PredicateBuilder.where(colTest).isLessOrEqual(10)
 						  			  .or(colTest).isLessOrEqual(10)
 						  			  .build());
 		Assertions.assertEquals(WHERECOLTESTLETEN +
 				" OR coltest <= 10",predResult3);
 
-		String predResult4 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.parm(Types.BIGINT, 10))
+		String predResult4 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().parm(Types.BIGINT, 10))
 						  			  .isLessOrEqual(10)
-						  			  .or(SQLTypeFactory.parm(Types.BIGINT, 10))
+						  			  .or(SQLTypeFactory.getInstance().parm(Types.BIGINT, 10))
 						  			  .isLessOrEqual(10)
 						  			  .build());
 		Assertions.assertEquals("WHERE ? <= 10 OR ? <= 10",predResult4);
 
 		String predResult5 = serializer.serialize(PredicateBuilder.where(
-				SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10)).add(10))
+				SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10)).add(10))
 						  .isLessOrEqual(10)
-						  .or(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10)).add(10))
+						  .or(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10)).add(10))
 						  .isLessOrEqual(10)
 						  .build());
 		Assertions.assertEquals(WHERETENPLUS10LETEN +
 				ORTENPLUS10LETEN,predResult5);
 
 		String predResult6 = serializer.serialize(PredicateBuilder
-				.where(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
+				.where(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
 							  	 .isLessOrEqual(ABCDEF)
-							  	 .or(SQLTypeFactory.stringExpression("abc").concat("def"))
+							  	 .or(SQLTypeFactory.getInstance().stringExpression("abc").concat("def"))
 							  	 .isLessOrEqual(ABCDEF)
 							  	 .build());
 		Assertions.assertEquals(WHERECONCATABCDEF +
 					" OR 'abc' || 'def' <= 'abcdef'",predResult6);
 		
 		String predResult7 = serializer.serialize(PredicateBuilder
-				.where(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
+				.where(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
 							  	 .isLessOrEqual(ABCDEF)
-							  	 .or(SQLTypeFactory.stringExpression("abc").concat("def"))
+							  	 .or(SQLTypeFactory.getInstance().stringExpression("abc").concat("def"))
 							  	 .isLessOrEqual(ABCDEF)
 							  	 .build());
 		Assertions.assertEquals(WHERECONCATABCDEF +
 					" OR 'abc' || 'def' <= 'abcdef'",predResult7);
 		
 		String predResult8 = serializer.serialize(PredicateBuilder
-				.where(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
+				.where(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
 							  	 .isNot(ABCDEF)
-							  	 .or(SQLTypeFactory.stringExpression("abc").concat("def"))
+							  	 .or(SQLTypeFactory.getInstance().stringExpression("abc").concat("def"))
 							  	 .isNotEqual(ABCDEF)
 							  	 .build());
 		Assertions.assertEquals(WHERECONCATABCDEF_NOT +
 					" OR 'abc' || 'def' <> 'abcdef'",predResult8);
 		
 		String predResult9 = serializer.serialize(PredicateBuilder
-				.where(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc")).concat("def"))
-							  	 .isGreaterOrEqual(SQLTypeFactory.constant(ABCDEF))
-//							  	 .or(SQLTypeFactory.stringExpression("abc").concat("def"))
+				.where(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc")).concat("def"))
+							  	 .isGreaterOrEqual(SQLTypeFactory.getInstance().constant(ABCDEF))
+//							  	 .or(SQLTypeFactory.getInstance().stringExpression("abc").concat("def"))
 //							  	 .isNotEqual(ABCDEF)
 							  	 .build());
 		Assertions.assertEquals(WHERECONCATABCDEF_GTE,predResult9);
@@ -264,16 +264,16 @@ class PredicateWhereTest {
 		Assertions.assertEquals("WHERE 10 = 10 AND 10 = 10" +
 							" OR 10 = 10",predResult);
 
-		String predResult2 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.constant(10))
+		String predResult2 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().constant(10))
 				  .isLessOrEqual(10)
-				  .or(SQLTypeFactory.constant(10))
+				  .or(SQLTypeFactory.getInstance().constant(10))
 				  .isLessOrEqual(10)
-				  .and(SQLTypeFactory.constant(10))
+				  .and(SQLTypeFactory.getInstance().constant(10))
 				  .isLessOrEqual(10)
 				  .build());
 		Assertions.assertEquals("WHERE 10 <= 10 OR 10 <= 10 AND 10 <= 10",predResult2);
 
-		Column colTest = (Column) SQLTypeFactory.column(COLTEST);
+		Column colTest = (Column) SQLTypeFactory.getInstance().column(COLTEST);
 		String predResult3 = serializer.serialize(PredicateBuilder.where(colTest).isLessOrEqual(10)
 				  .and(colTest).isLessOrEqual(10)
 				  .or(colTest).isLessOrEqual(10)
@@ -284,14 +284,14 @@ class PredicateWhereTest {
 				" OR coltest <= 10"  +
 				" AND coltest < 10",predResult3);
 
-		String predResult4 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.parm(Types.BIGINT, 10))
+		String predResult4 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().parm(Types.BIGINT, 10))
 						  .isLessOrEqual(10)
-						  .or(SQLTypeFactory.parm(Types.INTEGER,10)).isGreater(10)
-						  .or(SQLTypeFactory.parm(Types.SMALLINT, 10))
+						  .or(SQLTypeFactory.getInstance().parm(Types.INTEGER,10)).isGreater(10)
+						  .or(SQLTypeFactory.getInstance().parm(Types.SMALLINT, 10))
 						  .isGreaterOrEqual(10)
-						  .and(SQLTypeFactory.parm(Types.BIGINT, 10))
+						  .and(SQLTypeFactory.getInstance().parm(Types.BIGINT, 10))
 						  .isLessOrEqual(10)
-						  .and(SQLTypeFactory.parm(Types.DOUBLE, 10.01))
+						  .and(SQLTypeFactory.getInstance().parm(Types.DOUBLE, 10.01))
 						  .isNotEqual(10.01)
 						  .build());
 		Assertions.assertEquals("WHERE ? <= 10"
@@ -300,17 +300,17 @@ class PredicateWhereTest {
 				+ " AND ? <= 10"
 				+ " AND ? <> 10.01",predResult4);
 
-		String predResult5 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.mathExpression(10).add(10))
+		String predResult5 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().mathExpression(10).add(10))
 						  .isLessOrEqual(10)
-						  .and(SQLTypeFactory.mathExpression(10).add(10))
+						  .and(SQLTypeFactory.getInstance().mathExpression(10).add(10))
 						  .isLessOrEqual(10)
-						  .or(SQLTypeFactory.mathExpression(10).add(10))
+						  .or(SQLTypeFactory.getInstance().mathExpression(10).add(10))
 						  .isLessOrEqual(10)
-						  .and(SQLTypeFactory.mathExpression(10).add(10))
+						  .and(SQLTypeFactory.getInstance().mathExpression(10).add(10))
 						  .isLessOrEqual(10)
-						  .or(SQLTypeFactory.mathExpression(10).add(10))
+						  .or(SQLTypeFactory.getInstance().mathExpression(10).add(10))
 						  .isLessOrEqual(10)
-						  .or(SQLTypeFactory.mathExpression(10).add(10))
+						  .or(SQLTypeFactory.getInstance().mathExpression(10).add(10))
 						  .isNot(10)
 						  .build());
 		Assertions.assertEquals(WHERETENPLUS10LETEN +
@@ -320,17 +320,17 @@ class PredicateWhereTest {
 				ORTENPLUS10LETEN 		 +
 				" OR 10 + 10 ! 10",predResult5);
 
-		String predResult6 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.stringExpression("abc").concat("def"))
+		String predResult6 = serializer.serialize(PredicateBuilder.where(SQLTypeFactory.getInstance().stringExpression("abc").concat("def"))
 							  .isLessOrEqual(ABCDEF)
-							  .and(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc2")).concat("def2"))
+							  .and(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc2")).concat("def2"))
 							  .isLessOrEqual("abc2def2")
-							  .and(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc3")).concat("def3"))
+							  .and(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc3")).concat("def3"))
 							  .isLessOrEqual("abc3def3")
-							  .or(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc4")).concat("def4"))
+							  .or(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc4")).concat("def4"))
 							  .isLessOrEqual("abc4def4")
-							  .or(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc5")).concat("def5"))
+							  .or(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc5")).concat("def5"))
 							  .isLessOrEqual("abc5def5")
-							  .and(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("abc6")).concat("def6"))
+							  .and(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("abc6")).concat("def6"))
 							  .isLessOrEqual("abc6def6")
 							  .build());
 		Assertions.assertEquals(WHERECONCATABCDEF +

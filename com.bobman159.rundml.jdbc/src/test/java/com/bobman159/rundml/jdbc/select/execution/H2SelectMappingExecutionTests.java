@@ -259,7 +259,7 @@ class H2SelectMappingExecutionTests {
 		
 		logger.info("****** allColumnTypesStringTest ******");
 		
-		selectModel.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column("NotNullIdentity"));
+		selectModel.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.getInstance().column("NotNullIdentity"));
 		List<Object> results = RunDMLExecutor.getInstance()
 											 .executeSelect(h2Provider.getConnection(), selectModel,
 													 		H2MockStringTypeTest.class);

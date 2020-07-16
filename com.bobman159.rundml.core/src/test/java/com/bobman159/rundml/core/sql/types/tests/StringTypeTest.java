@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.sql.BaseSQLSerializer;
+import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 import com.bobman159.rundml.core.sql.types.SQLType;
 import com.bobman159.rundml.core.sql.types.impl.StringType;
 
@@ -34,7 +34,7 @@ class StringTypeTest {
 		
 		StringType strType = new StringType("AbcDef");
 		Assertions.assertEquals(SQLType.STRING, strType.getType());
-		Assertions.assertEquals("'AbcDef'", new BaseSQLSerializer().serialize(strType));
+		Assertions.assertEquals("'AbcDef'", new TestBaseSQLSerializer().serialize(strType));
 		
 	}
 

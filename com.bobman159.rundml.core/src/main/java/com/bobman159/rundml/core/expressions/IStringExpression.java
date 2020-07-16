@@ -11,7 +11,7 @@ public interface IStringExpression extends IExpressionNode {
 	/**
 	 * Define a concatenation operation between two <code>SQLStrings</code>
 	 * SQLStrings are automatically escaped with ''
-	 * <p> example : SQLTypeFactory.constant("abc").concat("def") =&lt; "'abcdef'"
+	 * <p> example : SQLTypeFactory.getInstance().constant("abc").concat("def") =&lt; "'abcdef'"
 	 * 
 	 * @param rightExpr the string to the right of the concat operator
 	 * @return An expression representing the concatenated strings

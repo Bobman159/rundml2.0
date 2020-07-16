@@ -9,10 +9,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.sql.BaseSQLSerializer;
 import com.bobman159.rundml.core.sql.ICaseClause;
 import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.impl.CaseClause;
+import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 
 class CaseClauseTest {
@@ -29,7 +29,7 @@ class CaseClauseTest {
 	private final Column colNotNullChar = new Column(COL_NOTNULLCHAR);
 	private final int ONE_HUNDRED_THOUSAND = 100000;
 	private final int TWO_HUNDRED_THOUSAND = 200000;
-	private final BaseSQLSerializer serializer = new BaseSQLSerializer();
+	private final TestBaseSQLSerializer serializer = new TestBaseSQLSerializer();
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -52,24 +52,24 @@ class CaseClauseTest {
 		
 		/* Not all combinations of expressions in a CASE are tested here 
 		 * I think the likelihood/validity of CASE expression in nested CASE expressions is low */
-		ICaseClause colCase = SQLTypeFactory.caseClause(SQLTypeFactory.column("Col01")).end();
+		ICaseClause colCase = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().column("Col01")).end();
 		Assertions.assertNotNull(colCase);
 		Assertions.assertTrue(colCase instanceof CaseClause);
 		
-		ICaseClause nbrCase = SQLTypeFactory.caseClause(SQLTypeFactory.constant(10)).end();
+		ICaseClause nbrCase = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().constant(10)).end();
 		Assertions.assertNotNull(nbrCase);
 		Assertions.assertTrue(nbrCase instanceof CaseClause);
 		
-		ICaseClause mathCase = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																	.add(SQLTypeFactory.constant(20))).end();
+		ICaseClause mathCase = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																	.add(SQLTypeFactory.getInstance().constant(20))).end();
 		Assertions.assertNotNull(mathCase);
 		Assertions.assertTrue(mathCase instanceof CaseClause);
 		
-		ICaseClause parmCase = SQLTypeFactory.caseClause(SQLTypeFactory.parm(Types.INTEGER, 10)).end();
+		ICaseClause parmCase = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().parm(Types.INTEGER, 10)).end();
 		Assertions.assertNotNull(parmCase);
 		Assertions.assertTrue(parmCase instanceof CaseClause);
 		
-		ICaseClause stringCase = SQLTypeFactory.caseClause(SQLTypeFactory.constant("abc")).end();
+		ICaseClause stringCase = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().constant("abc")).end();
 		Assertions.assertNotNull(stringCase);
 		Assertions.assertTrue(stringCase instanceof CaseClause);
 	}
@@ -82,42 +82,42 @@ class CaseClauseTest {
 		 * the syntax is generated correctly.
 		 */
 		/* CASE ? WHEN ? THEN NOTNULLCHAR || 'ab' */ 
-		String caseExprParm = serializer.serialize(SQLTypeFactory.caseClause(SQLTypeFactory.parm(Types.CHAR, "Abc"))
-				.when(SQLTypeFactory.parm(Types.CHAR, "Def"))
+		String caseExprParm = serializer.serialize(SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().parm(Types.CHAR, "Abc"))
+				.when(SQLTypeFactory.getInstance().parm(Types.CHAR, "Def"))
 				.then(colNotNullChar)
 				.end());
 		Assertions.assertEquals("case ?" + " when ? then " + COL_NOTNULLCHAR + " end",caseExprParm);		
 
 		/*	CASE NOTNULLCHAR || 'ab' WHEN NOTNULLCHAR || 'ab' THEN NOTNULLCHAR END */
 		String caseExprConcat = serializer.serialize(
-				SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(colNotNullChar).concat("ab"))
-							  .when(SQLTypeFactory.stringExpression(colNotNullChar).concat(SQLTypeFactory.constant("ab")))
+				SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(colNotNullChar).concat("ab"))
+							  .when(SQLTypeFactory.getInstance().stringExpression(colNotNullChar).concat(SQLTypeFactory.getInstance().constant("ab")))
 							  .then(colNotNullChar)
 							  .end());
 		Assertions.assertEquals("case " + COL_NOTNULLCHAR + " || 'ab' when " + COL_NOTNULLCHAR + " || 'ab' " +
 						        "then " + COL_NOTNULLCHAR + " end",caseExprConcat);
 		
 		/* CASE NOTNULLCHAR WHEN NOTNULCHAR THEN 'A123456789' END */
-		String caseExprChar = serializer.serialize(SQLTypeFactory.caseClause(colNotNullChar).when(colNotNullChar)
-																.then(SQLTypeFactory.constant(STRING_EXPR_A))
+		String caseExprChar = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colNotNullChar).when(colNotNullChar)
+																.then(SQLTypeFactory.getInstance().constant(STRING_EXPR_A))
 																.end());
 		Assertions.assertEquals("case " + COL_NOTNULLCHAR + " when " + COL_NOTNULLCHAR + 
 						        " then '" + STRING_EXPR_A + "' end",caseExprChar);
 		
 		/* CASE NOTNULLCHAR WHEN '0123456789' || NOTNULLCHAR THEN 'A123456789' END */
-		String caseExprLiteral = serializer.serialize(SQLTypeFactory.caseClause(colNotNullChar)
-			.when(SQLTypeFactory.stringExpression(SQLTypeFactory.constant(STRING_EXPR))
+		String caseExprLiteral = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colNotNullChar)
+			.when(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant(STRING_EXPR))
 							 .concat(colNotNullChar))
-				.then(SQLTypeFactory.constant(STRING_EXPR_A)).end());
+				.then(SQLTypeFactory.getInstance().constant(STRING_EXPR_A)).end());
 		Assertions.assertEquals("case " + COL_NOTNULLCHAR + 
 					" when '" + STRING_EXPR + "' || " + COL_NOTNULLCHAR +
 					" then '" + STRING_EXPR_A + "' end",caseExprLiteral);
 
 		/* CASE NOTNULLCHAR || 10 WHEN '112345678910' THEN 'B123456789' END */
-		ICaseClause caseExpr = SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(colNotNullChar)
-																.concat(SQLTypeFactory.constant("10")))
-											 .when(SQLTypeFactory.constant(STRING_EXPR_1))
-											 .then(SQLTypeFactory.constant(STRING_EXPR_B))
+		ICaseClause caseExpr = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(colNotNullChar)
+																.concat(SQLTypeFactory.getInstance().constant("10")))
+											 .when(SQLTypeFactory.getInstance().constant(STRING_EXPR_1))
+											 .then(SQLTypeFactory.getInstance().constant(STRING_EXPR_B))
 											 .end();		
 		
 		String caseExprLiteralB = serializer.serialize(caseExpr);
@@ -125,20 +125,20 @@ class CaseClauseTest {
 		     "' then '" + STRING_EXPR_B + "' end",caseExprLiteralB);
 
 		/* CASE DFLTINTEGER WHEN DFLTINTEGER + 100000 THEN 200000 END */
-		String caseExprNumb = serializer.serialize(SQLTypeFactory.caseClause(colDfltInteger)
-				.when(SQLTypeFactory.mathExpression(colDfltInteger).add(ONE_HUNDRED_THOUSAND))
-				.then(SQLTypeFactory.constant(TWO_HUNDRED_THOUSAND))
+		String caseExprNumb = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colDfltInteger)
+				.when(SQLTypeFactory.getInstance().mathExpression(colDfltInteger).add(ONE_HUNDRED_THOUSAND))
+				.then(SQLTypeFactory.getInstance().constant(TWO_HUNDRED_THOUSAND))
 				.end());
 		Assertions.assertEquals("case " + COL_DFLTINTEGER + 
 				" when " + COL_DFLTINTEGER + " + " + String.valueOf(ONE_HUNDRED_THOUSAND) +
 				" then " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end",caseExprNumb);
 
 		/* CASE DFLTINTEGER + 10 WHEN 100000 + DFLTINTEGER THEN 200010 END */
-		ICaseClause caseAdd = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(colDfltInteger)
+		ICaseClause caseAdd = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(colDfltInteger)
 																	 .add(10))
-											.when(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(100000))
+											.when(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(100000))
 																.add(colDfltInteger))
-											.then(SQLTypeFactory.constant(200000))
+											.then(SQLTypeFactory.getInstance().constant(200000))
 											.end();				
 		
 		String caseExprAdd = serializer.serialize(caseAdd);
@@ -149,12 +149,12 @@ class CaseClauseTest {
 
 		/* String Expressions */
 		/* CASE 'Abc' || 'Def' WHEN 'Abc' || 'Def' THEN 'True' END */
-		CaseClause caseString = (CaseClause) SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(
-																	   SQLTypeFactory.constant(STRING_EXPR_ABC))
+		CaseClause caseString = (CaseClause) SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(
+																	   SQLTypeFactory.getInstance().constant(STRING_EXPR_ABC))
 						  															 .concat(STRING_EXPR_DEF))
-				.when(SQLTypeFactory.stringExpression(SQLTypeFactory.constant(STRING_EXPR_ABC))
+				.when(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant(STRING_EXPR_ABC))
 						   											.concat(STRING_EXPR_DEF))
-				.then(SQLTypeFactory.constant("True"))
+				.then(SQLTypeFactory.getInstance().constant("True"))
 				.end();
 		
 		String caseExprConcat2 = serializer.serialize(caseString);
@@ -162,32 +162,32 @@ class CaseClauseTest {
 								" when 'Abc' || 'Def' then 'True' end", caseExprConcat2);
 		
 		/* CASE '10' || '10' WHEN '10' || '10' THEN '1010' END */
-		CaseClause caseString10 = (CaseClause) SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(
-																		 SQLTypeFactory.constant("10")).concat("10"))
-															 .when(SQLTypeFactory.stringExpression(
-																   SQLTypeFactory.constant("10"))
-																	 			 .concat(SQLTypeFactory.constant("10")))
-															 .then(SQLTypeFactory.constant("1010"))
+		CaseClause caseString10 = (CaseClause) SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(
+																		 SQLTypeFactory.getInstance().constant("10")).concat("10"))
+															 .when(SQLTypeFactory.getInstance().stringExpression(
+																   SQLTypeFactory.getInstance().constant("10"))
+																	 			 .concat(SQLTypeFactory.getInstance().constant("10")))
+															 .then(SQLTypeFactory.getInstance().constant("1010"))
 															 .end();
 		String caseExpr10 = serializer.serialize(caseString10);
 		Assertions.assertEquals("case '10' || '10' when '10' || '10' then '1010' end", caseExpr10);
 
 		/* Number Expressions */
 		/* CASE 10 + 10 WHEN 20 THEN 20 END */
-		ICaseClause caseNumber10 = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																   		  .add(SQLTypeFactory.constant(10)))
-												.when(SQLTypeFactory.constant(20))
-												.then(SQLTypeFactory.constant(20))
+		ICaseClause caseNumber10 = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																   		  .add(SQLTypeFactory.getInstance().constant(10)))
+												.when(SQLTypeFactory.getInstance().constant(20))
+												.then(SQLTypeFactory.getInstance().constant(20))
 												.end();
 		String caseNumber10Str = serializer.serialize(caseNumber10);
 		Assertions.assertEquals("case 10 + 10 when 20 then 20 end", caseNumber10Str);
 		
 		/* CASE 10 * 10 WHEN 10 * 10 THEN 100 END */
-		ICaseClause caseMult10 = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(10)
-																		.multiply(SQLTypeFactory.constant(10)))
-											  .when(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																  .multiply(SQLTypeFactory.constant(10)))
-											  .then(SQLTypeFactory.constant(100))
+		ICaseClause caseMult10 = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(10)
+																		.multiply(SQLTypeFactory.getInstance().constant(10)))
+											  .when(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																  .multiply(SQLTypeFactory.getInstance().constant(10)))
+											  .then(SQLTypeFactory.getInstance().constant(100))
 											  .end();
 		String caseMult10Str = serializer.serialize(caseMult10);
 		Assertions.assertEquals("case 10 * 10 when 10 * 10 then 100 end", caseMult10Str);
@@ -199,40 +199,40 @@ class CaseClauseTest {
 		
 		/* Column Expressions */
 		/* CASE ? WHEN ? THEN ? */ 
-		String caseExprParm = serializer.serialize(SQLTypeFactory.caseClause(SQLTypeFactory.parm(Types.CHAR, "Abc"))
-				.when(SQLTypeFactory.parm(Types.CHAR, "Def"))
-				.then(SQLTypeFactory.parm(Types.CHAR, "Test"))
+		String caseExprParm = serializer.serialize(SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().parm(Types.CHAR, "Abc"))
+				.when(SQLTypeFactory.getInstance().parm(Types.CHAR, "Def"))
+				.then(SQLTypeFactory.getInstance().parm(Types.CHAR, "Test"))
 				.end());
 		Assertions.assertEquals("case ?" + " when ? then ? end",caseExprParm);
 		
 		/*	CASE NOTNULLCHAR || 'ab' WHEN NOTNULLCHAR || 'ab' THEN NOTNULLCHAR || 'ab' END */
-		String caseExprConcat = serializer.serialize(SQLTypeFactory.caseClause(
-				SQLTypeFactory.stringExpression(colNotNullChar).concat("ab"))
-				.when(SQLTypeFactory.stringExpression(colNotNullChar).concat(SQLTypeFactory.constant("ab")))
-				.then(SQLTypeFactory.stringExpression(colNotNullChar).concat("ab"))
+		String caseExprConcat = serializer.serialize(SQLTypeFactory.getInstance().caseClause(
+				SQLTypeFactory.getInstance().stringExpression(colNotNullChar).concat("ab"))
+				.when(SQLTypeFactory.getInstance().stringExpression(colNotNullChar).concat(SQLTypeFactory.getInstance().constant("ab")))
+				.then(SQLTypeFactory.getInstance().stringExpression(colNotNullChar).concat("ab"))
 				.end());
 		Assertions.assertEquals("case " + COL_NOTNULLCHAR + " || 'ab' when " + COL_NOTNULLCHAR + " || 'ab' " +
 						        "then " + COL_NOTNULLCHAR + " || 'ab' end",caseExprConcat);
 		
 		/* CASE NOTNULLCHAR WHEN NOTNULLCHAR THEN NOTNULLCHAR END */
-		String caseExprChar = serializer.serialize(SQLTypeFactory.caseClause(colNotNullChar).when(colNotNullChar)
+		String caseExprChar = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colNotNullChar).when(colNotNullChar)
 																.then(colNotNullChar)
 																.end());
 		Assertions.assertEquals("case " + COL_NOTNULLCHAR + " when " + COL_NOTNULLCHAR + 
 						        " then " + COL_NOTNULLCHAR + " end",caseExprChar);
 		
 		/* CASE NOTNULLCHAR WHEN '0123456789' THEN 'A123456789' || NOTNULLCHAR END */
-		String caseExprLiteral = serializer.serialize(SQLTypeFactory.caseClause(colNotNullChar)
-				.when(SQLTypeFactory.constant(STRING_EXPR))
-				.then(SQLTypeFactory.constant(STRING_EXPR_A)).end());
+		String caseExprLiteral = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colNotNullChar)
+				.when(SQLTypeFactory.getInstance().constant(STRING_EXPR))
+				.then(SQLTypeFactory.getInstance().constant(STRING_EXPR_A)).end());
 		Assertions.assertEquals("case " + COL_NOTNULLCHAR + " when '" + STRING_EXPR + 
 						        "' then '" + STRING_EXPR_A + "' end",caseExprLiteral);
 
 		/* CASE NOTNULLCHAR || 10 WHEN '112345678910' THEN 'B123456789' || '10' END */
-		ICaseClause caseExpr = SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(colNotNullChar)
-																	   .concat(SQLTypeFactory.constant("10")))
-											 .when(SQLTypeFactory.constant(STRING_EXPR_1))
-											 .then(SQLTypeFactory.stringExpression(SQLTypeFactory.constant(STRING_EXPR_B))
+		ICaseClause caseExpr = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(colNotNullChar)
+																	   .concat(SQLTypeFactory.getInstance().constant("10")))
+											 .when(SQLTypeFactory.getInstance().constant(STRING_EXPR_1))
+											 .then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant(STRING_EXPR_B))
 													 			 .concat("10"))
 											 .end();
 		String caseExprLiteralB = serializer.serialize(caseExpr);
@@ -240,20 +240,20 @@ class CaseClauseTest {
 		     "' then '" + STRING_EXPR_B + "' || '10' end",caseExprLiteralB);
 		
 		/* CASE DFLTINTEGER WHEN 100000 THEN DFLTINTEGER + 200000 END */
-		String caseExprNumb = serializer.serialize(SQLTypeFactory.caseClause(colDfltInteger)
-				.when(SQLTypeFactory.constant(ONE_HUNDRED_THOUSAND))
-				.then(SQLTypeFactory.mathExpression(colDfltInteger).add(SQLTypeFactory.constant(TWO_HUNDRED_THOUSAND)))
+		String caseExprNumb = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colDfltInteger)
+				.when(SQLTypeFactory.getInstance().constant(ONE_HUNDRED_THOUSAND))
+				.then(SQLTypeFactory.getInstance().mathExpression(colDfltInteger).add(SQLTypeFactory.getInstance().constant(TWO_HUNDRED_THOUSAND)))
 				.end());
 		Assertions.assertEquals("case " + COL_DFLTINTEGER + 
 				" when " + String.valueOf(ONE_HUNDRED_THOUSAND) +
 				" then " + COL_DFLTINTEGER + " + " + String.valueOf(TWO_HUNDRED_THOUSAND) + " end",caseExprNumb);
 
 		/* CASE DFLTINTEGER + 10 WHEN 100000 - 10 THEN 200000 - 10 END */
-		ICaseClause caseAdd = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(colDfltInteger).add(10))
-										   .when(SQLTypeFactory.mathExpression(SQLTypeFactory
+		ICaseClause caseAdd = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(colDfltInteger).add(10))
+										   .when(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance()
 												   			   .constant(ONE_HUNDRED_THOUSAND))
-												   			   .subtract(SQLTypeFactory.constant(10)))
-										   .then(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(TWO_HUNDRED_THOUSAND))
+												   			   .subtract(SQLTypeFactory.getInstance().constant(10)))
+										   .then(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(TWO_HUNDRED_THOUSAND))
 												   			   .subtract(10))
 										   .end();
 		String caseExprAdd = serializer.serialize(caseAdd);
@@ -265,23 +265,23 @@ class CaseClauseTest {
 
 		/* String Expressions */
 		/* CASE 'Abc' || 'Def' WHEN 'AbcDef' THEN 'True' || 'That!' END */
-		ICaseClause caseString = SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(
-														  SQLTypeFactory.constant(STRING_EXPR_ABC))
+		ICaseClause caseString = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(
+														  SQLTypeFactory.getInstance().constant(STRING_EXPR_ABC))
 																		.concat(STRING_EXPR_DEF))
-											   .when(SQLTypeFactory.constant(STRING_EXPR_ABC + STRING_EXPR_DEF))
-											   .then(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("True"))
-												        			.concat(SQLTypeFactory.constant(" That!")))
+											   .when(SQLTypeFactory.getInstance().constant(STRING_EXPR_ABC + STRING_EXPR_DEF))
+											   .then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("True"))
+												        			.concat(SQLTypeFactory.getInstance().constant(" That!")))
 												.end();
 		String caseExprConcat2 = serializer.serialize(caseString);
 		Assertions.assertEquals("case 'Abc' || 'Def'" + " when 'AbcDef'" +
 								" then 'True' || ' That!' end", caseExprConcat2);
 		
 		/* CASE '10' || '10' WHEN '1010' THEN '10' || '10' END */
-		ICaseClause caseString10 = SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(SQLTypeFactory
-																		  .constant("10")).concat("10"))
-												.when(SQLTypeFactory.constant("1010"))
-												.then(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("10"))
-																	.concat(SQLTypeFactory.constant("10")))
+		ICaseClause caseString10 = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(
+								   SQLTypeFactory.getInstance().constant("10")).concat("10"))
+												.when(SQLTypeFactory.getInstance().constant("1010"))
+												.then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("10"))
+																	.concat(SQLTypeFactory.getInstance().constant("10")))
 												.end();
 		String caseExpr10 = serializer.serialize(caseString10);
 		Assertions.assertEquals("case '10' || '10' when '1010'" + 
@@ -289,20 +289,20 @@ class CaseClauseTest {
 
 		/* Number Expressions */
 		/* CASE 10 / 10 WHEN 0 THEN 0 END */
-		ICaseClause caseDiv0 = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																.divide(SQLTypeFactory.constant(10)))
-											.when(SQLTypeFactory.constant(0))
-											.then(SQLTypeFactory.constant(0))
+		ICaseClause caseDiv0 = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																.divide(SQLTypeFactory.getInstance().constant(10)))
+											.when(SQLTypeFactory.getInstance().constant(0))
+											.then(SQLTypeFactory.getInstance().constant(0))
 											.end();
 		String caseDiv0Str = serializer.serialize(caseDiv0);
 		Assertions.assertEquals("case 10 / 10 when 0 then 0 end", caseDiv0Str);
 		
 		/* CASE 10 / 10 WHEN 0 THEN 10 / 10 END */
-		ICaseClause caseDiv10 = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																.divide(SQLTypeFactory.constant(10)))
-											 .when(SQLTypeFactory.constant(0))
-											 .then(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																 .divide(SQLTypeFactory.constant(10)))
+		ICaseClause caseDiv10 = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																.divide(SQLTypeFactory.getInstance().constant(10)))
+											 .when(SQLTypeFactory.getInstance().constant(0))
+											 .then(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																 .divide(SQLTypeFactory.getInstance().constant(10)))
 											 .end();
 		String caseDiv10Str = serializer.serialize(caseDiv10);
 		Assertions.assertEquals("case 10 / 10 when 0 then 10 / 10 end", caseDiv10Str);
@@ -313,27 +313,28 @@ class CaseClauseTest {
 
 		/* Column Expressions */
 		/* CASE ? WHEN ? THEN ? ELSE ? */ 
-		String caseExprParm = serializer.serialize(SQLTypeFactory.caseClause(SQLTypeFactory.parm(Types.CHAR, "Abc"))
-				.when(SQLTypeFactory.parm(Types.CHAR, "Def"))
-				.then(SQLTypeFactory.parm(Types.CHAR, "Test"))
-				.elseClause(SQLTypeFactory.parm(Types.CHAR, "Test2"))
+		String caseExprParm = serializer.serialize(SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().parm(Types.CHAR, "Abc"))
+				.when(SQLTypeFactory.getInstance().parm(Types.CHAR, "Def"))
+				.then(SQLTypeFactory.getInstance().parm(Types.CHAR, "Test"))
+				.elseClause(SQLTypeFactory.getInstance().parm(Types.CHAR, "Test2"))
 				.end());
 		Assertions.assertEquals("case ?" + " when ? then ? else ? end",caseExprParm);
 		
 		/*	CASE NOTNULLCHAR || 'ab' WHEN NOTNULLCHAR || 'ab' THEN NOTNULLCHAR || 'ab' 
 		 *  ELSE NOTNULLCHAR || 'ab' END */
-		String caseExprConcat = serializer.serialize(SQLTypeFactory.caseClause(SQLTypeFactory
-				                                                   .stringExpression(colNotNullChar).concat("ab"))
-				.when(SQLTypeFactory.stringExpression(colNotNullChar).concat(SQLTypeFactory.constant("ab")))
-				.then(SQLTypeFactory.stringExpression(colNotNullChar).concat("ab"))
-				.elseClause(SQLTypeFactory.stringExpression(colNotNullChar).concat("ab"))
+		String caseExprConcat = serializer.serialize(SQLTypeFactory.getInstance().caseClause(
+													 SQLTypeFactory.getInstance().stringExpression(colNotNullChar)
+													 				.concat("ab"))
+				.when(SQLTypeFactory.getInstance().stringExpression(colNotNullChar).concat(SQLTypeFactory.getInstance().constant("ab")))
+				.then(SQLTypeFactory.getInstance().stringExpression(colNotNullChar).concat("ab"))
+				.elseClause(SQLTypeFactory.getInstance().stringExpression(colNotNullChar).concat("ab"))
 				.end());
 		Assertions.assertEquals("case " + COL_NOTNULLCHAR + " || 'ab' when " + COL_NOTNULLCHAR + " || 'ab' " +
 						        "then " + COL_NOTNULLCHAR + " || 'ab' " + 
 						        "else " + COL_NOTNULLCHAR + " || 'ab' end",caseExprConcat);
 		
 		/* CASE NOTNULLCHAR WHEN NOTNULLCHAR THEN NOTNULLCHAR ELSE NOTNULLCHAR END */
-		String caseExprChar = serializer.serialize(SQLTypeFactory.caseClause(colNotNullChar).when(colNotNullChar)
+		String caseExprChar = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colNotNullChar).when(colNotNullChar)
 																.then(colNotNullChar)
 																.elseClause(colNotNullChar)
 																.end());
@@ -343,10 +344,10 @@ class CaseClauseTest {
 		
 		/* CASE NOTNULLCHAR WHEN '0123456789' THEN 'A123456789' || NOTNULLCHAR 
 		 * ELSE 'Else' || NOTNULLCHAR END */
-		String caseExprLiteral = serializer.serialize(SQLTypeFactory.caseClause(colNotNullChar)
-				.when(SQLTypeFactory.constant(STRING_EXPR))
-				.then(SQLTypeFactory.constant(STRING_EXPR_A))
-				.elseClause(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("Else")).concat(colNotNullChar))
+		String caseExprLiteral = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colNotNullChar)
+				.when(SQLTypeFactory.getInstance().constant(STRING_EXPR))
+				.then(SQLTypeFactory.getInstance().constant(STRING_EXPR_A))
+				.elseClause(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("Else")).concat(colNotNullChar))
 				.end());
 		Assertions.assertEquals("case " + COL_NOTNULLCHAR + " when '" + STRING_EXPR + 
 						        "' then '" + STRING_EXPR_A + "' " + 
@@ -354,12 +355,12 @@ class CaseClauseTest {
 
 		/* CASE NOTNULLCHAR || 10 WHEN '112345678910' THEN 'B123456789' || '10' 
 		 * ELSE 'Else' || '10' END */
-		ICaseClause caseExpr = SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(colNotNullChar)
-																.concat(SQLTypeFactory.constant("10")))		
-											.when(SQLTypeFactory.constant(STRING_EXPR_1))
-											.then(SQLTypeFactory.stringExpression(SQLTypeFactory.constant(STRING_EXPR_B))
+		ICaseClause caseExpr = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(colNotNullChar)
+																.concat(SQLTypeFactory.getInstance().constant("10")))		
+											.when(SQLTypeFactory.getInstance().constant(STRING_EXPR_1))
+											.then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant(STRING_EXPR_B))
 																.concat("10"))
-											.elseClause(SQLTypeFactory.stringExpression(SQLTypeFactory.constant(STRING_EXPR_B))
+											.elseClause(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant(STRING_EXPR_B))
 																		  				.concat("10"))
 											.end();
 		String caseExprLiteralB = serializer.serialize(caseExpr);
@@ -369,10 +370,10 @@ class CaseClauseTest {
 		
 		/* CASE DFLTINTEGER WHEN 100000 THEN DFLTINTEGER + 200000 
 		 * ELSE DFLTINTEGER + 200000 END */
-		String caseExprNumb = serializer.serialize(SQLTypeFactory.caseClause(colDfltInteger)
-				.when(SQLTypeFactory.constant(ONE_HUNDRED_THOUSAND))
-				.then(SQLTypeFactory.mathExpression(colDfltInteger).add(SQLTypeFactory.constant(TWO_HUNDRED_THOUSAND)))
-				.elseClause(SQLTypeFactory.mathExpression(colDfltInteger).add(SQLTypeFactory.constant(TWO_HUNDRED_THOUSAND)))
+		String caseExprNumb = serializer.serialize(SQLTypeFactory.getInstance().caseClause(colDfltInteger)
+				.when(SQLTypeFactory.getInstance().constant(ONE_HUNDRED_THOUSAND))
+				.then(SQLTypeFactory.getInstance().mathExpression(colDfltInteger).add(SQLTypeFactory.getInstance().constant(TWO_HUNDRED_THOUSAND)))
+				.elseClause(SQLTypeFactory.getInstance().mathExpression(colDfltInteger).add(SQLTypeFactory.getInstance().constant(TWO_HUNDRED_THOUSAND)))
 				.end());
 		Assertions.assertEquals("case " + COL_DFLTINTEGER + 
 				" when " + String.valueOf(ONE_HUNDRED_THOUSAND) +
@@ -381,12 +382,12 @@ class CaseClauseTest {
 
 		/* CASE DFLTINTEGER + 10 WHEN 100000 - 10 THEN 200000 - 10 
 		 * ELSE 200000 - 10 END */
-		ICaseClause caseAdd = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(colDfltInteger).add(10))				
-										   .when(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(ONE_HUNDRED_THOUSAND))
-												   			   .subtract(SQLTypeFactory.constant(10)))
-										   .then(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(TWO_HUNDRED_THOUSAND))
+		ICaseClause caseAdd = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(colDfltInteger).add(10))				
+										   .when(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(ONE_HUNDRED_THOUSAND))
+												   			   .subtract(SQLTypeFactory.getInstance().constant(10)))
+										   .then(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(TWO_HUNDRED_THOUSAND))
 												   			   .subtract(10))
-										   .elseClause(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(TWO_HUNDRED_THOUSAND))
+										   .elseClause(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(TWO_HUNDRED_THOUSAND))
 												   					 .subtract(10))
 										   .end();
 		String caseExprAdd = serializer.serialize(caseAdd);
@@ -398,14 +399,14 @@ class CaseClauseTest {
 		/* String Expressions */
 		/* CASE 'Abc' || 'Def' WHEN 'AbcDef' THEN 'True' || 'That!' 
 		 * ELSE 'Thats' || ' False' END */
-		ICaseClause caseString = SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(
-														  SQLTypeFactory.constant(STRING_EXPR_ABC))
+		ICaseClause caseString = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(
+														  SQLTypeFactory.getInstance().constant(STRING_EXPR_ABC))
 																		.concat(STRING_EXPR_DEF))
-											  .when(SQLTypeFactory.constant(STRING_EXPR_ABC + STRING_EXPR_DEF))
-											  .then(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("True"))
-																  .concat(SQLTypeFactory.constant(" That!")))
-											  .elseClause(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("Thats"))
-																		.concat(SQLTypeFactory.constant(" False")))
+											  .when(SQLTypeFactory.getInstance().constant(STRING_EXPR_ABC + STRING_EXPR_DEF))
+											  .then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("True"))
+																  .concat(SQLTypeFactory.getInstance().constant(" That!")))
+											  .elseClause(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("Thats"))
+																		.concat(SQLTypeFactory.getInstance().constant(" False")))
 											  .end();
 		String caseExprConcat2 = serializer.serialize(caseString);
 		Assertions.assertEquals("case 'Abc' || 'Def'" + " when 'AbcDef'" +
@@ -414,12 +415,12 @@ class CaseClauseTest {
 		
 		/* CASE '10' || '10' WHEN '1010' THEN '10' || '10' 
 		 * ELSE '10' || '10' END */
-		ICaseClause caseString10 = SQLTypeFactory.caseClause(SQLTypeFactory.stringExpression(
-															SQLTypeFactory.constant("10")).concat("10"))
-												.when(SQLTypeFactory.constant("1010"))
-												.then(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("10"))
-																	.concat(SQLTypeFactory.constant("10")))
-												.elseClause(SQLTypeFactory.stringExpression("10").concat(SQLTypeFactory.constant("10")))
+		ICaseClause caseString10 = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().stringExpression(
+															SQLTypeFactory.getInstance().constant("10")).concat("10"))
+												.when(SQLTypeFactory.getInstance().constant("1010"))
+												.then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("10"))
+																	.concat(SQLTypeFactory.getInstance().constant("10")))
+												.elseClause(SQLTypeFactory.getInstance().stringExpression("10").concat(SQLTypeFactory.getInstance().constant("10")))
 												.end();
 		String caseExpr10 = serializer.serialize(caseString10);
 		Assertions.assertEquals("case '10' || '10' when '1010'" + 
@@ -428,23 +429,23 @@ class CaseClauseTest {
 
 		/* Number Expressions */
 		/* CASE 10 / 10 WHEN 0 THEN 0 ELSE 10 END */
-		ICaseClause caseDiv0 = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																.divide(SQLTypeFactory.constant(10)))
-											.when(SQLTypeFactory.constant(0))
-											.then(SQLTypeFactory.constant(0))
-											.elseClause(SQLTypeFactory.constant(10))
+		ICaseClause caseDiv0 = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																.divide(SQLTypeFactory.getInstance().constant(10)))
+											.when(SQLTypeFactory.getInstance().constant(0))
+											.then(SQLTypeFactory.getInstance().constant(0))
+											.elseClause(SQLTypeFactory.getInstance().constant(10))
 											.end();
 		String caseDiv0Str = serializer.serialize(caseDiv0);
 		Assertions.assertEquals("case 10 / 10 when 0 then 0 else 10 end", caseDiv0Str);
 		
 		/* CASE 10 / 10 WHEN 0 THEN 10 / 10 ELSE 10 / 10 END */
-		ICaseClause caseDiv10 = SQLTypeFactory.caseClause(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																	   .divide(SQLTypeFactory.constant(10)))
-											 .when(SQLTypeFactory.constant(0))
-											 .then(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																 .divide(SQLTypeFactory.constant(10)))
-											 .elseClause(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(10))
-																	   .divide(SQLTypeFactory.constant(10)))
+		ICaseClause caseDiv10 = SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																	   .divide(SQLTypeFactory.getInstance().constant(10)))
+											 .when(SQLTypeFactory.getInstance().constant(0))
+											 .then(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																 .divide(SQLTypeFactory.getInstance().constant(10)))
+											 .elseClause(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(10))
+																	   .divide(SQLTypeFactory.getInstance().constant(10)))
 											 .end();
 		String caseDiv10Str = serializer.serialize(caseDiv10);
 		Assertions.assertEquals("case 10 / 10 when 0 then 10 / 10 else 10 / 10 end", caseDiv10Str);
@@ -462,22 +463,22 @@ class CaseClauseTest {
 		 		  when 'AbcDef' then 'True' || ' That!'	
 		 * 
 		 * ELSE ? */ 
-		String caseExprParm = serializer.serialize(SQLTypeFactory.caseClause(SQLTypeFactory.parm(Types.CHAR, "Abc"))
-				.when(SQLTypeFactory.parm(Types.CHAR, "Def")).then(SQLTypeFactory.parm(Types.CHAR, "Test"))
-				.when(SQLTypeFactory.stringExpression(SQLTypeFactory.column(COL_NOTNULLCHAR)).concat(SQLTypeFactory.constant("ab")))
-				.then(SQLTypeFactory.stringExpression(SQLTypeFactory.column(COL_NOTNULLCHAR)).concat("ab"))
+		String caseExprParm = serializer.serialize(SQLTypeFactory.getInstance().caseClause(SQLTypeFactory.getInstance().parm(Types.CHAR, "Abc"))
+				.when(SQLTypeFactory.getInstance().parm(Types.CHAR, "Def")).then(SQLTypeFactory.getInstance().parm(Types.CHAR, "Test"))
+				.when(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().column(COL_NOTNULLCHAR)).concat(SQLTypeFactory.getInstance().constant("ab")))
+				.then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().column(COL_NOTNULLCHAR)).concat("ab"))
 				
-				.when(SQLTypeFactory.constant(STRING_EXPR_1))
-				.then(SQLTypeFactory.stringExpression(SQLTypeFactory.constant(STRING_EXPR_B))
+				.when(SQLTypeFactory.getInstance().constant(STRING_EXPR_1))
+				.then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant(STRING_EXPR_B))
 						  									  .concat("10"))
-				.when(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(ONE_HUNDRED_THOUSAND))
-						    		.subtract(SQLTypeFactory.constant(10)))
-				.then(SQLTypeFactory.mathExpression(SQLTypeFactory.constant(TWO_HUNDRED_THOUSAND))
+				.when(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(ONE_HUNDRED_THOUSAND))
+						    		.subtract(SQLTypeFactory.getInstance().constant(10)))
+				.then(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(TWO_HUNDRED_THOUSAND))
 									.subtract(10))				
-				.when(SQLTypeFactory.constant(STRING_EXPR_ABC + STRING_EXPR_DEF))
-				.then(SQLTypeFactory.stringExpression(SQLTypeFactory.constant("True"))
-						  		   .concat(SQLTypeFactory.constant(" That!")))
-				.elseClause(SQLTypeFactory.parm(Types.CHAR, "Test2"))
+				.when(SQLTypeFactory.getInstance().constant(STRING_EXPR_ABC + STRING_EXPR_DEF))
+				.then(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("True"))
+						  		   .concat(SQLTypeFactory.getInstance().constant(" That!")))
+				.elseClause(SQLTypeFactory.getInstance().parm(Types.CHAR, "Test2"))
 				.end());
 		Assertions.assertEquals("case ?" + " when ? then ? " + 
 				"when NotNullChar || 'ab' then NotNullChar || 'ab' " +

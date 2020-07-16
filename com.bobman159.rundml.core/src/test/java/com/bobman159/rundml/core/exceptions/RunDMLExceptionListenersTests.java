@@ -2,10 +2,7 @@ package com.bobman159.rundml.core.exceptions;
 
 import java.beans.ExceptionListener;
 import java.sql.SQLException;
-import java.util.List;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;

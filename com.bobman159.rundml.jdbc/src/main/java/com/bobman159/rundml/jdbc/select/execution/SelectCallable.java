@@ -15,7 +15,7 @@ import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.model.SQLStatementSerializer;
+import com.bobman159.rundml.core.sql.serialize.impl.SQLStatementSerializer;
 
 /**
  * Executes an SQL SELECT statement using JDBC and the callable interface which

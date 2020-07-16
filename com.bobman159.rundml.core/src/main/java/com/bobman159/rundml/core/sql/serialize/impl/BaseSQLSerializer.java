@@ -1,4 +1,4 @@
-package com.bobman159.rundml.core.sql;
+package com.bobman159.rundml.core.sql.serialize.impl;
 
 import java.util.Iterator;
 import java.util.stream.Stream;
@@ -7,6 +7,8 @@ import com.bobman159.rundml.core.expressions.ExpressionList;
 import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.predicates.IPredicate;
 import com.bobman159.rundml.core.predicates.impl.PredicatesList;
+import com.bobman159.rundml.core.sql.ICaseClause;
+import com.bobman159.rundml.core.sql.ICaseWhenThen;
 import com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.impl.Column;
@@ -20,7 +22,7 @@ import com.bobman159.rundml.core.util.CoreUtils;
  * Serialize Java objects into SQL text clauses.
  *
  */
-public class BaseSQLSerializer {
+class BaseSQLSerializer {
 
 
 	protected final String serialize(ISQLType sqlType) {
@@ -74,7 +76,7 @@ public class BaseSQLSerializer {
 	 * Serialize an SQL parameter marker
 	 * @param parmMarker an SQL parameter marker type
 	 */
-	public final String serialize(ParmMarker parmMarker) {
+	public final String serialize(ParmMarker parmMarker) {	//NOSONAR
 		
 		String sql = "";
 		sql = "?";

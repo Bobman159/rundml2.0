@@ -17,7 +17,6 @@ import com.bobman159.rundml.core.mapping.FieldMap;
 import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
 import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
-import com.bobman159.rundml.core.mockclasses.test.FieldMapInstantiationException;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceAllColumnsDefined;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceClassNotUsed;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceSomeColumnsDefined;

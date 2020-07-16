@@ -19,7 +19,7 @@ public class StringExpression extends AbstractBaseExpression implements  IString
 	 * @param firstString the first string in the expression
 	 */
 	public StringExpression(String firstString) {
-		super(SQLTypeFactory.constant(firstString));
+		super(SQLTypeFactory.getInstance().constant(firstString));
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class StringExpression extends AbstractBaseExpression implements  IString
 	 */
 	@Override
 	public IStringExpression concat(String secondString) {
-		 return (StringExpression) addToExpression(this,Op.CONCAT,SQLTypeFactory.constant(secondString));
+		 return (StringExpression) addToExpression(this,Op.CONCAT,SQLTypeFactory.getInstance().constant(secondString));
 	
 	}
 

@@ -85,10 +85,10 @@ class SelectCallableTests {
 		selectModel = SQLModelTestFactory.getInstance().createH2SelectTypeTestModel();
 		SQLStatementModel model = new SQLStatementModel();
 		model.addClause(SQLClause.SELECT);
-		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column("DfltInteger"));
-		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column("NotNullMediumInt"));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.getInstance().column("DfltInteger"));
+		model.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.getInstance().column("NotNullMediumInt"));
 		model.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName("rundml", "typeTest"));
-		PredicateBuilder pred = PredicateBuilder.where(SQLTypeFactory.column("DfltInteger")).isEqual(999999)
+		PredicateBuilder pred = PredicateBuilder.where(SQLTypeFactory.getInstance().column("DfltInteger")).isEqual(999999)
 								  .build();
 		model.addClause(SQLClause.WHERE, pred);
 		Connection conn = h2Provider.getConnection();
@@ -128,8 +128,8 @@ class SelectCallableTests {
 		/* NoTableRowClassFieldException - Testing Exception path in call method */
 		SQLStatementModel ntrcfexModel = new SQLStatementModel();
 		ntrcfexModel.addClause(SQLClause.SELECT);
-		ntrcfexModel.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column("DfltInteger"));
-		ntrcfexModel.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.column("NotNullMediumInt"));
+		ntrcfexModel.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.getInstance().column("DfltInteger"));
+		ntrcfexModel.addExpressionList(SQLClause.SELECTEXPR, SQLTypeFactory.getInstance().column("NotNullMediumInt"));
 		ntrcfexModel.addClause(SQLClause.FROM, CoreUtils.qualifiedTbName("rundml", "typeTest"));
 		Connection ntrcfexConn = h2Provider.getConnection();
 		SelectCallable ntrcfexCallable = new SelectCallable(ntrcfexConn, ntrcfexModel, 

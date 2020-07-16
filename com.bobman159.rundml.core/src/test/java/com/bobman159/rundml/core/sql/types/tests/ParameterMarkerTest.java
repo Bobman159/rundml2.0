@@ -9,11 +9,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.sql.BaseSQLSerializer;
+import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 import com.bobman159.rundml.core.sql.types.impl.ParmMarker;
 
 class ParameterMarkerTest {
 
+	private final TestBaseSQLSerializer serializer = new TestBaseSQLSerializer();
+	
 	@BeforeAll
 	static void setUpBeforeClass() {
 		//no set up needed at this time
@@ -42,14 +44,14 @@ class ParameterMarkerTest {
 		
 		int intTest = 10;
 		ParmMarker marker = new ParmMarker(Types.INTEGER,intTest);
-		String sqlGen = new BaseSQLSerializer().serialize(marker);
+		String sqlGen = serializer.serialize(marker);
 		Assertions.assertEquals("?",sqlGen);
 		Assertions.assertEquals(Types.INTEGER, marker.getParmType());
 		Assertions.assertEquals("10", marker.getValue());
 
 		String strTest = "abc";
 		ParmMarker marker2 = new ParmMarker(Types.VARCHAR,strTest);
-		String sqlGen2 = new BaseSQLSerializer().serialize(marker2);
+		String sqlGen2 = serializer.serialize(marker2);
 		Assertions.assertEquals("?",sqlGen2);
 		Assertions.assertEquals(Types.VARCHAR, marker2.getParmType());
 		Assertions.assertEquals("abc", marker2.getValue());

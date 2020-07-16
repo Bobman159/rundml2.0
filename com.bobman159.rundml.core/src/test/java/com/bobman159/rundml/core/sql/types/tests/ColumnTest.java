@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.sql.BaseSQLSerializer;
+import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 import com.bobman159.rundml.core.sql.types.SQLType;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 
@@ -40,7 +40,7 @@ class ColumnTest {
 		
 		Column colLhs = new Column(COLLHS);
 		Assertions.assertEquals(SQLType.COLUMN,colLhs.getType()); 
-		Assertions.assertEquals(COLLHS,new BaseSQLSerializer().serialize(colLhs));
+		Assertions.assertEquals(COLLHS,new TestBaseSQLSerializer().serialize(colLhs));
 
 	}
 

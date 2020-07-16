@@ -13,7 +13,27 @@ import com.bobman159.rundml.core.sql.types.impl.ParmMarker;
 import com.bobman159.rundml.core.sql.types.impl.StringType;
 import com.bobman159.rundml.core.sql.types.impl.Table;
 
-public class SQLTypeFactory { //NOSONAR
+/**
+ * Factory class for the creation of SQL types 
+ *
+ */
+public class SQLTypeFactory { 
+	
+	private static SQLTypeFactory self = null;
+	
+	/**
+	 * @return an instance of the SQLTypeFactory
+	 */
+	public static SQLTypeFactory getInstance() {
+		if (self == null) {
+			self = new SQLTypeFactory();
+		}
+		return self;
+	}
+	
+	protected SQLTypeFactory() {
+		//Default constructor
+	}
 	
 	//Initially The Type factory methods were in an ITypesFactory interface,
 	//the Expressions factory methods were in an IExpressionsFactory interface 
@@ -26,7 +46,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param columnName string column name in table
 	 * @return a <code>Column</code> expression
 	 */
-	public static ISQLType column(String columnName) {
+	public ISQLType column(String columnName) {
 		return new Column(columnName);
 	}
 	
@@ -37,7 +57,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param numb the number value
 	 * @return a <code>NumericType</code> expression value
 	 */
-	public static NumericType constant(Number numb) {
+	public NumericType constant(Number numb) {
 		return new NumericType(numb);
 	}
 
@@ -46,7 +66,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param value the string value
 	 * @return a <code>StringType</code> expression value
 	 */
-	public static ISQLType constant(String value) {
+	public ISQLType constant(String value) {
 		return new StringType(value);
 	}
 	
@@ -55,7 +75,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param tableName the database table name 
 	 * @return a <code>Table</code> type
 	 */
-	public static Table unQualifiedTable(String tableName) {
+	public Table unQualifiedTable(String tableName) {
 		return new Table(tableName);
 	}
 	
@@ -64,7 +84,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param schema the database schema for the table
 	 * @param tableName the database table name
 	 */
-	public static Table qualifiedTable(String schema, String tableName) {
+	public Table qualifiedTable(String schema, String tableName) {
 		return new Table(schema, tableName);
 	}
 	
@@ -78,7 +98,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @see java.sql.Types
 	 * @return a <code>ParmMarker</code> expression 
 	 */
-	public static ParmMarker parm(int jdbcType,Object value) {
+	public ParmMarker parm(int jdbcType,Object value) {
 		return new ParmMarker(jdbcType,value);
 	}
 
@@ -90,7 +110,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param value the string value
 	 * @return a string expression
 	 */
-	public static IStringExpression stringExpression(String value) {
+	public IStringExpression stringExpression(String value) {
 		return new StringExpression(value);
 	}
 	
@@ -99,7 +119,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param firstExpr the first part of the expression
 	 * @return a string expression
 	 */
-	public static IStringExpression stringExpression(ISQLType firstExpr) {
+	public IStringExpression stringExpression(ISQLType firstExpr) {
 		return new StringExpression(firstExpr);
 	}
 	
@@ -109,7 +129,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param value the java number type
 	 * @return a mathematical expression
 	 */
-	public static IMathExpression mathExpression(Number value) {
+	public IMathExpression mathExpression(Number value) {
 		return new MathExpression(constant(value));
 	}
 	
@@ -119,7 +139,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param value an expression type value
 	 * @return a mathematical expression
 	 */
-	public static IMathExpression mathExpression(ISQLType value) {
+	public IMathExpression mathExpression(ISQLType value) {
 		return new MathExpression(value);
 	}
 	
@@ -128,7 +148,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * Build a CASE WHEN value statement
 	 * @return a CASE statement builder
 	 */
-	public static ICaseBuilder caseClause() {
+	public ICaseBuilder caseClause() {
 		return new CaseClauseBuilder();
 	}
 	
@@ -137,7 +157,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param caseValue value for the CASE clause
 	 * @return a CASE statement builder 
 	 */
-	public static ICaseBuilder caseClause(ISQLType caseValue) {
+	public ICaseBuilder caseClause(ISQLType caseValue) {
 		return new CaseClauseBuilder(caseValue);
 	}
 	
@@ -146,7 +166,7 @@ public class SQLTypeFactory { //NOSONAR
 	 * @param mathExpr math expression for the CASE clause
 	 * @return a CASE statement builder 
 	 */
-	public static ICaseBuilder caseClause(IExpressionNode mathExpr) {
+	public ICaseBuilder caseClause(IExpressionNode mathExpr) {
 		return new CaseClauseBuilder(mathExpr);
 	}
 
