@@ -1,12 +1,14 @@
 package com.bobman159.rundml.core.sql.serialize.impl;
 
+import java.util.List;
+
 import com.bobman159.rundml.core.sql.IOrderByEntry;
 import com.bobman159.rundml.core.sql.IOrderByEntry.NullsOrder;
 import com.bobman159.rundml.core.sql.IOrderByEntry.SortOrder;
-import com.bobman159.rundml.core.sql.impl.OrderByList;
+import com.bobman159.rundml.core.sql.IOrderByList;
 import com.bobman159.rundml.core.sql.serialize.ICommonSerializationTask;
-import com.bobman159.rundml.core.sql.serialize.ISerializationStrategy;
 import com.bobman159.rundml.core.sql.serialize.ICommonSerializationTask.Clause;
+import com.bobman159.rundml.core.sql.serialize.ISerializationStrategy;
 import com.bobman159.rundml.core.util.CoreUtils;
 
 /**
@@ -26,8 +28,8 @@ public class OrderBySerializationStrategy implements ISerializationStrategy {
 		
 		if ((Clause.ORDERBY.equals(task.getClause())) &&
 			task.getModel() != null) {
-			if (task.getModel() instanceof OrderByList) {
-				OrderByList orderBys = (OrderByList) task.getModel();
+			if (task.getModel() instanceof IOrderByList) {
+				IOrderByList orderBys = (IOrderByList) task.getModel();
 				sql = serializeOrderBy(orderBys);
 			}
 		} else {
@@ -36,13 +38,13 @@ public class OrderBySerializationStrategy implements ISerializationStrategy {
 		return sql;
 	}
 
-	private String serializeOrderBy(OrderByList orderBys) {
+	private String serializeOrderBy(IOrderByList orderBys) {
 	
 		StringBuilder sql = new StringBuilder();
 		BaseSQLSerializer serializer = new BaseSQLSerializer();
 		
 		sql.append("order by").append(" ");
-		Iterable<IOrderByEntry> orderByList = orderBys.iteratable();
+		List<IOrderByEntry> orderByList = orderBys.getOrderBys();
 		int ix = 1;
 		for (IOrderByEntry entry : orderByList) {
 			sql.append(serializer.serialize(entry.getOrderByValue()));
@@ -63,7 +65,7 @@ public class OrderBySerializationStrategy implements ISerializationStrategy {
 					sql.append("nulls last");
 				}
 			}
-			if (ix < orderBys.size()) {
+			if (ix < orderByList.size()) {
 				sql.append(",");
 			}
 			ix++;

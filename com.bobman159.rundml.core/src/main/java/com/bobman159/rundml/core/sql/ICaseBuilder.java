@@ -12,7 +12,6 @@ public interface ICaseBuilder {
 
 	/**
 	 * Create a CASE value WHEN value/condition SQL clause
-	 * @param casevalue the value for CASE clause
 	 * @return an <code>ICaseBuilder</code> instance
 	 */
 	public ICaseBuilder caseClause();
@@ -55,7 +54,7 @@ public interface ICaseBuilder {
 	/**
 	 * Create a WHEN SQL condition (eg value = value) SQL clause in a CASE statement
 	 * @param lhsValue the left side of the condition for the WHEN clause
-	 * @param oper the operator (=, <,>,etc) 
+	 * @param oper the operator (&lt;,&#61;,&lt;&gt;,etc)
 	 * @param rhsValue the right side of the condition
 	 * @return an <code>ICaseBuilder</code> instance
 	 */
@@ -64,7 +63,7 @@ public interface ICaseBuilder {
 	/**
 	 * Create a WHEN SQL condition (eg value = value) SQL clause in a CASE statement
 	 * @param lhsValue the left side of the condition for the WHEN clause
-	 * @param oper the operator (=, <,>,etc) 
+	 * @param oper the operator (&lt;,&#61;,&lt;&gt;,etc)
 	 * @param rhsValue the right side of the condition
 	 * @return an <code>ICaseBuilder</code> instance
 	 */
@@ -73,7 +72,7 @@ public interface ICaseBuilder {
 	/**
 	 * Create a WHEN SQL condition (eg value = value) SQL clause in a CASE statement
 	 * @param lhsValue the left side of the condition for the WHEN clause
-	 * @param oper the operator (=, <,>,etc) 
+	 * @param oper the operator (&lt;,&#61;,&lt;&gt;,etc)
 	 * @param rhsValue the right side of the condition
 	 * @return an <code>ICaseBuilder</code> instance
 	 */
@@ -96,7 +95,7 @@ public interface ICaseBuilder {
 	
 	/**
 	 * Create a ELSE SQL clause in a CASE statement
-	 * @param thenValue the value or condition for the WHEN clause
+	 * @param elseValue the value or condition for the WHEN clause
 	 * @return an <code>ICaseBuilder</code> instance
 	 */
 	public ICaseBuilder elseClause(ISQLType elseValue);

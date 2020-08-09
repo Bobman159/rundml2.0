@@ -26,7 +26,7 @@ public interface IOrderByEntry {
 	
 	/**
 	 * Set the sort order ASC or DESC 
-	 * @param order the sort order
+	 * @param sortOrder the sort order
 	 */
 	public void setSortOrder(SortOrder sortOrder);
 	

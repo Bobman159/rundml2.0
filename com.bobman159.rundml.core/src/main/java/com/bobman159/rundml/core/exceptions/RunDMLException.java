@@ -23,8 +23,8 @@ public class RunDMLException extends Exception {
 	 */
 	public static final int	SQL_MODEL_BUILD = 1002;
 	
-	private int execPhase;			//Code indicating when error occurred
-	private Object[] args;			//Argument(s) if any for the error
+	private final int execPhase;			//Code indicating when error occurred
+	private final Object[] args;			//Argument(s) if any for the error
 	
 	/**
 	 * Create an instance of a RunDMLException with a specified reason
@@ -49,7 +49,7 @@ public class RunDMLException extends Exception {
 	 * @return - a text string of the error type, " " is returned for unknown error codes
 	 */
 	public String getRunDMLMessage() {
-		StringBuilder errorMessage = new StringBuilder();;
+		StringBuilder errorMessage = new StringBuilder();
 		errorMessage.append("RunDML encountered a ");
 		
 		if (execPhase == TABLE_ROW_CLASS_REFLECTION) {

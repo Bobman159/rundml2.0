@@ -7,16 +7,20 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.sql.impl.OrderByList;
-import com.bobman159.rundml.core.sql.select.SelectTypesFactory;
+import com.bobman159.rundml.core.model.ICoreModelFactory;
+import com.bobman159.rundml.core.model.impl.CoreModelFactory;
+import com.bobman159.rundml.core.sql.IOrderByList;
+import com.bobman159.rundml.core.sql.ISQLTypeFactory;
 import com.bobman159.rundml.core.sql.serialize.impl.BaseSelectSerializer;
+import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 
 
 class OrderByClauseTest {
 	
 	private static final String DFLTINTEGER = "dfltInteger";
 	private static final String NOTNULLVARCHAR = "notNullVarchar";
-	private static final SelectTypesFactory factory = SelectTypesFactory.getInstance();
+	private static final ISQLTypeFactory typeFactory = SQLTypeFactory.getInstance();
+	private static final ICoreModelFactory modelFactory = CoreModelFactory.getInstance();
 
 	@BeforeAll
 	static void setUpBeforeClass() {
@@ -47,74 +51,74 @@ class OrderByClauseTest {
 		 * "order by" are generated correctly, so here I will explicitly code the
 		 * "order by" text 
 		 */
-		OrderByList orderByList = new OrderByList();
-		orderByList.addOrderByClause(factory.orderByEntry(1));
-		orderByList.addOrderByClause(factory.orderByEntry(2));
-		orderByList.addOrderByClause(factory.orderByEntry(3));
+		IOrderByList orderByList = modelFactory.createOrderByList();
+		orderByList.addOrderByClause(typeFactory.orderBy(1));
+		orderByList.addOrderByClause(typeFactory.orderBy(2));
+		orderByList.addOrderByClause(typeFactory.orderBy(3));
 		
 		String stmtText = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList);
 		Assertions.assertEquals("order by 1,2,3",stmtText);
 		
-		OrderByList orderByList2 = new OrderByList();
-		orderByList2.addOrderByClause(factory.orderByEntry(1)); 
-		orderByList2.addOrderByClause(factory.orderByEntry(2));
-		orderByList2.addOrderByClause(factory.orderByEntry(factory.column(DFLTINTEGER)));
+		IOrderByList orderByList2 = modelFactory.createOrderByList();
+		orderByList2.addOrderByClause(typeFactory.orderBy(1)); 
+		orderByList2.addOrderByClause(typeFactory.orderBy(2));
+		orderByList2.addOrderByClause(typeFactory.orderBy(typeFactory.column(DFLTINTEGER)));
 		String stmtText2 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList2);	
 		Assertions.assertEquals("order by 1,2,dfltInteger",stmtText2);		
 		
 		
-		OrderByList orderByList3 = new OrderByList();
-		orderByList3.addOrderByClause(factory.orderByEntry(factory.constant("Abcdefg")));
+		IOrderByList orderByList3 = modelFactory.createOrderByList();
+		orderByList3.addOrderByClause(typeFactory.orderBy(typeFactory.constant("Abcdefg")));
 		String stmtText3 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList3);
 		Assertions.assertEquals("order by 'Abcdefg'",stmtText3);
 		
 		
 
-		OrderByList orderByList4 = new OrderByList();
-		orderByList4.addOrderByClause(factory.orderByEntry(1).asc());
+		IOrderByList orderByList4 = modelFactory.createOrderByList();
+		orderByList4.addOrderByClause(typeFactory.orderBy(1).asc());
 		String stmtText4 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList4);
 		Assertions.assertEquals("order by 1 asc",stmtText4);
 		
-		OrderByList orderByList5 = new OrderByList();
-		orderByList5.addOrderByClause(factory.orderByEntry(factory.column(DFLTINTEGER)).desc());
+		IOrderByList orderByList5 = modelFactory.createOrderByList();
+		orderByList5.addOrderByClause(typeFactory.orderBy(typeFactory.column(DFLTINTEGER)).desc());
 		String stmtText5 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList5);
 		Assertions.assertEquals("order by dfltInteger desc",stmtText5);
 
-		OrderByList orderByList6 = new OrderByList();
-		orderByList6.addOrderByClause(factory.orderByEntry(1));
-		orderByList6.addOrderByClause(factory.orderByEntry(2).desc());
+		IOrderByList orderByList6 = modelFactory.createOrderByList();
+		orderByList6.addOrderByClause(typeFactory.orderBy(1));
+		orderByList6.addOrderByClause(typeFactory.orderBy(2).desc());
 		String stmtText6 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList6);
 		Assertions.assertEquals("order by 1,2 desc",stmtText6);		
 
 		
-		OrderByList orderByList7 = new OrderByList();
-		orderByList7.addOrderByClause(factory.orderByEntry(1));
-		orderByList7.addOrderByClause(factory.orderByEntry(2).desc().nullsLast());
+		IOrderByList orderByList7 = modelFactory.createOrderByList();
+		orderByList7.addOrderByClause(typeFactory.orderBy(1));
+		orderByList7.addOrderByClause(typeFactory.orderBy(2).desc().nullsLast());
 		String stmtText7 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList7);
 		Assertions.assertEquals("order by 1,2 desc nulls last",stmtText7);		
 
-		OrderByList orderByList8 = new OrderByList();
-		orderByList8.addOrderByClause(factory.orderByEntry(factory.column(DFLTINTEGER)));
-		orderByList8.addOrderByClause(factory.orderByEntry(factory.column(NOTNULLVARCHAR))
+		IOrderByList orderByList8 = modelFactory.createOrderByList();
+		orderByList8.addOrderByClause(typeFactory.orderBy(typeFactory.column(DFLTINTEGER)));
+		orderByList8.addOrderByClause(typeFactory.orderBy(typeFactory.column(NOTNULLVARCHAR))
 											 .desc().nullsFirst());
 		String stmtText8 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList8);
 		Assertions.assertEquals("order by dfltInteger,notNullVarchar desc nulls first",
 							stmtText8);	
 
-		OrderByList orderByList9 = new OrderByList();
-		orderByList9.addOrderByClause(factory.orderByEntry(factory.column(NOTNULLVARCHAR))
+		IOrderByList orderByList9 = modelFactory.createOrderByList();
+		orderByList9.addOrderByClause(typeFactory.orderBy(typeFactory.column(NOTNULLVARCHAR))
 																 .desc().nullsLast());
-		orderByList9.addOrderByClause(factory.orderByEntry(1).asc().nullsFirst());
-		orderByList9.addOrderByClause(factory.orderByEntry(factory.column(DFLTINTEGER)));
+		orderByList9.addOrderByClause(typeFactory.orderBy(1).asc().nullsFirst());
+		orderByList9.addOrderByClause(typeFactory.orderBy(typeFactory.column(DFLTINTEGER)));
 		String stmtText9 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList9);
 		Assertions.assertEquals("order by notNullVarchar desc nulls last,1 asc nulls first," +
 				     		"dfltInteger",stmtText9);
 		
-		OrderByList orderByList10 = new OrderByList();
-		orderByList10.addOrderByClause(factory.orderByEntry(factory.column(DFLTINTEGER))
+		IOrderByList orderByList10 = modelFactory.createOrderByList();
+		orderByList10.addOrderByClause(typeFactory.orderBy(typeFactory.column(DFLTINTEGER))
 									  								.asc().nullsFirst());
-		orderByList10.addOrderByClause(factory.orderByEntry(2).desc().nullsLast());
-		orderByList10.addOrderByClause(factory.orderByEntry(3).desc().nullsFirst());
+		orderByList10.addOrderByClause(typeFactory.orderBy(2).desc().nullsLast());
+		orderByList10.addOrderByClause(typeFactory.orderBy(3).desc().nullsFirst());
 		String stmtText10 = BaseSelectSerializer.getInstance().serializeOrderBy(orderByList10);
 		Assertions.assertEquals("order by dfltInteger asc nulls first," + 
 						    "2 desc nulls last,3 desc nulls first",stmtText10);

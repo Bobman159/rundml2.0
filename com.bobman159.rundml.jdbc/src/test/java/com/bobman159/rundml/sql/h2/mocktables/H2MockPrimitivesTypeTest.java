@@ -7,9 +7,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
-import com.bobman159.rundml.core.mapping.FieldMap;
-import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
+import com.bobman159.rundml.core.model.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.model.mapping.IFieldMap;
 
 /**
  * Mock object for testing RunDML mapping SELECT results to 
@@ -42,7 +41,7 @@ public class H2MockPrimitivesTypeTest implements IFieldMap {
 	private byte	NotNullBinary;
 	private byte[]  varBinaryDflt;
 	
-	
+	//TODO: Add some tests to this class
 	public int getDfltInteger() {
 		return DfltInteger;
 	}

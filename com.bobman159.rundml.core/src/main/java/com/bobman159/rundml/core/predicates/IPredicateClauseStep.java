@@ -1,6 +1,5 @@
 package com.bobman159.rundml.core.predicates;
 
-import com.bobman159.rundml.core.predicates.impl.PredicatesList;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
 /**
@@ -57,6 +56,6 @@ public interface IPredicateClauseStep {
 	 * Finalize the predicate clause(s) for the current predicate
 	 * @return the <code>PredicateBuilder</code> 
 	*/
-	public PredicatesList build();
+	public IPredicatesList build();
 
 }

@@ -10,7 +10,7 @@ public interface ISQLType extends ICaseWhenValue {
 	
 	/**
 	 * The SQL type represented by classes implementing this interface.
-	 * @return
+	 * @return the type for SQL type
 	 */
 	public SQLType getType();
 	

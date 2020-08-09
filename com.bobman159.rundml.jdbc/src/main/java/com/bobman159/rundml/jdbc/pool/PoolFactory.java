@@ -15,14 +15,27 @@ import com.zaxxer.hikari.HikariDataSource;
  *	HikariCP is used for the connection pooling.
  * 	
  */
-public class PoolFactory {
+public class PoolFactory implements IPoolFactory {
 
+	private static PoolFactory self;
 	private static Logger logger = LogManager.getLogger(PoolFactory.class);
+	
 	
 	//TODO: Add makeH2Connection method to define single H2 Connection?
 	//TODO: Add makeMySQLConnection method to define single MySQL Connection?\
 	//TODO: Refactor the make*Connection method names to be create*Connection
 
+	/**
+	 * 
+	 * @return an instance of the Pool factory
+	 */
+	public static IPoolFactory getInstance() {
+		if (self == null) {
+			self = new PoolFactory();
+		}
+		return self;
+	}
+	
 	/**
 	 * Define a connection pool using the specified information for configuration. 
 	 * <b>Do not specify the file extension <code>.h2.db</code> for the dbPath parameter.</b>
@@ -120,4 +133,5 @@ public class PoolFactory {
 	private PoolFactory() {
 		throw new IllegalStateException("PoolFactory should not be created.");
 	}
+
 }

@@ -51,7 +51,7 @@ public class ParmMarker implements ISQLType {
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.types.ISQLType#getExpressionType()
+	 * @see com.bobman159.rundml.core.sql.types.ISQLType#getType()
 	 */
 	@Override
 	public SQLType getType() {

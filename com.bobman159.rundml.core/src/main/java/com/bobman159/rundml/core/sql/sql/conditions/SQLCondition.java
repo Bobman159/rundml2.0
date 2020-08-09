@@ -27,7 +27,8 @@ public class SQLCondition implements ISQLCondition {
 	 * 
 	 * @param condition partially defined (left expression) sql condition
 	 * @param op the operator (&gt;&lt;,&lt;&gt;,=") etc.
-	 * @param rhs the SQL expression on the right side of the operand
+	 * @param rightExpr the SQL expression on the right side of the operand
+	 * @return the SQL condition model definition
 	 */
 	public static SQLCondition createSQLCondition(ISQLCondition condition,Op op, ISQLType rightExpr) {
 		ISQLType leftExpr = condition.getLeftCondition();

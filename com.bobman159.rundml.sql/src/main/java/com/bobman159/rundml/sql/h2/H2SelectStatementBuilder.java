@@ -1,7 +1,7 @@
 package com.bobman159.rundml.sql.h2;
 
 import com.bobman159.rundml.core.sql.types.ISQLType;
-import com.bobman159.rundml.sql.base.builder.BaseSelectStatementBuilder;
+import com.bobman159.rundml.sql.builders.impl.BaseSelectStatementBuilder;
 import com.bobman159.rundml.sql.h2.H2SQLClauses.H2SelectClause;
 
 /**

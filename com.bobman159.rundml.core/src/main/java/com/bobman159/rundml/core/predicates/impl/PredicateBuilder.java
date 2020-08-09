@@ -1,13 +1,15 @@
 package com.bobman159.rundml.core.predicates.impl;
 
+import com.bobman159.rundml.core.model.impl.CoreModelFactory;
 import com.bobman159.rundml.core.predicates.IPredicate;
 import com.bobman159.rundml.core.predicates.IPredicateClauseStep;
 import com.bobman159.rundml.core.predicates.IPredicateComparisonStep;
-import com.bobman159.rundml.core.sql.SQLTypeFactory;
+import com.bobman159.rundml.core.predicates.IPredicatesList;
 import com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
 import com.bobman159.rundml.core.sql.sql.conditions.SQLCondition;
 import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 
 /**
  * Builder class for generating SQL predicate conditions.
@@ -24,7 +26,7 @@ public class PredicateBuilder {
 		 * Finalize the current predicate clause(s) being generated
 		 * @return the generated predicate
 		 */
-		public PredicatesList build();
+		public IPredicatesList build();
 	}
 	
 	/**
@@ -97,27 +99,26 @@ public class PredicateBuilder {
 		 * ASSUME: There is only one clause being created at any one time.
 		 */
 
-		PredicatesList predList = new PredicatesList();
+		IPredicatesList predList = CoreModelFactory.getInstance().createPredicateList();
 		
 		/**
 		 * Define an SQL predicate builder and the initial WHERE or HAVING clause
 		 * @param predOp predicate operand WHERE or HAVING
 		 * @param predExpr expression for the SQL WHERE clause
 		 */
-		public PredicateSteps(PredOperand predOp,ISQLType predExpr) {
-
-			predList = new PredicatesList();
-			predList.addPredicate(PredicateClause.createPredicate(predOp, SQLCondition.createSQLCondition(predExpr)));
+		public PredicateSteps(PredOperand predOp,ISQLType predExpr) { 
+			predList = CoreModelFactory.getInstance().createPredicateList();
+			predList.addPredicate(CoreModelFactory.getInstance().createPredicate(predOp, SQLCondition.createSQLCondition(predExpr)));
 
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateClauseStep#and(Object) 
+		 * @see com.bobman159.rundml.core.predicates.IPredicateClauseStep#and(ISQLType) 
 		 */
 		@Override
 		public IPredicateComparisonStep and(ISQLType expr) {
 			
-			predList.addPredicate(PredicateClause.createPredicate(PredOperand.AND,expr));
+			predList.addPredicate(CoreModelFactory.getInstance().createPredicate(PredOperand.AND,expr));
 			return this;
 		}
 		
@@ -128,7 +129,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateComparisonStep and(Number leftPred) {
-			predList.addPredicate(PredicateClause.createPredicate(PredOperand.AND,
+			predList.addPredicate(CoreModelFactory.getInstance().createPredicate(PredOperand.AND,
 								  SQLTypeFactory.getInstance().constant(leftPred)));
 			return this;
 		}
@@ -141,7 +142,7 @@ public class PredicateBuilder {
 		@Override
 		public IPredicateComparisonStep and(String leftPred) {
 
-				predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,
+				predList.addPredicate(CoreModelFactory.getInstance().createPredicate(PredOperand.OR,
 									  SQLTypeFactory.getInstance().constant(leftPred)));
 				return this;		
 		}
@@ -153,7 +154,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateComparisonStep or(Number leftPred) {
-			predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,SQLTypeFactory.getInstance().constant(leftPred)));
+			predList.addPredicate(CoreModelFactory.getInstance().createPredicate(PredOperand.OR,SQLTypeFactory.getInstance().constant(leftPred)));
 			return this;
 		}
 		
@@ -164,7 +165,7 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateComparisonStep or(String leftPred) {	//NOSONAR
-			predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,SQLTypeFactory.getInstance().constant(leftPred)));
+			predList.addPredicate(CoreModelFactory.getInstance().createPredicate(PredOperand.OR,SQLTypeFactory.getInstance().constant(leftPred)));
 			return this;
 		}
 		
@@ -173,12 +174,12 @@ public class PredicateBuilder {
 		 */
 		@Override
 		public IPredicateComparisonStep or(ISQLType expr) {
-			predList.addPredicate(PredicateClause.createPredicate(PredOperand.OR,expr));
+			predList.addPredicate(CoreModelFactory.getInstance().createPredicate(PredOperand.OR,expr));
 			return this;
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isEqual(Number)
 		 */
 		@Override
 		public IPredicateClauseStep isEqual(Number expr) {
@@ -188,7 +189,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isEqual(String)
 		 */
 		@Override
 		public IPredicateClauseStep isEqual(String expr) {
@@ -198,7 +199,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isEqual(ISQLType)
 		 */
 		@Override
 		public IPredicateClauseStep isEqual(ISQLType expr) {
@@ -207,7 +208,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreater(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreater(Number)
 		 */
 		@Override
 		public IPredicateClauseStep isGreater(Number expr) {
@@ -216,7 +217,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreater(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreater(String)
 		 */
 		@Override
 		public IPredicateClauseStep isGreater(String expr) {
@@ -225,7 +226,7 @@ public class PredicateBuilder {
 		}	
 
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreater(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreater(ISQLType)
 		 */
 		@Override
 		public IPredicateClauseStep isGreater(ISQLType expr) {
@@ -234,7 +235,7 @@ public class PredicateBuilder {
 		}
 
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreaterOrEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreaterOrEqual(Number)
 		 */
 		@Override
 		public IPredicateClauseStep isGreaterOrEqual(Number expr) {
@@ -243,7 +244,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreaterOrEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreaterOrEqual(String)
 		 */
 		@Override
 		public IPredicateClauseStep isGreaterOrEqual(String expr) {
@@ -252,7 +253,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreaterOrEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isGreaterOrEqual(ISQLType)
 		 */
 		@Override
 		public IPredicateClauseStep isGreaterOrEqual(ISQLType expr) {
@@ -261,7 +262,7 @@ public class PredicateBuilder {
 		}
 
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLess(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLess(Number)
 		 */
 		@Override
 		public IPredicateClauseStep isLess(Number expr) {
@@ -270,7 +271,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLess(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLess(String)
 		 */
 		@Override
 		public IPredicateClauseStep isLess(String expr) {
@@ -279,7 +280,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLess(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLess(ISQLType)
 		 */
 		@Override
 		public IPredicateClauseStep isLess(ISQLType expr) {
@@ -288,7 +289,7 @@ public class PredicateBuilder {
 		}
 
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLessOrEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLessOrEqual(Number)
 		 */
 		@Override
 		public IPredicateClauseStep isLessOrEqual(Number expr) {
@@ -297,7 +298,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLessOrEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLessOrEqual(String)
 		 */
 		@Override
 		public IPredicateClauseStep isLessOrEqual(String expr) {
@@ -306,7 +307,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLessOrEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isLessOrEqual(ISQLType)
 		 */
 		@Override
 		public IPredicateClauseStep isLessOrEqual(ISQLType expr) {
@@ -315,7 +316,7 @@ public class PredicateBuilder {
 		}
 
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNot(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNot(Number)
 		 */
 		@Override
 		public IPredicateClauseStep isNot(Number expr) {
@@ -324,7 +325,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNot(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNot(String)
 		 */
 		@Override
 		public IPredicateClauseStep isNot(String expr) {
@@ -333,7 +334,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNot(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNot(ISQLType)
 		 */
 		@Override
 		public IPredicateClauseStep isNot(ISQLType expr) {
@@ -342,7 +343,7 @@ public class PredicateBuilder {
 		}
 
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNotEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNotEqual(Number)
 		 */
 		@Override
 		public IPredicateClauseStep isNotEqual(Number expr) {
@@ -351,7 +352,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNotEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNotEqual(String)
 		 */
 		@Override
 		public IPredicateClauseStep isNotEqual(String expr) {
@@ -360,7 +361,7 @@ public class PredicateBuilder {
 		}
 		
 		/**
-		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNotEqual(Object)
+		 * @see com.bobman159.rundml.core.predicates.IPredicateComparisonStep#isNotEqual(ISQLType)
 		 */
 		@Override
 		public IPredicateClauseStep isNotEqual(ISQLType expr) {
@@ -372,7 +373,7 @@ public class PredicateBuilder {
 		 * @see PredBuildStep#build()
 		 */		
 		@Override 
-		public PredicatesList build() {
+		public IPredicatesList build() {
 
 			return predList;
 		}

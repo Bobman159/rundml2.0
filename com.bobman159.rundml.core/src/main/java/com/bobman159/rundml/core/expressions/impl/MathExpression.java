@@ -3,9 +3,9 @@ package com.bobman159.rundml.core.expressions.impl;
 import com.bobman159.rundml.core.expressions.AbstractBaseExpression;
 import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.expressions.IMathExpression;
-import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
 import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 
 /**
  * A math operation between two SQL Expressions, numbers,
@@ -38,7 +38,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	@Override
 	public IMathExpression add(Number number) {
 
-		return (MathExpression) addToExpression(this,Op.ADD,SQLTypeFactory.getInstance().constant(number));
+		return (IMathExpression) addToExpression(this,Op.ADD,SQLTypeFactory.getInstance().constant(number));
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression add(ISQLType expr) {
-		return (MathExpression) addToExpression(this,Op.ADD,expr);
+		return (IMathExpression) addToExpression(this,Op.ADD,expr);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression subtract(Number number) {
-		return (MathExpression) addToExpression(this,Op.SUB,SQLTypeFactory.getInstance().constant(number));
+		return (IMathExpression) addToExpression(this,Op.SUB,SQLTypeFactory.getInstance().constant(number));
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression subtract(ISQLType expr) {	
-		return (MathExpression) addToExpression(this,Op.SUB,expr);
+		return (IMathExpression) addToExpression(this,Op.SUB,expr);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression multiply(Number number) {
-		return (MathExpression) addToExpression(this,Op.MULT,SQLTypeFactory.getInstance().constant(number));
+		return (IMathExpression) addToExpression(this,Op.MULT,SQLTypeFactory.getInstance().constant(number));
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression multiply(ISQLType expr) {
-		return (MathExpression) addToExpression(this,Op.MULT,expr);
+		return (IMathExpression) addToExpression(this,Op.MULT,expr);
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression divide(Number number) {
-		return (MathExpression) addToExpression(this,Op.DIVIDE,SQLTypeFactory.getInstance().constant(number));
+		return (IMathExpression) addToExpression(this,Op.DIVIDE,SQLTypeFactory.getInstance().constant(number));
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class MathExpression extends AbstractBaseExpression implements IMathExpre
 	 */
 	@Override
 	public IMathExpression divide(ISQLType expr) {
-		return (MathExpression) addToExpression(this,Op.DIVIDE,expr);
+		return (IMathExpression) addToExpression(this,Op.DIVIDE,expr);
 	}
 
 	/**

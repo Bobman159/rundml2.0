@@ -1,6 +1,6 @@
 package com.bobman159.rundml.core.sql.serialize.impl;
 
-import com.bobman159.rundml.core.sql.impl.OrderByList;
+import com.bobman159.rundml.core.sql.IOrderByList;
 import com.bobman159.rundml.core.sql.serialize.ICommonSerializationTask.Clause;
 import com.bobman159.rundml.core.sql.types.impl.Table;
 import com.bobman159.rundml.core.util.CoreUtils;
@@ -47,7 +47,7 @@ public class BaseSelectSerializer extends SQLStatementSerializer {
 	 * @param orderBys list of ORDER BY entries
 	 * @return the ORDER BY as an SQL ORDER BY text
 	 */
-	public String serializeOrderBy(OrderByList orderBys) {
+	public String serializeOrderBy(IOrderByList orderBys) {
 		
 		CommonSerializationContext context = CommonSerializationContext.createSerializationContext();
 		CommonSerializationTask task = CommonSerializationTask.createSerializationTask(Clause.ORDERBY, orderBys);

@@ -1,8 +1,7 @@
 package com.bobman159.rundml.jdbc.utils.tests;
 
 import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.sql.SQLTypeFactory;
-import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
+import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 import com.bobman159.rundml.core.util.CoreUtils;
 
 /**

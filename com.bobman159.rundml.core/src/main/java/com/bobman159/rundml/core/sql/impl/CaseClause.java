@@ -7,7 +7,6 @@ import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.sql.ICaseClause;
 import com.bobman159.rundml.core.sql.ICaseWhenThen;
 import com.bobman159.rundml.core.sql.ICaseWhenValue;
-import com.bobman159.rundml.core.sql.impl.SQLClauses.SQLClause;
 import com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
@@ -78,8 +77,7 @@ public class CaseClause implements ICaseClause {
 
 			
 	}
-	
-	SQLClause caseType = null;
+
 	private ISQLType caseValue;
 	private LinkedList<ICaseWhenThen> whenConds;
 	private ISQLType elseCondition = null;
@@ -108,7 +106,7 @@ public class CaseClause implements ICaseClause {
 	
 	/**
 	 * Create a CASE math expression WHEN... clause
-	 * @param mathExpr the math expression for the CASE clause
+	 * @param caseExpr the math expression for the CASE clause
 	 */
 	public CaseClause(IExpressionNode caseExpr) {
 		if (caseExpr instanceof ISQLType) {
@@ -121,8 +119,8 @@ public class CaseClause implements ICaseClause {
 		
 	/**
 	 * Add a new WHEN value THEN value to the list of WHEN clauses for the current CASE
-	 * @param whenValue 
-	 * @param thenValue
+	 * @param whenValue value for WHEN condition
+	 * @param thenValue value for THEN condition
 	 */
 	@Override
 	public void setWhenThen(ICaseWhenValue whenValue, ISQLType thenValue) {
@@ -139,7 +137,7 @@ public class CaseClause implements ICaseClause {
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseClause#getWhenConditions()
+	 * @see com.bobman159.rundml.core.sql.ICaseClause#getWhenThenConditions()
 	 */
 	@Override
 	public Stream<ICaseWhenThen> getWhenThenConditions() {

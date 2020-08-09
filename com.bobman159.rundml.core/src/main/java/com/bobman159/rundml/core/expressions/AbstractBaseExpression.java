@@ -1,7 +1,5 @@
 package com.bobman159.rundml.core.expressions;
 
-import com.bobman159.rundml.core.expressions.impl.MathExpression;
-import com.bobman159.rundml.core.expressions.impl.StringExpression;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.SQLType;
@@ -11,7 +9,7 @@ import com.bobman159.rundml.core.sql.types.SQLType;
  * type (Number, String, Column name, parameter marker etc) in an expression and
  * expressions (String and Mathematical) are supported.
  * 
- * This class <b>must be</ 
+ * This class <b>must be</b> implemented
  *
  */
 public abstract class AbstractBaseExpression implements IExpressionNode {
@@ -21,7 +19,7 @@ public abstract class AbstractBaseExpression implements IExpressionNode {
 	private Op			operator;
 
 	/**
-	 * Create of a new <code>ISQLType> instance
+	 * Create of a new <code>ISQLType</code> instance
 	 * @param leftExpr the left expression value
 	 * @param operator the expression operator
 	 * @param rightExpr the right expression value 
@@ -32,9 +30,8 @@ public abstract class AbstractBaseExpression implements IExpressionNode {
 	
 	/**
 	 * Create an SQL expression 
-	 * @param nodeType the type of the expression
 	 * @param expr the left value in the expression
-	 * @see com.bobman159.rundml.core.expressions.ExpressionNodeEnum
+	 * @see com.bobman159.rundml.core.expressions.AbstractBaseExpression
 	 */
 	protected AbstractBaseExpression(ISQLType expr) {
 		leftExpr = expr;
@@ -151,8 +148,8 @@ public abstract class AbstractBaseExpression implements IExpressionNode {
 			IExpressionNode exprNode = (IExpressionNode) node;
 			
 			if ((exprNode.getRightExpr() != null) &&
-				(exprNode instanceof MathExpression) ||
-				(exprNode instanceof StringExpression)) {
+				(exprNode instanceof IMathExpression) ||
+				(exprNode instanceof IStringExpression)) {
 				isExprNode = true;
 			} 
 		}

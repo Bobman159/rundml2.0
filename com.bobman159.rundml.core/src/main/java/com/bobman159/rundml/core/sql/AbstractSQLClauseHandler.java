@@ -68,11 +68,12 @@ public abstract class AbstractSQLClauseHandler {
 	private boolean wasHandled() {
 		return this.isHandled;
 	}
-	
+
 	/**
-	 * Create a SQL clause text from a SQL type 
-	 * @param a <SQLModeNode> to be translated to a string 
-	 * @return an SQL clause string
+	 * Create a SQL clause text from a SQL type
+	 * @param typeNode an SQL type model object
+	 * @return the model object as SQL clause text
+	 * @throws RunDMLException when an error is encountered
 	 */
 	public abstract String toSQLClause(ISQLType typeNode) throws RunDMLException;
 	

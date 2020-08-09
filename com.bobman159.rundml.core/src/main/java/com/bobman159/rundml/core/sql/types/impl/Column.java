@@ -35,8 +35,8 @@ public class Column implements ISQLType {
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.types.ISQLType#toSQLString()
-	 * @return
+	 * 
+	 * @return the column name as a string
 	 */
 	public String getColumnName() {
 		return columnName;

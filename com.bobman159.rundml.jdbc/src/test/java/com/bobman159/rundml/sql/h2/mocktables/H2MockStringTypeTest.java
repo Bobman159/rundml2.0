@@ -1,7 +1,7 @@
 package com.bobman159.rundml.sql.h2.mocktables;
 
-import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
+import com.bobman159.rundml.core.model.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.model.mapping.IFieldMap;
 
 public class H2MockStringTypeTest implements IFieldMap {
 	

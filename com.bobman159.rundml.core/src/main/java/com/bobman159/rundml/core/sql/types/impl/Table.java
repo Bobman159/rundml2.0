@@ -42,8 +42,6 @@ public class Table implements ISQLType {
 	
 	/**
 	 * Returns a qualified table name (schema.tableName)
-	 * @param schema the database schema 
-	 * @param tbName the table name
 	 * @return the fully qualified table name
 	 */
 	public String tableName() {
@@ -53,7 +51,7 @@ public class Table implements ISQLType {
 			tableName = schema + ".";
 		}
 		
-		if (tableName != null) {
+		if (tbName != null) {
 			tableName = tableName + tbName;
 		}
 		

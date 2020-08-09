@@ -7,14 +7,15 @@ import java.util.ArrayList;
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListener;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
-import com.bobman159.rundml.core.mapping.FieldMap;
-import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
-import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
-import com.bobman159.rundml.core.sql.SQLTypeFactory;
+import com.bobman159.rundml.core.model.impl.CoreModelFactory;
+import com.bobman159.rundml.core.model.mapping.FieldMap;
+import com.bobman159.rundml.core.model.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.model.mapping.IFieldMap;
+import com.bobman159.rundml.core.model.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.impl.Column;
+import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 
 //TODO: Refactor this & move methods to Utils* classes where
 // -	IE  Method in Coreutils used for field mapping should belong in a FieldMappingUtils
@@ -109,7 +110,9 @@ public class CoreUtils {
 	 * 
 	 * @param tableRowClass the table row class
 	 * @return an array of column names as an ISQLType[] array
+	 * @throws RunDMLException when errors occur building the field map
 	 */
+	
 	public static ISQLType[] createColumnsFromClass(Class<?> tableRowClass) throws RunDMLException {
 		ISQLType[] exprs;
 		int index = 0;
@@ -117,7 +120,7 @@ public class CoreUtils {
 		FieldMap fieldMap = FieldMap.findFieldMap(tableRowClass);
 		if (fieldMap == null) {
 			try {
-				fieldMap = FieldMap.createFieldMap(tableRowClass);
+				fieldMap = CoreModelFactory.getInstance().createFieldMap(tableRowClass);
 			} catch (NoTableRowClassFieldException e) {
 				throw RunDMLException.createRunDMLException(e, RunDMLException.SQL_MODEL_BUILD);
 			}

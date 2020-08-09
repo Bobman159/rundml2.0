@@ -1,5 +1,7 @@
 package com.bobman159.rundml.core.mockclasses.test;
+@SuppressWarnings("unused")
 public class FieldMapNoInterface {
+
 
 	private int field1;
 	private int field2;

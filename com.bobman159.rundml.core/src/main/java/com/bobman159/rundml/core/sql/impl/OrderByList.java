@@ -1,13 +1,16 @@
 package com.bobman159.rundml.core.sql.impl;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.bobman159.rundml.core.sql.IOrderByEntry;
+import com.bobman159.rundml.core.sql.IOrderByList;
 /**
  * List of the expressions in an SQL ORDER BY clause
  *
  */
-public class OrderByList {
+public class OrderByList implements IOrderByList {
 	
 	private LinkedList<IOrderByEntry> orderByClauses;
 	
@@ -20,25 +23,30 @@ public class OrderByList {
 	
 	/**
 	 * Add an expression to the ORDER BY clause
-	 * @param orderByExpr the expression for the ORDER BY
-	 * @return the ORDER BY clause
+	 * @param orderByClause the expression for the ORDER BY
 	 */
+	@Override
 	public void addOrderByClause(IOrderByEntry orderByClause) {
 		orderByClauses.add(orderByClause);
 	}
 	
 	/**
-	 * @return the list of Order By clauses as a iterable
+	 * Add an list of expressions to the ORDER BY clause
+	 * @param orderByClauses the expression for the ORDER BY
 	 */
-	public Iterable<IOrderByEntry> iteratable() {
-		return orderByClauses;
+	@Override
+	public void addOrderByClause(IOrderByEntry[] orderByClauses) {
+		for (IOrderByEntry entry: orderByClauses) {
+			this.orderByClauses.add(entry);
+		}
 	}
 	
 	/**
-	 * @see java.util.LinkedList#size()
+	 * @return an unmodifiable list of Order By clauses
 	 */
-	public int size() {
-		return orderByClauses.size();
+	@Override
+	public List<IOrderByEntry> getOrderBys() {
+		return Collections.unmodifiableList(orderByClauses);
 	}
 	
 }

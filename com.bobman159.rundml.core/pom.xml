@@ -57,6 +57,6 @@
   	</dependency>  
     </dependencies>
     
-    <groupId>io.github.bobman159</groupId>
+    <groupId>io.github.bobman159.core</groupId>
     <artifactId>rundml-core</artifactId>
 </project>

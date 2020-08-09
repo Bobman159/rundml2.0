@@ -9,13 +9,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.expressions.ExpressionList;
-import com.bobman159.rundml.core.sql.SQLTypeFactory;
+import com.bobman159.rundml.core.expressions.impl.ExpressionList;
+import com.bobman159.rundml.core.model.impl.CoreModelFactory;
 import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.impl.Column;
 import com.bobman159.rundml.core.sql.types.impl.NumericType;
 import com.bobman159.rundml.core.sql.types.impl.ParmMarker;
+import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 
 class ExpressionListTest {
 
@@ -44,7 +45,7 @@ class ExpressionListTest {
 										SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("ABC")).concat("DEF")
 		};
 											
-		ExpressionList exprList = new ExpressionList();
+		ExpressionList exprList = (ExpressionList) CoreModelFactory.getInstance().createExpressionList();
 		exprList.addExpressions(exprArray);
 		String csv = new TestBaseSQLSerializer().serialize(exprList);
 		Assertions.assertEquals("column_name,?,100 / 10,'ABC' || 'DEF'",csv);
@@ -54,7 +55,7 @@ class ExpressionListTest {
 	@Test
 	void addExpressionTest() {
 						
-		ExpressionList exprList = new ExpressionList();
+		ExpressionList exprList = (ExpressionList) CoreModelFactory.getInstance().createExpressionList();
 		
 		exprList.addExpression(new Column("column_name"));
 		exprList.addExpression(new ParmMarker(Types.SMALLINT,new NumericType(10)));

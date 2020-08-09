@@ -13,15 +13,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.core.mapping.FieldMap;
-import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceAllColumnsDefined;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceClassNotUsed;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapInterfaceSomeColumnsDefined;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoInterface;
 import com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException;
+import com.bobman159.rundml.core.model.impl.CoreModelFactory;
+import com.bobman159.rundml.core.model.mapping.FieldMap;
+import com.bobman159.rundml.core.model.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.model.mapping.IFieldMapDefinition;
 
 class FieldMappingTests {
 
@@ -71,7 +72,7 @@ class FieldMappingTests {
 		assertNull(fieldMap);
 		
 		try {
-			FieldMap.createFieldMap(FieldMapNoInterface.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapNoInterface.class);
 		} catch (NoTableRowClassFieldException e) {
 			e.printStackTrace();
 		}
@@ -86,7 +87,7 @@ class FieldMappingTests {
 		final String NOFIELD_ERROR = "No Field named fieldOne found in class com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException";
 		FieldMap fieldMap = null;
 		try {
-			fieldMap = FieldMap.createFieldMap(FieldMapNoInterface.class);
+			fieldMap = CoreModelFactory.getInstance().createFieldMap(FieldMapNoInterface.class);
 			assertNotNull(fieldMap);
 		} catch (NoTableRowClassFieldException e) {
 			e.printStackTrace();
@@ -94,7 +95,7 @@ class FieldMappingTests {
 		
 		/* NoTableRowClassFieldException - Test */
 		try {
-			fieldMap = FieldMap.createFieldMap(FieldMapNoTableRowFieldClassException.class);
+			fieldMap = CoreModelFactory.getInstance().createFieldMap(FieldMapNoTableRowFieldClassException.class);
 		} catch (NoTableRowClassFieldException e) {
 			Assertions.assertNotNull(e);
 			Assertions.assertEquals(NOFIELD_ERROR,e.getMessage());
@@ -109,9 +110,8 @@ class FieldMappingTests {
 
 		
 		try {
-			FieldMap.createFieldMap(FieldMapNoInterface.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapNoInterface.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap fieldMap = FieldMap.findFieldMap(FieldMapNoInterface.class);
@@ -138,9 +138,8 @@ class FieldMappingTests {
 
 		
 		try {
-			FieldMap.createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap fieldMap = FieldMap.findFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
@@ -160,9 +159,8 @@ class FieldMappingTests {
 	void testFieldMapAllColsDefinedInterface() {
 
 		try {
-			FieldMap.createFieldMap(FieldMapInterfaceAllColumnsDefined.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapInterfaceAllColumnsDefined.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap fieldMap = FieldMap.findFieldMap(FieldMapInterfaceAllColumnsDefined.class);
@@ -183,9 +181,8 @@ class FieldMappingTests {
 
 		/* No FieldMap Interface Implemented */
 		try {
-			FieldMap.createFieldMap(FieldMapNoInterface.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapNoInterface.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap noneFieldMap = FieldMap.findFieldMap(FieldMapNoInterface.class);		
@@ -205,9 +202,8 @@ class FieldMappingTests {
 
 		/* Partial FieldMap Interface (Some Columns Defined) */
 		try {
-			FieldMap.createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap fieldMapSome = FieldMap.findFieldMap(FieldMapInterfaceSomeColumnsDefined.class);		
@@ -227,9 +223,8 @@ class FieldMappingTests {
 		
 		/* Partial FieldMap Interface (All Columns Defined) */
 		try {
-			FieldMap.createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap fieldMapAll = FieldMap.findFieldMap(FieldMapInterfaceSomeColumnsDefined.class);		
@@ -254,9 +249,8 @@ class FieldMappingTests {
 
 		/* No FieldMap Interface Implemented */
 		try {
-			FieldMap.createFieldMap(FieldMapNoInterface.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapNoInterface.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap noneFieldMap = FieldMap.findFieldMap(FieldMapNoInterface.class);		
@@ -276,9 +270,8 @@ class FieldMappingTests {
 
 		/* Partial FieldMap Interface (Some Columns Defined) */
 		try {
-			FieldMap.createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap fieldMapSome = FieldMap.findFieldMap(FieldMapInterfaceSomeColumnsDefined.class);		
@@ -298,9 +291,8 @@ class FieldMappingTests {
 		
 		/* Partial FieldMap Interface (All Columns Defined) */
 		try {
-			FieldMap.createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
+			CoreModelFactory.getInstance().createFieldMap(FieldMapInterfaceSomeColumnsDefined.class);
 		} catch (NoTableRowClassFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		FieldMap fieldMapAll = FieldMap.findFieldMap(FieldMapInterfaceSomeColumnsDefined.class);		

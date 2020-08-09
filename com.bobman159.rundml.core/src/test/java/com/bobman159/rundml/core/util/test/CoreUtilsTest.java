@@ -84,7 +84,6 @@ class CoreUtilsTest {
 		try {
 			actualColumns = CoreUtils.createColumnsFromClass(FieldMapInterfaceAllColumnsDefined.class);
 		} catch (RunDMLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Assertions.assertNotNull(actualColumns);
@@ -105,7 +104,6 @@ class CoreUtilsTest {
 		try {
 			actualColumns2 = CoreUtils.createColumnsFromClass(FieldMapNoInterface.class);
 		} catch (RunDMLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Assertions.assertNotNull(actualColumns2);
@@ -122,9 +120,10 @@ class CoreUtilsTest {
 			ix2++;
 		}
 		
-		final String NOFIELD_ERROR = "com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException: No Field named fieldOne found in class com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException";
+		final String NOFIELD_ERROR = "com.bobman159.rundml.core.model.mapping.exceptions.NoTableRowClassFieldException: No Field named fieldOne found in class com.bobman159.rundml.core.mockclasses.test.FieldMapNoTableRowFieldClassException";
 		try {
 			ISQLType[] actualColumns3 = CoreUtils.createColumnsFromClass(FieldMapNoTableRowFieldClassException.class);
+			Assertions.assertEquals(0,actualColumns3.length);
 		} catch (RunDMLException e) {
 			Assertions.assertNotNull(e);
 			Assertions.assertEquals(RunDMLException.SQL_MODEL_BUILD, e.getExecutionPhase());

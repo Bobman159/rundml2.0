@@ -30,7 +30,7 @@ public class CommonSerializationContext {
 	/**
 	 * Execute the serialization strategy to generate the SQL clause text
 	 * @param task the task information for the strategy.
-	 * @return
+	 * @return the SQL clause as text
 	 */
 	public String executeStrategy(ICommonSerializationTask task) {
 		return strategy.serialize(task);

@@ -7,9 +7,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
-import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
-
+import com.bobman159.rundml.core.model.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.model.mapping.IFieldMap;
+@SuppressWarnings("unused")
 public class FieldMapNoTableRowFieldClassException implements IFieldMap {
 
 	private int		DfltInteger;

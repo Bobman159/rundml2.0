@@ -20,18 +20,4 @@ public class SQLStatementSerializer extends BaseSQLSerializer {
 		return self;
 	}
 	
-	
-	/**
-	 * Serialize an SQL SELECT statement from a model.
-	 * @param model the model to build the SELECT statement from
-	 * @return text of the SELECT statement
-	 */
-	public static String serializeSelect() {
-		
-		StringBuilder builder = new StringBuilder();		
-		return builder.toString().trim();
-	}
-	
-
-	
 }

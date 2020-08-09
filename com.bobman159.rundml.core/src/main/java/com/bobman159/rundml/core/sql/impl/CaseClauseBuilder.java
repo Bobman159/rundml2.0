@@ -1,7 +1,6 @@
 package com.bobman159.rundml.core.sql.impl;
 
 import com.bobman159.rundml.core.expressions.IExpressionNode;
-import com.bobman159.rundml.core.expressions.IMathExpression;
 import com.bobman159.rundml.core.sql.ICaseBuilder;
 import com.bobman159.rundml.core.sql.ICaseClause;
 import com.bobman159.rundml.core.sql.ICaseWhenValue;
@@ -20,7 +19,7 @@ public class CaseClauseBuilder implements ICaseBuilder {
 	private ICaseWhenValue   tempWhenValue;			//temp storage for WHEN value
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseBuilderFactory#caseClause()
+	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#caseClause()
 	 */
 	public CaseClauseBuilder() {
 		caseClause();
@@ -28,20 +27,22 @@ public class CaseClauseBuilder implements ICaseBuilder {
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseBuilderFactory#caseClause(ISQLType)
+	 * Create a CASE clause builder for an SQL CASE statement
+	 * @param caseValue the value for the CASE clause 
 	 */
 	public CaseClauseBuilder(ISQLType caseValue) {
 		caseClause(caseValue);
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseBuilderFactory#caseClause(IMathExpression)
+	 * Create an CASE clause builder for an SQL CASE statement
+	 * @param caseExpr the expression for the CASE clause
 	 */
-	public CaseClauseBuilder(IExpressionNode mathExpr) {
-		if (mathExpr instanceof IExpressionNode) {
-			caseClause((ISQLType) mathExpr);
+	public CaseClauseBuilder(IExpressionNode caseExpr) {
+		if (caseExpr instanceof IExpressionNode) {
+			caseClause((ISQLType) caseExpr);
 		} else {
-			throw new IllegalArgumentException("IMathExpression implementation must be sub class of IExpressionNode");
+			throw new IllegalArgumentException("caseExpr implementation must be sub class of IExpressionNode");
 		}
 	}
 	
@@ -64,7 +65,7 @@ public class CaseClauseBuilder implements ICaseBuilder {
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#caseClause(IMathExpression)
+	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#caseClause(IExpressionNode)
 	 */
 	@Override
 	public ICaseBuilder caseClause(IExpressionNode mathExpr) {
@@ -91,7 +92,7 @@ public class CaseClauseBuilder implements ICaseBuilder {
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#when(IMathExpression)
+	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#when(IExpressionNode)
 	 */
 	@Override
 	public ICaseBuilder when(IExpressionNode whenExpr) {
@@ -138,7 +139,7 @@ public class CaseClauseBuilder implements ICaseBuilder {
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#then(IMathExpression)
+	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#then(IExpressionNode)
 	 */
 	@Override
 	public ICaseBuilder then(IExpressionNode thenExpr) {
@@ -160,7 +161,7 @@ public class CaseClauseBuilder implements ICaseBuilder {
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#elseClause(IMathExpression)
+	 * @see com.bobman159.rundml.core.sql.ICaseBuilder#elseClause(IExpressionNode)
 	 */
 	@Override
 	public CaseClauseBuilder elseClause(IExpressionNode elseExpr) {

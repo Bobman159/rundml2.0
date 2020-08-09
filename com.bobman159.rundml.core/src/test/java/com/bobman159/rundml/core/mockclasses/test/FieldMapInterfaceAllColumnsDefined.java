@@ -1,14 +1,19 @@
 package com.bobman159.rundml.core.mockclasses.test;
 
-import com.bobman159.rundml.core.mapping.FieldMapDefinitionList;
-import com.bobman159.rundml.core.mapping.exceptions.IFieldMap;
+import com.bobman159.rundml.core.model.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.model.mapping.IFieldMap;
 
 public class FieldMapInterfaceAllColumnsDefined implements IFieldMap {
 
+	@SuppressWarnings("unused")
 	private int	classField1;
+	@SuppressWarnings("unused")
 	private int classField2;
+	@SuppressWarnings("unused")
 	private int classField3;
+	@SuppressWarnings("unused")
 	private int classField4;
+	@SuppressWarnings("unused")
 	private int classField5;
 	
 	@Override

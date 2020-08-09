@@ -1,12 +1,12 @@
 package com.bobman159.rundml.core.sql.serialize.impl;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
-import com.bobman159.rundml.core.expressions.ExpressionList;
+import com.bobman159.rundml.core.expressions.IExpressionList;
 import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.predicates.IPredicate;
-import com.bobman159.rundml.core.predicates.impl.PredicatesList;
+import com.bobman159.rundml.core.predicates.IPredicatesList;
 import com.bobman159.rundml.core.sql.ICaseClause;
 import com.bobman159.rundml.core.sql.ICaseWhenThen;
 import com.bobman159.rundml.core.sql.sql.conditions.ISQLCondition;
@@ -63,6 +63,7 @@ class BaseSQLSerializer {
 	/**
 	 * Serialize an SQL column
 	 * @param column an SQL column type
+	 * @return an SQL column as text
 	 */
 	public final String serialize(Column column) {
 		
@@ -75,6 +76,7 @@ class BaseSQLSerializer {
 	/**
 	 * Serialize an SQL parameter marker
 	 * @param parmMarker an SQL parameter marker type
+	 * @return a parameter marker character as text 
 	 */
 	public final String serialize(ParmMarker parmMarker) {	//NOSONAR
 		
@@ -87,6 +89,7 @@ class BaseSQLSerializer {
 	/**
 	 * Serialize an SQL numeric type
 	 * @param number an SQL parameter marker type
+	 * @return the numeric type as text
 	 */
 	public final String serialize(NumericType number) {
 		
@@ -99,6 +102,7 @@ class BaseSQLSerializer {
 	/**
 	 * Serialize an SQL numeric type
 	 * @param stringValue an SQL parameter marker type
+	 * @return the numeric type as text
 	 */
 	public final String serialize(StringType stringValue) {
 		
@@ -111,6 +115,7 @@ class BaseSQLSerializer {
 	/**
 	 * Serialize an SQL numeric type
 	 * @param tableName an SQL parameter marker type
+	 * @return the parameter marker as text
 	 */
 	public final String serialize(Table tableName) {
 		
@@ -157,17 +162,17 @@ class BaseSQLSerializer {
 	/**
 	 * Serialize a list of SQL expressions as comma separated text 
 	 * "expr1,expr2,expr3..."
-	 * 
+	 * @param exprList a a list of SQL expressions as a <code>IExpressionList</code> 
 	 * @return comma separated text string
 	 */
-	public final String serialize(ExpressionList exprList) {
+	public final String serialize(IExpressionList exprList) {
 	
 		StringBuilder csvString = new StringBuilder();
-		Iterator<ISQLType> csvIterator = exprList.stream().iterator();
-		while (csvIterator.hasNext()) {
-			ISQLType exprBase = csvIterator.next();
+		List<ISQLType> csvIterator = exprList.getExpressions();
+		
+		for (ISQLType exprBase : csvIterator) {
 			csvString.append(serialize(exprBase));
-			if (csvIterator.hasNext()) {
+			if (csvIterator.indexOf(exprBase) + 1 < csvIterator.size()) {
 				csvString.append(",");
 			}
 		}
@@ -212,10 +217,10 @@ class BaseSQLSerializer {
 	 * @param predList list of predicate clauses
 	 * @return the predicates list as an SQL predicate string
 	 */
-	public final String serialize(PredicatesList predList) {
+	public final String serialize(IPredicatesList predList) {
 		
 		StringBuilder sql = new StringBuilder();
-		for (IPredicate pred : predList.iteratable()) {
+		for (IPredicate pred : predList.getPredicates()) {
 			sql.append(serialize(pred)).append(" ");
 		}
 		

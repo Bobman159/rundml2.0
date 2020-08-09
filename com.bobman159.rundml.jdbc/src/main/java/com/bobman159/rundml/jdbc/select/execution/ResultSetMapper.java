@@ -11,9 +11,10 @@ import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
-import com.bobman159.rundml.core.mapping.FieldMap;
-import com.bobman159.rundml.core.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
+import com.bobman159.rundml.core.model.impl.CoreModelFactory;
+import com.bobman159.rundml.core.model.mapping.FieldMap;
+import com.bobman159.rundml.core.model.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.util.CoreUtils;
 
 /**
@@ -55,7 +56,7 @@ class ResultSetMapper {
 				if (fieldMap == null) {
 					//No field map found, create the field map which will automatically map the class fields
 					//to table names.					
-					fieldMap = FieldMap.createFieldMap(tableRowClass);
+					fieldMap = CoreModelFactory.getInstance().createFieldMap(tableRowClass);
 				}
 				
 				//Search the FieldMap definitions for an entry matching the Result Set column name.
@@ -150,7 +151,6 @@ class ResultSetMapper {
 					break;
 				case "java.lang.String":
 					targetField.set(targetObj,rs.getString(index));
-					String val = rs.getString(index);
 					break;
 				case "java.sql.Blob":
 					targetField.set(targetObj,rs.getBlob(index));

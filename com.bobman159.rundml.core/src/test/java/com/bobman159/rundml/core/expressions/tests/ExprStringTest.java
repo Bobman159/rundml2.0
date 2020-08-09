@@ -10,9 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.bobman159.rundml.core.expressions.IExpressionNode;
-import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.serialize.impl.TestBaseSQLSerializer;
 import com.bobman159.rundml.core.sql.types.impl.Column;
+import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 
 class ExprStringTest {
 

@@ -3,9 +3,9 @@ package com.bobman159.rundml.core.expressions.impl;
 import com.bobman159.rundml.core.expressions.AbstractBaseExpression;
 import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.expressions.IStringExpression;
-import com.bobman159.rundml.core.sql.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.sql.conditions.Op;
 import com.bobman159.rundml.core.sql.types.ISQLType;
+import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 
 /**
  * An SQL String expression for an SQL statement clause.
@@ -46,7 +46,7 @@ public class StringExpression extends AbstractBaseExpression implements  IString
 	 */
 	@Override
 	public IStringExpression concat(String secondString) {
-		 return (StringExpression) addToExpression(this,Op.CONCAT,SQLTypeFactory.getInstance().constant(secondString));
+		 return (IStringExpression) addToExpression(this,Op.CONCAT,SQLTypeFactory.getInstance().constant(secondString));
 	
 	}
 
@@ -55,7 +55,7 @@ public class StringExpression extends AbstractBaseExpression implements  IString
 	 */
 	@Override
 	public IStringExpression concat(ISQLType rhs) {
-		return (StringExpression) addToExpression(this, Op.CONCAT, rhs);
+		return (IStringExpression) addToExpression(this, Op.CONCAT, rhs);
 	}
 
 	/**
