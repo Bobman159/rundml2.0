@@ -71,7 +71,7 @@ class H2SelectSyntaxStatementTests {
 		String stmtText = SQLStatementBuilderFactory.createH2SelectStatement()
 				  .select(TypeTest.class)
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
-				  .toSQL();
+				  .build().toSQL();
 	
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," 	+ 
 								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," 		+ 
@@ -94,7 +94,7 @@ class H2SelectSyntaxStatementTests {
 				  .selectExpression(SQLTypeFactory.getInstance().column("dfltTinyInt"))
 				  .selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))				  
 				  .from(RUNDML_SCHEMA,RUNDML_TABLE)
-				  .toSQL();
+				  .build().toSQL();
 		
 		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullDate," + 
 						    "notNullChar,dfltSigned,dfltTinyInt,notNullVarchar "	   + 
@@ -115,7 +115,7 @@ class H2SelectSyntaxStatementTests {
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.selectExpression(new ParmMarker(Types.VARCHAR,"This is a string too"))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select 10,'This is a string',dfltInteger," +
 							"? from rundml.typetest",stmtText);
@@ -130,7 +130,7 @@ class H2SelectSyntaxStatementTests {
 				.top(SQLTypeFactory.getInstance().constant(5))
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select top 5 dfltInteger " +
 							FROM_CLAUSE,stmtText);
@@ -140,7 +140,7 @@ class H2SelectSyntaxStatementTests {
 				.top(SQLTypeFactory.getInstance().constant(NUMERIC_LITERAL))
 				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select top '0123456789' notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
@@ -155,7 +155,7 @@ class H2SelectSyntaxStatementTests {
 				.top(SQLTypeFactory.getInstance().constant(5)).distinct()
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select top 5 distinct dfltInteger " +
 							FROM_CLAUSE,stmtText);
@@ -165,7 +165,7 @@ class H2SelectSyntaxStatementTests {
 				.top(SQLTypeFactory.getInstance().constant(NUMERIC_LITERAL)).distinct()
 				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select top '0123456789' distinct notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
@@ -180,7 +180,7 @@ class H2SelectSyntaxStatementTests {
 				.top(SQLTypeFactory.getInstance().constant(5)).all()
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select top 5 all dfltInteger " +
 							FROM_CLAUSE,stmtText);
@@ -190,7 +190,7 @@ class H2SelectSyntaxStatementTests {
 				.top(SQLTypeFactory.getInstance().constant("5")).all()
 				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select top '5' all notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
@@ -207,7 +207,7 @@ class H2SelectSyntaxStatementTests {
 				.distinct().all()
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select distinct all dfltInteger " +
 							FROM_CLAUSE,stmtText);
@@ -217,7 +217,7 @@ class H2SelectSyntaxStatementTests {
 				.distinct().all()
 				.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
-				.toSQL();
+				.build().toSQL();
 		
 		Assertions.assertEquals("select distinct all notNullVarchar " +
 							FROM_CLAUSE,stmtText2);
@@ -247,7 +247,7 @@ class H2SelectSyntaxStatementTests {
 								.selectExpression(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
 								.from(RUNDML_SCHEMA,RUNDML_TABLE)
 								.where(pred)
-								.toSQL();
+								.build().toSQL();
 		
 		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullDate," +
 						     "notNullVarchar from rundml.typetest " + 
@@ -272,7 +272,7 @@ class H2SelectSyntaxStatementTests {
 						 SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL),
 						 SQLTypeFactory.getInstance().parm(Types.DECIMAL, 100000),
 						 SQLTypeFactory.getInstance().column(DFLTINTEGER))
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -290,7 +290,7 @@ class H2SelectSyntaxStatementTests {
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(SQLTypeFactory.getInstance().orderBy(1),SQLTypeFactory.getInstance().orderBy(2),SQLTypeFactory.getInstance().orderBy(3))
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -305,7 +305,7 @@ class H2SelectSyntaxStatementTests {
 				.orderBy(SQLTypeFactory.getInstance().orderBy(1),
 						 SQLTypeFactory.getInstance().orderBy(2),
 						 SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(DFLTINTEGER)))
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -318,7 +318,7 @@ class H2SelectSyntaxStatementTests {
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().constant(ABCDEFG_LITERAL)))
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -331,7 +331,7 @@ class H2SelectSyntaxStatementTests {
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(SQLTypeFactory.getInstance().orderBy(1).asc())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -344,7 +344,7 @@ class H2SelectSyntaxStatementTests {
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(DFLTINTEGER)).desc())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -357,7 +357,7 @@ class H2SelectSyntaxStatementTests {
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(SQLTypeFactory.getInstance().orderBy(1),SQLTypeFactory.getInstance().orderBy(2).desc())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -370,7 +370,7 @@ class H2SelectSyntaxStatementTests {
 				.selectExpression(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.orderBy(SQLTypeFactory.getInstance().orderBy(1),SQLTypeFactory.getInstance().orderBy(2).desc().nullsLast())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -385,7 +385,7 @@ class H2SelectSyntaxStatementTests {
 				.orderBy(SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(DFLTINTEGER)),
 						 SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).desc()
 						 			.nullsFirst())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -401,7 +401,7 @@ class H2SelectSyntaxStatementTests {
 								   .nullsLast(),
 						 SQLTypeFactory.getInstance().orderBy(1).asc().nullsFirst(),
 						 SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().column(NOTNULLDEC72)))
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals("select dfltInteger,notNullDec72,notNullVarchar " +
 				     FROM_CLAUSE_SPACE +
@@ -420,7 +420,7 @@ class H2SelectSyntaxStatementTests {
 						 SQLTypeFactory.getInstance().orderBy(3).desc().nullsFirst(),
 						 SQLTypeFactory.getInstance().orderBy(SQLTypeFactory.getInstance().parm(Types.TINYINT,10)).asc()
 						 		   .nullsLast())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_1000 +
 				     FROM_CLAUSE_SPACE +
@@ -439,7 +439,7 @@ class H2SelectSyntaxStatementTests {
 				.groupBy(SQLTypeFactory.getInstance().column(DFLTINTEGER))
 				.having(PredicateBuilder.having(SQLTypeFactory.getInstance().column(DFLTINTEGER)).isGreater(100000)
 								 .build())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals("select dfltInteger " +
 				     FROM_CLAUSE_SPACE +
@@ -452,7 +452,7 @@ class H2SelectSyntaxStatementTests {
 				.groupBy(SQLTypeFactory.getInstance().column(NOTNULLCHAR))
 				.having(PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLCHAR)).isGreater(NUMERIC_LITERAL)
 								 .build())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
@@ -468,7 +468,7 @@ class H2SelectSyntaxStatementTests {
 								 .or(SQLTypeFactory.getInstance().column(NOTNULLCHAR)).isEqual("223456789")
 								 .and(SQLTypeFactory.getInstance().column(NOTNULLCHAR)).isLess("1123456789")
 								 .build())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
@@ -486,7 +486,7 @@ class H2SelectSyntaxStatementTests {
 								 .isEqual("Abcdef2")
 								 .or("Hijklmnop").isGreater("Hijklmno")
 								 .build())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals(SELECT_NOTNULLCHAR +
 				     FROM_CLAUSE_SPACE +
@@ -508,7 +508,7 @@ class H2SelectSyntaxStatementTests {
 								 .and(10).isLess(30)
 								 .and(SQLTypeFactory.getInstance().parm(Types.CHAR, ABCDEFG_LITERAL)).isEqual("Abcdefg")
 								 .build())
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals("select 10,20,30 " +
 				     FROM_CLAUSE_SPACE +
@@ -525,7 +525,7 @@ class H2SelectSyntaxStatementTests {
 				.select(H2MockPrimitivesTypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(SQLTypeFactory.getInstance().constant(5))
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," + 
 								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," + 
@@ -543,7 +543,7 @@ class H2SelectSyntaxStatementTests {
 				.select(H2MockStringTypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
 				.limit(SQLTypeFactory.getInstance().constant(5)).offset(SQLTypeFactory.getInstance().constant(1))
-				.toSQL();
+				.build().toSQL();
 
 		Assertions.assertEquals("select DfltInteger,NotNullMediumInt,DfltSigned,DfltTinyInt,NotNullSmint," + 
 								"NotNullDec72,DfltNumber72,NotNullTime,NotNullDate,NotNullTimestamp," + 

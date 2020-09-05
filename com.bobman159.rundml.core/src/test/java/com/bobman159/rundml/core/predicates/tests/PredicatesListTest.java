@@ -105,7 +105,7 @@ class PredicatesListTest {
 												SQLTypeFactory.getInstance().constant("Abc")));
 		predList.addPredicate(orClause);
 		
-		String sql = new TestBaseSQLSerializer().serialize(predList);
+		String sql = new TestBaseSQLSerializer().serializePredicatesList(predList.getPredicates());
 		assertEquals("WHERE 10 = 10 AND COL01 ! COL02 OR 'Abc' <= 'Abc'", sql);
 	}
 

@@ -47,7 +47,7 @@ class ExpressionListTest {
 											
 		ExpressionList exprList = (ExpressionList) CoreModelFactory.getInstance().createExpressionList();
 		exprList.addExpressions(exprArray);
-		String csv = new TestBaseSQLSerializer().serialize(exprList);
+		String csv = new TestBaseSQLSerializer().serializeSQLTypeList(exprList.getExpressions());
 		Assertions.assertEquals("column_name,?,100 / 10,'ABC' || 'DEF'",csv);
 
 	}
@@ -61,7 +61,7 @@ class ExpressionListTest {
 		exprList.addExpression(new ParmMarker(Types.SMALLINT,new NumericType(10)));
 		exprList.addExpression(SQLTypeFactory.getInstance().mathExpression(SQLTypeFactory.getInstance().constant(100)).divide(10));
 		exprList.addExpression(SQLTypeFactory.getInstance().stringExpression(SQLTypeFactory.getInstance().constant("ABC")).concat("DEF"));
-		String csv = new TestBaseSQLSerializer().serialize(exprList);
+		String csv = new TestBaseSQLSerializer().serializeSQLTypeList(exprList.getExpressions());
 		Assertions.assertEquals("column_name,?,100 / 10,'ABC' || 'DEF'",csv);		
 
 	}

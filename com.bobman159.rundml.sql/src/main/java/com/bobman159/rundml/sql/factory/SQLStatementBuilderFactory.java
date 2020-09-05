@@ -1,6 +1,9 @@
 package com.bobman159.rundml.sql.factory;
 
+import com.bobman159.rundml.core.model.ISelectStatement;
+import com.bobman159.rundml.core.sql.impl.AbstractStatementSerializer;
 import com.bobman159.rundml.sql.builders.impl.BaseSelectStatementBuilder;
+import com.bobman159.rundml.sql.generic.GenericSelectStatement;
 import com.bobman159.rundml.sql.h2.H2SelectStatementBuilder;
 import com.bobman159.rundml.sql.mysql.MySQLSelectStatementBuilder;
 
@@ -34,8 +37,8 @@ public class SQLStatementBuilderFactory {
 	 * @return a basic SELECT statement builder and executor
 	 */
 	@SuppressWarnings("rawtypes")
-	public static BaseSelectStatementBuilder createBaseSelectStatement() {
-		return new BaseSelectStatementBuilder();
+	public static BaseSelectStatementBuilder<BaseSelectStatementBuilder> createBaseSelectStatement() {
+		return new BaseSelectStatementBuilder<>();
 	}
 	
 	/**
@@ -53,5 +56,21 @@ public class SQLStatementBuilderFactory {
 	public static H2SelectStatementBuilder createH2SelectStatement() {
 		return new H2SelectStatementBuilder();
 	}
+	
+	/**
+	 * Create a SELECT statement model
+	 * @param Dialect the dbms model to be created GENERIC, H2 etc
+	 * @return the select model for the dialect
+	 */
+	public ISelectStatement createSelectModel(String dialect) {
+		
+		ISelectStatement model = null;
+		if (AbstractStatementSerializer.GENERIC_SELECT.equals(dialect)) {
+			model = new GenericSelectStatement();
+		}
+		
+		return model;
+	}
+
 
 }

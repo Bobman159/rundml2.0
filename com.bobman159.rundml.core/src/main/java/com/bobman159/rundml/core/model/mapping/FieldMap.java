@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.model.impl.CoreModelFactory;
-import com.bobman159.rundml.core.util.CoreUtils;
 
 /**
  * A map of class fields for mapping to a table column name using a string
@@ -67,7 +66,7 @@ public class FieldMap {
 		Object tableRow = null;
 		FieldMapDefinitionList fieldOverrides = CoreModelFactory.getInstance().createFieldMapDefinitionList();
 		//#1 - Get the list of IFieldMap entries (if there are any)
-		if (CoreUtils.isAnIFieldMap(tableRowClass)) {
+		if (FieldMappingUtils.isAnIFieldMap(tableRowClass)) {
 			try {
 				tableRow = tableRowClass.newInstance();
 			} catch (InstantiationException | IllegalAccessException e) {
@@ -103,7 +102,7 @@ public class FieldMap {
 		 * 			limitation (for now)
 		 * 
 		 */
-		Field[] classFields = CoreUtils.getClassDeclaredFields(tableRowClass);
+		Field[] classFields = FieldMappingUtils.getClassDeclaredFields(tableRowClass);
 		
 		for (Field classField : classFields) {
 			IFieldMapDefinition wkFieldDef = null;
@@ -142,7 +141,7 @@ public class FieldMap {
 		Object[] fieldOverrideArray = fieldOverrides.getFieldDefinitions().toArray();
 		for (int index = 0; index < fieldOverrideArray.length; index++) {
 			IFieldMapDefinition fieldDef = (IFieldMapDefinition) fieldOverrideArray[index];
-			Field classField = CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
+			Field classField = FieldMappingUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
 			if (classField == null) {
 				throw new NoTableRowClassFieldException(tableRowClass, fieldDef.getClassFieldName());
 			}

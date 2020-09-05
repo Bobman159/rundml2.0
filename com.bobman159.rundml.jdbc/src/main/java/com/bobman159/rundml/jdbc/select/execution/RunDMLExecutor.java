@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
-import com.bobman159.rundml.core.model.SQLStatementModel;
+import com.bobman159.rundml.core.model.ISelectStatement;
 
 
 
@@ -57,8 +57,7 @@ public class RunDMLExecutor  {
 	 * 
 	 * @return a <code>List</code> of SELECT rows
 	 */
-	public List<Object> executeSelect(Connection conn,
-												 SQLStatementModel model,
+	public List<Object> executeSelect(Connection conn, ISelectStatement model,
 												 Class<?> tableRow) {
 		
 		Future<List<Object>> futureTask;
@@ -81,7 +80,6 @@ public class RunDMLExecutor  {
 		try {
 			results = futureTask.get();
 		} catch (CancellationException | ExecutionException | InterruptedException ex) {
-//			Thread.currentThread().interrupt();
 			RunDMLExceptionListeners.getInstance().notifyListeners(ex);
 			shutdown();
 		}

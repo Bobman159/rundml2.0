@@ -13,10 +13,10 @@ public class PredicateClause implements IPredicate {
 	private PredOperand predOperand;
 	private ISQLCondition condition;
 		
-	/*
+	/**
 	 * Defines a partial SQL WHERE, AND or OR clause with a partial SQL Condition
 	 * @param predOperand type of clause being defined
-	 * @param leftPred the left side of the SQL predicate
+	 * @param condition the condition for the SQL predicate
 	 */
 	public PredicateClause(PredOperand predOperand,ISQLCondition condition) {
 		this.predOperand = predOperand;

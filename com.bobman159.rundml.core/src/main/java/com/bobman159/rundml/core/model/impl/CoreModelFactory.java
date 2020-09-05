@@ -4,10 +4,10 @@ import com.bobman159.rundml.core.expressions.IExpressionList;
 import com.bobman159.rundml.core.expressions.impl.ExpressionList;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.model.ICoreModelFactory;
-import com.bobman159.rundml.core.model.ISelectModel;
 import com.bobman159.rundml.core.model.mapping.FieldMap;
 import com.bobman159.rundml.core.model.mapping.FieldMapDefinition;
 import com.bobman159.rundml.core.model.mapping.FieldMapDefinitionList;
+import com.bobman159.rundml.core.model.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.predicates.IPredicate;
 import com.bobman159.rundml.core.predicates.IPredicatesList;
 import com.bobman159.rundml.core.predicates.impl.PredOperand;
@@ -42,7 +42,7 @@ public class CoreModelFactory implements ICoreModelFactory {
 	 * @return the field map definition entry.
 	 */
 	@Override
-	public FieldMapDefinition createFieldMapDefinition(String columnName, String classField) {
+	public IFieldMapDefinition createFieldMapDefinition(String columnName, String classField) {
 		return new FieldMapDefinition(columnName,classField);
 	}
 	
@@ -64,15 +64,7 @@ public class CoreModelFactory implements ICoreModelFactory {
 		}
 		return self;
 	}
-	
-	/**
-	 * @return a SQL SELECT base model
-	 */
-	@Override
-	public ISelectModel createSelectModel() {
-		return new BaseSelectModel();
-	}
-	
+		
 	/**
 	 * 
 	 * @return a SQL ORDER BY clause list

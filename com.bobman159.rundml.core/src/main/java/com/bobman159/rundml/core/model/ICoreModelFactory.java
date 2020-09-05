@@ -18,11 +18,6 @@ import com.bobman159.rundml.core.sql.types.ISQLType;
 public interface ICoreModelFactory {
 
 	/**
-	 * @return a SQL SELECT model
-	 */
-	public ISelectModel createSelectModel();
-	
-	/**
 	 * 
 	 * @return a SQL ORDER BY list of clauses model
 	 */

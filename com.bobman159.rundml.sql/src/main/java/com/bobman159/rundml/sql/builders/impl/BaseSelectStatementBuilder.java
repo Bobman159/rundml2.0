@@ -6,20 +6,17 @@ import java.util.List;
 
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
-import com.bobman159.rundml.core.expressions.IExpressionList;
-import com.bobman159.rundml.core.model.ICoreModelFactory;
-import com.bobman159.rundml.core.model.ISelectModel;
-import com.bobman159.rundml.core.model.impl.CoreModelFactory;
-import com.bobman159.rundml.core.model.impl.SelectClause;
+import com.bobman159.rundml.core.model.ISelectStatement;
 import com.bobman159.rundml.core.predicates.IPredicatesList;
 import com.bobman159.rundml.core.sql.IOrderByEntry;
-import com.bobman159.rundml.core.sql.IOrderByList;
-import com.bobman159.rundml.core.sql.serialize.impl.SQLStatementSerializer;
+import com.bobman159.rundml.core.sql.impl.AbstractStatementSerializer;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
+import com.bobman159.rundml.core.sql.types.impl.Table;
 import com.bobman159.rundml.core.util.CoreUtils;
 import com.bobman159.rundml.jdbc.select.execution.RunDMLExecutor;
 import com.bobman159.rundml.sql.builders.ISelectBuilder;
+import com.bobman159.rundml.sql.factory.SQLStatementBuilderFactory;
 
 /**
  * Defines a basic SQL SELECT statement that can be executed on different DBMS
@@ -38,7 +35,8 @@ import com.bobman159.rundml.sql.builders.ISelectBuilder;
 public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> implements ISelectBuilder {
 
 	
-	private ISelectModel model = CoreModelFactory.getInstance().createSelectModel();
+	protected ISelectStatement model = SQLStatementBuilderFactory.getInstance().
+				createSelectModel(AbstractStatementSerializer.GENERIC_SELECT);
 
 	public BaseSelectStatementBuilder() {
 		CoreUtils.initRunDML();
@@ -50,6 +48,7 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * 
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B select() {
 
 		return self();
@@ -66,10 +65,10 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param clazz class name to use for the select list
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B select(Class<?> clazz) {
 		try {
-			ISQLType[] columnArray = CoreUtils.createColumnsFromClass(clazz);
-			model.addSelectExpression(columnArray);
+			model.addSelectExpressions(clazz);
 		} catch (RunDMLException rdex) {
 			RunDMLExceptionListeners.getInstance().notifyListeners(rdex);
 		}
@@ -89,10 +88,10 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param columns one or more column names as string values
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B select(String... columns) {
 
-		model.addSelectExpression(CoreUtils.createColumnsFromStrings(columns));
-
+		model.addSelectExpression(columns);
 		return self();
 	}
 
@@ -115,6 +114,7 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param exprs one or more <code>ISQLType</code> to be selected
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B select(ISQLType... exprs) {
 
 		model.addSelectExpression(exprs);
@@ -127,6 +127,7 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param expr the expression to be add
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B selectExpression(ISQLType expr) {
 		model.addSelectExpression(expr);
 		return self();
@@ -137,8 +138,9 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * 
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B all() {
-		model.putProp(SelectClause.ALL, Boolean.valueOf(true));
+		model.setAll();
 		return self();
 	}
 
@@ -147,8 +149,9 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * 
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B distinct() {
-		model.putProp(SelectClause.DISTINCT, Boolean.valueOf(true));
+		model.setDistinct();
 		return self();
 	}
 
@@ -159,8 +162,10 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param tbName the table name
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B from(String schema, String tbName) {
-		model.putProp(SelectClause.FROM, SQLTypeFactory.getInstance().qualifiedTable(schema, tbName));
+		
+		model.addFrom((Table) SQLTypeFactory.getInstance().qualifiedTable(schema, tbName));
 		return self();
 	}
 
@@ -170,8 +175,9 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param predList predicate
 	 * @return
 	 */
+	@Override
 	public B where(IPredicatesList predList) {
-		model.putProp(SelectClause.WHERE, predList);
+		model.setWhere(predList);
 		return self();
 	}
 
@@ -182,10 +188,9 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param groupByExprs list of expressions 1 to n
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B groupBy(ISQLType... groupByExprs) {
-		IExpressionList groupByExprList = CoreModelFactory.getInstance().createExpressionList();
-		groupByExprList.addExpressions(groupByExprs);
-		model.putProp(SelectClause.GROUPBY, groupByExprs);
+		model.addGroupByExpression(groupByExprs);
 		return self();
 	}
 
@@ -196,8 +201,9 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param havingPred a <code>PredicateBuilder</code>
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B having(IPredicatesList havingPred) {
-		model.putProp(SelectClause.HAVING, havingPred);
+		model.setHaving(havingPred);
 		return self();
 	}
 
@@ -208,24 +214,15 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 	 * @param orderByExprs expression(s) for the ORDER BY
 	 * @return an instance of this builder
 	 */
+	@Override
 	public B orderBy(IOrderByEntry... orderByExprs) {
-	
-		IOrderByList orderByList = CoreModelFactory.getInstance().createOrderByList();
-		orderByList.addOrderByClause(orderByExprs);
-		model.putProp(SelectClause.ORDERBY, orderByList);
+
+		model.addOrderByEntry(orderByExprs);
 		return self();
 	}
 	
 	/**
-	 * @see com.bobman159.rundml.sql.builders.impl.IStatementBuilder.ISQLStatement#toSQL()
-	 */
-	@Override
-	public String toSQL() {
-		return SQLStatementSerializer.serializeSelect(this);
-	}
-
-	/**
-	 * @see com.bobman159.rundml.sql.builders.impl.ISelectBuilder.ISQLSelect#execute(Connection, Class)
+	 * @see com.bobman159.rundml.sql.builders.com.bobman159.rundml.sql.builders.impl.ISelectBuilder.ISQLSelect#execute(Connection, Class)
 	 */
 	@Override
 	public List<Object> execute(Connection conn, Class clazz) {
@@ -237,13 +234,14 @@ public class BaseSelectStatementBuilder <B extends BaseSelectStatementBuilder> i
 		 * thread. Since I don't expect to be using this for results > 5000 rows. I will
 		 * leave it this way for now.
 		 */
-		results = RunDMLExecutor.getInstance().executeSelect(conn, model, clazz);
+		results = RunDMLExecutor.getInstance().executeSelect(conn,model,clazz);
 
 		return results;
 
 	}
 	
-	public ISelectBuilder build() {
+	@Override
+	public ISelectStatement build() {
 		return model;
 	}
 

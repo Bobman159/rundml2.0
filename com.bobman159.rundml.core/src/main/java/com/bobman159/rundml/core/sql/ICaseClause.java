@@ -1,6 +1,6 @@
 package com.bobman159.rundml.core.sql;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 import com.bobman159.rundml.core.sql.types.ISQLType;
 
@@ -30,10 +30,10 @@ public interface ICaseClause extends ISQLClause {
 	
 	/**
 	 * Get the list WHEN expression THEN expression condition clauses for the SQL CASE statement as a 
-	 * <code>Stream</code>
+	 * unmodifiable list
 	 * @return the list of WHEN conditions for the CASE
 	 */
-	public Stream<ICaseWhenThen> getWhenThenConditions();
+	public List<ICaseWhenThen> getWhenThenConditions();
 	
 	/**
 	 * 

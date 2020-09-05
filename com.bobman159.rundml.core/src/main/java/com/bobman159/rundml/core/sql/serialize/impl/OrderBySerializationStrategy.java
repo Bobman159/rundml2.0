@@ -5,7 +5,6 @@ import java.util.List;
 import com.bobman159.rundml.core.sql.IOrderByEntry;
 import com.bobman159.rundml.core.sql.IOrderByEntry.NullsOrder;
 import com.bobman159.rundml.core.sql.IOrderByEntry.SortOrder;
-import com.bobman159.rundml.core.sql.IOrderByList;
 import com.bobman159.rundml.core.sql.serialize.ICommonSerializationTask;
 import com.bobman159.rundml.core.sql.serialize.ICommonSerializationTask.Clause;
 import com.bobman159.rundml.core.sql.serialize.ISerializationStrategy;
@@ -21,6 +20,7 @@ public class OrderBySerializationStrategy implements ISerializationStrategy {
 	/**
 	 * @see com.bobman159.rundml.core.sql.serialize.ISerializationStrategy#serialize(ICommonSerializationTask)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public String serialize(ICommonSerializationTask task) {
 		
@@ -28,25 +28,21 @@ public class OrderBySerializationStrategy implements ISerializationStrategy {
 		
 		if ((Clause.ORDERBY.equals(task.getClause())) &&
 			task.getModel() != null) {
-			if (task.getModel() instanceof IOrderByList) {
-				IOrderByList orderBys = (IOrderByList) task.getModel();
-				sql = serializeOrderBy(orderBys);
-			}
+				sql = serializeOrderBy((List<IOrderByEntry>) task.getModel());
 		} else {
 			throw new IllegalStateException("OrderBySerialization called for non ORDER BY model type");
 		}
 		return sql;
 	}
 
-	private String serializeOrderBy(IOrderByList orderBys) {
+	private String serializeOrderBy(List<IOrderByEntry> orderBys) {
 	
 		StringBuilder sql = new StringBuilder();
-		BaseSQLSerializer serializer = new BaseSQLSerializer();
+		SQLTypeSerializer serializer = new SQLTypeSerializer();
 		
 		sql.append("order by").append(" ");
-		List<IOrderByEntry> orderByList = orderBys.getOrderBys();
 		int ix = 1;
-		for (IOrderByEntry entry : orderByList) {
+		for (IOrderByEntry entry : orderBys) {
 			sql.append(serializer.serialize(entry.getOrderByValue()));
 			
 			if (entry.getSortOrder() != null) {
@@ -65,7 +61,7 @@ public class OrderBySerializationStrategy implements ISerializationStrategy {
 					sql.append("nulls last");
 				}
 			}
-			if (ix < orderByList.size()) {
+			if (ix < orderBys.size()) {
 				sql.append(",");
 			}
 			ix++;

@@ -40,40 +40,44 @@ class PredicateHavingTest {
 	@Test
 	void testHavingPreidcates() {
 
-		String stmtText = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.getInstance().column(DFLTINTEGER)).isGreater(100000)
-								 .build());
+		String stmtText = serializer.serializePredicatesList(
+				PredicateBuilder.having(SQLTypeFactory.getInstance()
+								.column(DFLTINTEGER)).isGreater(100000)
+								.build().getPredicates());
 		Assertions.assertEquals("HAVING dfltInteger > 100000",stmtText);
 
-		String stmtText2 = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
-				 .isGreater("0123456789")
-				 .build());
+		String stmtText2 = serializer.serializePredicatesList(
+				PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
+				 				.isGreater("0123456789")
+				 				.build().getPredicates());
 		Assertions.assertEquals("HAVING notNullVarchar > '0123456789'",stmtText2);
 
-		String stmtText3 = serializer.serialize(PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
-				 .isGreaterOrEqual("0123456789")
-				 .or(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).isEqual("223456789")
-				 .and(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).isLess("1123456789")
-				 .build());
+		String stmtText3 = serializer.serializePredicatesList(
+				PredicateBuilder.having(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR))
+				 				.isGreaterOrEqual("0123456789")
+				 				.or(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).isEqual("223456789")
+				 				.and(SQLTypeFactory.getInstance().column(NOTNULLVARCHAR)).isLess("1123456789")
+				 				.build().getPredicates());
 		Assertions.assertEquals("HAVING notNullVarchar >= '0123456789' " + 
 				 			"OR notNullVarchar = '223456789' " + 
 				 			"AND notNullVarchar < '1123456789'",stmtText3);
 
-		String stmtText4 = serializer.serialize(PredicateBuilder.having("Abcdef").isEqual("Abcdef2")
+		String stmtText4 = serializer.serializePredicatesList(PredicateBuilder.having("Abcdef").isEqual("Abcdef2")
 				 .or("Hijklmnop").isGreater("Hijklmno")
-				 .build());
+				 .build().getPredicates());
 		Assertions.assertEquals("HAVING 'Abcdef' = 'Abcdef2' " + 
 				 			"OR 'Hijklmnop' > 'Hijklmno'",stmtText4);
 
-		String stmtText5 = serializer.serialize(PredicateBuilder.having(20).isEqual(20)
+		String stmtText5 = serializer.serializePredicatesList(PredicateBuilder.having(20).isEqual(20)
 				 .and(20).isGreater(10).and(10).isLess(30)
-				 .build());
+				 .build().getPredicates());
 		Assertions.assertEquals("HAVING 20 = 20 " + 
 				 			"AND 20 > 10 AND 10 < 30",stmtText5);
 		
-		String stmtText6 = serializer.serialize(PredicateBuilder.having(20).isNot(SQLTypeFactory.getInstance().constant(20))
+		String stmtText6 = serializer.serializePredicatesList(PredicateBuilder.having(20).isNot(SQLTypeFactory.getInstance().constant(20))
 				 .and(20).isNotEqual(SQLTypeFactory.getInstance().constant(10))
 				 .and(10).isLess(30)
-				 .build());
+				 .build().getPredicates());
 		Assertions.assertEquals("HAVING 20 ! 20 " + 
 				 			"AND 20 <> 10 AND 10 < 30",stmtText6);
 

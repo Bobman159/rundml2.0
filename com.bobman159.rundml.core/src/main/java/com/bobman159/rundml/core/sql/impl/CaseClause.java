@@ -1,7 +1,8 @@
 package com.bobman159.rundml.core.sql.impl;
 
+import java.util.Collections;
 import java.util.LinkedList;
-import java.util.stream.Stream;
+import java.util.List;
 
 import com.bobman159.rundml.core.expressions.IExpressionNode;
 import com.bobman159.rundml.core.sql.ICaseClause;
@@ -140,8 +141,8 @@ public class CaseClause implements ICaseClause {
 	 * @see com.bobman159.rundml.core.sql.ICaseClause#getWhenThenConditions()
 	 */
 	@Override
-	public Stream<ICaseWhenThen> getWhenThenConditions() {
-		return whenConds.stream();
+	public List<ICaseWhenThen> getWhenThenConditions() {
+		return Collections.unmodifiableList(whenConds);
 	}
 	
 	/**
