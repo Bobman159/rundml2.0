@@ -25,6 +25,17 @@ public class RunDMLException extends Exception {
 	
 	private final int execPhase;			//Code indicating when error occurred
 	private final Object[] args;			//Argument(s) if any for the error
+
+	/**
+	 * Create an instance of a RunDMLException with a specified reason
+	 * 
+	 * @param reason the reason the exception occurred
+	 * @param execPhase the type of error
+	 * @return a RunDMLException
+	 */
+	public static RunDMLException createRunDMLException(Throwable reason, int execPhase) {
+		return new RunDMLException(execPhase,reason);
+	}
 	
 	/**
 	 * Create an instance of a RunDMLException with a specified reason
@@ -36,6 +47,12 @@ public class RunDMLException extends Exception {
 	 */
 	public static RunDMLException createRunDMLException(Throwable reason, int execPhase,Object...args) {
 		return new RunDMLException(execPhase,args,reason);
+	}
+	
+	private RunDMLException(int execPhase,Throwable reason) {
+		super(reason);
+		this.execPhase = execPhase;
+		this.args = null;
 	}
 	
 	private RunDMLException(int execPhase,Object[] args,Throwable reason) {

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
-import com.bobman159.rundml.core.model.ISelectStatement;
+import com.bobman159.rundml.core.model.ISQLStatement;
 
 
 
@@ -52,17 +52,17 @@ public class RunDMLExecutor  {
 	/**
 	 * Execute an SQL SELECT statement using JDBC.
 	 * @param conn JDBC connection for the database to execute on
-	 * @param model the SQL SELECT definition
+	 * @param selectModel the SQL SELECT definition
 	 * @param tableRow the SQL SELECT result row class
 	 * 
 	 * @return a <code>List</code> of SELECT rows
 	 */
-	public List<Object> executeSelect(Connection conn, ISelectStatement model,
+	public List<Object> executeSelect(Connection conn, ISQLStatement selectModel,
 												 Class<?> tableRow) {
 		
 		Future<List<Object>> futureTask;
 		List<Object> results = new ArrayList<>();
-		SelectCallable exec = new SelectCallable(conn,model,tableRow);
+		SelectCallable exec = new SelectCallable(conn,selectModel,tableRow);
 		if (service == null || service.isShutdown()) {
 			initService();			
 		}

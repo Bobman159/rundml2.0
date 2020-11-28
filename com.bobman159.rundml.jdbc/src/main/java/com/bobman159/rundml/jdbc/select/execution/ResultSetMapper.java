@@ -14,6 +14,7 @@ import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
 import com.bobman159.rundml.core.model.impl.CoreModelFactory;
 import com.bobman159.rundml.core.model.mapping.FieldMap;
+import com.bobman159.rundml.core.model.mapping.FieldMappingUtils;
 import com.bobman159.rundml.core.model.mapping.IFieldMapDefinition;
 import com.bobman159.rundml.core.util.CoreUtils;
 
@@ -62,7 +63,7 @@ class ResultSetMapper {
 				//Search the FieldMap definitions for an entry matching the Result Set column name.
 				IFieldMapDefinition fieldDef = fieldMap.getFieldDefinitions().findMapDefinitionByColumn(columnName);
 				if (fieldDef != null) {					
-					Field mapField = CoreUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
+					Field mapField = FieldMappingUtils.getClassField(tableRowClass, fieldDef.getClassFieldName());
 					logger.debug(MessageFormat.format("Mapping column {0} to field {1}",
 							 columnName,mapField.getName()));
 					mapColumnToField(numbCol,rs,row,mapField);
@@ -72,7 +73,7 @@ class ResultSetMapper {
 				}
 			}
 		} catch (SQLException sqlex) {
-			throw RunDMLException.createRunDMLException(sqlex,RunDMLException.SQL_ERROR,null);
+			throw RunDMLException.createRunDMLException(sqlex,RunDMLException.SQL_ERROR);
 		} catch (InstantiationException | IllegalAccessException rfex) {
 			throw RunDMLException.createRunDMLException(rfex,RunDMLException.TABLE_ROW_CLASS_REFLECTION,tableRowClass.getName());
 		}

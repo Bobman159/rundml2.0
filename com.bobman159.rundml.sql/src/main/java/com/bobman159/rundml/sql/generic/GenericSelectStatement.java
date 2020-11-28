@@ -1,15 +1,19 @@
 package com.bobman159.rundml.sql.generic;
 /**
  * Definition(s) for SQL SELECT statement
+ * Different DBMS's (SQL dialects) should sub class this class to obtain it's functionality.
  *
  */
 
 import java.util.List;
 
+import com.bobman159.rundml.common.model.ISelectStatement;
+import com.bobman159.rundml.common.serialize.AbstractStatementSerializer;
+import com.bobman159.rundml.common.serialize.SQLStatementSerializerService;
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.expressions.IExpressionList;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
-import com.bobman159.rundml.core.model.ISelectStatement;
+import com.bobman159.rundml.core.model.ISQLStatement;
 import com.bobman159.rundml.core.model.impl.CoreModelFactory;
 import com.bobman159.rundml.core.model.mapping.FieldMap;
 import com.bobman159.rundml.core.model.mapping.FieldMapDefinitionList;
@@ -18,11 +22,9 @@ import com.bobman159.rundml.core.predicates.IPredicate;
 import com.bobman159.rundml.core.predicates.IPredicatesList;
 import com.bobman159.rundml.core.sql.IOrderByEntry;
 import com.bobman159.rundml.core.sql.IOrderByList;
-import com.bobman159.rundml.core.sql.impl.AbstractStatementSerializer;
 import com.bobman159.rundml.core.sql.types.ISQLType;
 import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
 import com.bobman159.rundml.core.sql.types.impl.Table;
-import com.bobman159.rundml.sql.factory.SQLStatementSerializerFactory;
 
 
 /** Base Model class for SELECT SQL statements. 
@@ -103,7 +105,7 @@ public class GenericSelectStatement implements ISelectStatement {
 	
 	
 	/**
-	 * Add a SELECT value to the select model
+	 * Add a SELECT value to the select h2Model
 	 * @param selectExpr the value to be added
 	 */
 	@Override
@@ -112,7 +114,7 @@ public class GenericSelectStatement implements ISelectStatement {
 	}
 	
 	/**
-	 * Add a list of SELECT value, value, value... to the select model
+	 * Add a list of SELECT value, value, value... to the select h2Model
 	 * @param selectExprs the list of values to be added
 	 */
 	public void addSelectExpression(ISQLType... selectExprs) {
@@ -158,7 +160,7 @@ public class GenericSelectStatement implements ISelectStatement {
 	}
 	
 	/**
-	 * Add a list of SELECT value, value, value... to the select model
+	 * Add a list of SELECT value, value, value... to the select h2Model
 	 * @param orderByEntries the list of values to be added
 	 */
 	@Override
@@ -199,15 +201,19 @@ public class GenericSelectStatement implements ISelectStatement {
 	}
 
 	@Override
-	public Statement getStatement() {
-		return Statement.SELECT;
+	public ISQLStatement.Statement getStatement() {
+		return ISQLStatement.Statement.SELECT;
+	}
+	
+	@Override
+	public String getDialect() {
+		return AbstractStatementSerializer.GENERIC_SELECT;
 	}
 
 	@Override
 	public String toSQL() {
 		String sql = "";
-		sql = SQLStatementSerializerFactory.getInstance().getSerializer(AbstractStatementSerializer.GENERIC_SELECT, this)
-				.serializeSQLStatement();
+		sql = SQLStatementSerializerService.getInstance().serializeSelect(this);
 		return sql;
 	}
 

@@ -13,8 +13,8 @@ import com.bobman159.rundml.core.predicates.IPredicatesList;
 import com.bobman159.rundml.core.predicates.impl.PredicateBuilder;
 import com.bobman159.rundml.core.sql.ISQLTypeFactory;
 import com.bobman159.rundml.core.sql.types.impl.SQLTypeFactory;
+import com.bobman159.rundml.integration.jdbc.mocks.TypeTest;
 import com.bobman159.rundml.sql.factory.SQLStatementBuilderFactory;
-import com.bobman159.rundml.sql.h2.mocktables.TypeTest;
 
 class GenericSelectSyntaxTests {
 	
@@ -58,7 +58,6 @@ class GenericSelectSyntaxTests {
 	@Test
 	void compatibleSelectExpressionClassTest() {
 		
-		@SuppressWarnings("unchecked")
 		String stmtText = SQLStatementBuilderFactory.createBaseSelectStatement()
 				.select(TypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)
@@ -76,7 +75,6 @@ class GenericSelectSyntaxTests {
 	@Test
 	void compatibleSelectClassTest() {
 		
-		@SuppressWarnings("unchecked")
 		String stmtText = SQLStatementBuilderFactory.createBaseSelectStatement()
 				.select(TypeTest.class)
 				.from(RUNDML_SCHEMA,RUNDML_TABLE)

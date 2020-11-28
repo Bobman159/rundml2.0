@@ -1,13 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
+  
+  <properties>
+    <rundml.version>2.0.1-SNAPSHOT</rundml.version>
+  </properties>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>14</source>
+          <target>14</target>
         </configuration>
       </plugin>
       <plugin>
@@ -40,8 +44,8 @@
 		</plugin>
     </plugins>
   </build>
-  <parent>
-  
+
+  <parent>  
   	<version>2.0.1-SNAPSHOT</version>
   	<relativePath>../com.bobman159.rundml.parent</relativePath>
   	<groupId>io.github.bobman159</groupId>
@@ -54,9 +58,14 @@
   		<artifactId>junit-jupiter-engine</artifactId>
   		<version>${parent.jupiter.version}</version>
   		<scope>test</scope>
-  	</dependency>  
+  	</dependency>
+  	<dependency>
+  		<groupId>io.github.bobman159</groupId>
+  		<artifactId>rundml-common</artifactId>
+  		<version>${rundml.version}</version>
+  	</dependency>
     </dependencies>
     
-    <groupId>io.github.bobman159.core</groupId>
+    <groupId>io.github.bobman159</groupId>
     <artifactId>rundml-core</artifactId>
 </project>

@@ -11,9 +11,14 @@
 		<parent.jupiter.version>5.5.2</parent.jupiter.version>
 	</properties>
 	<modules>
+	    <module>../com.bobman159.rundml.common</module>
 		<module>../com.bobman159.rundml.core</module>
 		<module>../com.bobman159.rundml.jdbc</module>
 		<module>../com.bobman159.rundml.sql</module>
+		
+		<module>../com.bobman159.rundml.jdbc.test</module>
+		
+		<module>../com.bobman159.rundml.common.test</module>
 	</modules>
 	<build>
 		<pluginManagement>

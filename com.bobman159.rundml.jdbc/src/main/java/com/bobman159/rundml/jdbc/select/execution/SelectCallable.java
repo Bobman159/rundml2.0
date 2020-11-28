@@ -11,11 +11,12 @@ import java.util.concurrent.Callable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.bobman159.rundml.common.serialize.SQLStatementSerializerService;
 import com.bobman159.rundml.core.exceptions.RunDMLException;
 import com.bobman159.rundml.core.exceptions.RunDMLExceptionListeners;
 import com.bobman159.rundml.core.mapping.exceptions.NoTableRowClassFieldException;
-import com.bobman159.rundml.core.model.SQLStatementModel;
-import com.bobman159.rundml.core.sql.serialize.impl.SQLStatementSerializer;
+import com.bobman159.rundml.core.model.ISelectStatement;
+
 
 /**
  * Executes an SQL SELECT statement using JDBC and the callable interface which
@@ -33,7 +34,7 @@ import com.bobman159.rundml.core.sql.serialize.impl.SQLStatementSerializer;
 class SelectCallable implements Callable<List<Object>> {
 	
 	private Connection conn;
-	private SQLStatementModel model;
+	private ISelectStatement model;
 	private List<Object> results;
 	private ResultSetMapper mapper;
 	
@@ -44,7 +45,7 @@ class SelectCallable implements Callable<List<Object>> {
 	 * @param provider connection pool provider for JDBC connections
 	 * @param model model for an SQL SELECT statement to be executed
 	 */
-	public SelectCallable(Connection conn,SQLStatementModel model,Class<?> rowClass) {
+	public SelectCallable(Connection conn,ISelectStatement model,Class<?> rowClass) {
 		this.conn = conn;
 		this.model = model;
 		mapper = new ResultSetMapper(rowClass);
@@ -58,7 +59,8 @@ class SelectCallable implements Callable<List<Object>> {
 	public List<Object> call() throws SQLException,RunDMLException {
 		
 		logger.info("Execute SELECT statement");
-		String stmtText = SQLStatementSerializer.serializeSelect(model);
+		String stmtText =   SQLStatementSerializerService.getInstance().getSerializer(AbstractStatementSerializer)
+				.serializeSelect(model);
 		
 		try (PreparedStatement ps = conn.prepareStatement(stmtText)) {
 			//TODO: Figure out how to bind parameters....
@@ -87,14 +89,14 @@ class SelectCallable implements Callable<List<Object>> {
 			}
 		
 		} catch (SQLException sqlex) {			
-			throw RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+			throw RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR);
 		} catch (NoTableRowClassFieldException ntrcfex) {
 			throw RunDMLException.createRunDMLException(ntrcfex, RunDMLException.TABLE_ROW_CLASS_REFLECTION, mapper.getTableRowClassName() );
 		} finally {
 			try {
 				conn.close();
 			} catch (SQLException sqlex) {
-				RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR, null);
+				RunDMLException.createRunDMLException(sqlex, RunDMLException.SQL_ERROR);
 			}
 		}
 

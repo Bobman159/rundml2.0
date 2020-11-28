@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-14">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
@@ -28,12 +28,6 @@
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Eclipse IDE/2019-03_RCP/eclipse/plugins/org.junit.platform.runner_1.4.0.v20190212-2109.jar" sourcepath="C:/Eclipse IDE/2019-03_RCP/eclipse/plugins/org.junit.platform.runner_1.4.0.v20190212-2109.jar">
-		<accessrules>
-			<accessrule kind="accessible" pattern="org/junit/platform/runner/*"/>
-			<accessrule ignoreifbetter="true" kind="nonaccessible" pattern="**/*"/>
-		</accessrules>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="target/classes"/>

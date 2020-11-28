@@ -46,9 +46,9 @@ public class PoolFactory implements IPoolFactory {
 	 * @param password password for the user Id, null if no password
 	 * @param numberConnections the number of connections to be defined in the pool
 	 * 
-	 * @return a <code>DefaultConnectionProvider</code> data source.
+	 * @return a <code>DefaultConnectionPool</code> data source.
 	 */
-	public static DefaultConnectionProvider makeH2DataSource(String dbPath,String userId, String password, 
+	public static DefaultConnectionPool makeH2DataSource(String dbPath,String userId, String password, 
 			 						  String numberConnections) {
 	
 		logger.debug(Messages.bind(Messages.propCreateConfig, "h2"));
@@ -66,7 +66,7 @@ public class PoolFactory implements IPoolFactory {
 		HikariConfig config = new HikariConfig(dbProps);
 		HikariDataSource ds = new HikariDataSource(config);
 		
-		DefaultConnectionProvider provider = new DefaultConnectionProvider(ds);
+		DefaultConnectionPool provider = new DefaultConnectionPool(ds);
 		logger.debug(Messages.bind(Messages.dataSourceAdded, ds.getPoolName()));				
 
 		return provider;
@@ -81,10 +81,10 @@ public class PoolFactory implements IPoolFactory {
 	 * @param password password for the user Id, null if no password
 	 * @param numberConnections the number of connections to be defined in the pool
 	 * 
- 	 * @return a <code>DefaultConnectionProvider</code> interface for the data source.
+ 	 * @return a <code>DefaultConnectionPool</code> interface for the data source.
 	 */
 
-	public static DefaultConnectionProvider makeMySQLDataSource(String dbUrl,String userId, String password, 
+	public static DefaultConnectionPool makeMySQLDataSource(String dbUrl,String userId, String password, 
 			  								 String numberConnections) {
 
 
@@ -102,7 +102,7 @@ public class PoolFactory implements IPoolFactory {
 			HikariConfig config = new HikariConfig(dbProps);
 			HikariDataSource ds = new HikariDataSource(config);
 
-			DefaultConnectionProvider provider = new DefaultConnectionProvider(ds);
+			DefaultConnectionPool provider = new DefaultConnectionPool(ds);
 			logger.debug(Messages.bind(Messages.propCreateConfig, "MySQL"));
 			logger.debug(Messages.bind(Messages.dataSourceAdded, ds.getPoolName()));
 			
@@ -116,15 +116,15 @@ public class PoolFactory implements IPoolFactory {
 	  * 
 	  * For .properties file parameters, see https://github.com/brettwooldridge/HikariCP#configuration.
 	  * 	  
- 	  * @return a <code>DefaultConnectionProvider</code> interface for the data source. 	  
+ 	  * @return a <code>DefaultConnectionPool</code> interface for the data source. 	  
  	  * 
 	  */
-	public static DefaultConnectionProvider makeDataSource(String propFile)  {
+	public static DefaultConnectionPool makeDataSource(String propFile)  {
 		
 		logger.debug(Messages.bind(Messages.initPoolMessage, "properties"));
 		HikariConfig config = new HikariConfig(propFile);
 		HikariDataSource ds = new HikariDataSource(config);
-		DefaultConnectionProvider provider = new DefaultConnectionProvider(ds);
+		DefaultConnectionPool provider = new DefaultConnectionPool(ds);
 		logger.debug(Messages.bind(Messages.dataSourceAdded,ds.getPoolName()));
 		
 		return provider;

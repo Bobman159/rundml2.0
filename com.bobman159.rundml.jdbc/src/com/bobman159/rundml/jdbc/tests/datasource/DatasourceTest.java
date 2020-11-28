@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.bobman159.rundml.jdbc.pool.DefaultConnectionProvider;
+import com.bobman159.rundml.jdbc.pool.DefaultConnectionPool;
 import com.bobman159.rundml.jdbc.pool.PoolFactory;
 
 class DatasourceTest {

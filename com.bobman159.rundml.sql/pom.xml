@@ -1,8 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId> io.github.bobman159</groupId>
+  <groupId>io.github.bobman159</groupId>
   <artifactId>rundml-sql</artifactId>
-  
+
+  <parent>
+    <version>2.0.1-SNAPSHOT</version>
+    <relativePath>../com.bobman159.rundml.parent</relativePath>
+    <groupId>io.github.bobman159</groupId>
+    <artifactId>rundml-parent</artifactId>
+  </parent>
+
+  <properties>
+    <rundml.version>2.0.1-SNAPSHOT</rundml.version>
+  </properties>
+      
   <build>
 <!--    <sourceDirectory>src</sourceDirectory>     -->
     <plugins>
@@ -45,19 +56,18 @@
 		-->
     </plugins>
   </build>
-    
-  <parent>
-  	<version>2.0.1-SNAPSHOT</version>
-  	<relativePath>../com.bobman159.rundml.parent</relativePath>
-  	<groupId>io.github.bobman159</groupId>
-  	<artifactId>rundml-parent</artifactId>
-  </parent>
+
   <dependencies>
   	<dependency>
   		<groupId>io.github.bobman159.core</groupId>
   		<artifactId>rundml-core</artifactId>
   		<version>${rundml.version}</version>
   	</dependency>
+  	<dependency>
+        <groupId>io.github.bobman159</groupId>
+        <artifactId>rundml-common-test</artifactId>
+        <version>${rundml.version}</version>
+    </dependency>
   	<dependency>
   		<groupId>io.github.bobman159</groupId>
   		<artifactId>rundml-jdbc</artifactId>
@@ -67,6 +77,7 @@
   		<type>test-jar</type>
 -->  		
   	</dependency>
+<!--  	
   	     <dependency>
         <groupId>io.github.bobman159</groupId>
         <artifactId>rundml-jdbc</artifactId>
@@ -75,6 +86,7 @@
         <type>test-jar</type>
         <scope>test</scope>
     </dependency>
+-->    
   	  	<dependency>
   		<groupId>org.junit.jupiter</groupId>
   		<artifactId>junit-jupiter-engine</artifactId>
@@ -86,7 +98,5 @@
   		<version>5.4.1</version>
   	</dependency>
   </dependencies>
-  <properties>
-  	<rundml.version>2.0.1-SNAPSHOT</rundml.version>
-  </properties>
+
 </project>
